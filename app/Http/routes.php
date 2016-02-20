@@ -29,10 +29,3 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {
     //
 });
-
-
-/*
- * Twitter BOT
- */
- 
-Route::get('retweet-trending', 'TwitterBot@retweetTrending');
