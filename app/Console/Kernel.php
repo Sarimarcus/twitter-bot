@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Inspire::class,
-        Commands\RetweetTrending::class
+        Commands\RetweetTrending::class,
+        Commands\TweetInspire::class
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('retweet:trending')->hourly();
+        $schedule->command('twitter:retweet-trending')->hourly();
+        $schedule->command('twitter:tweet-inspire')->weekly()->fridays()->at('16:00');
     }
 }

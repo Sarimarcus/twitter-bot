@@ -11,7 +11,7 @@ class RetweetTrending extends Command
      *
      * @var string
      */
-    protected $signature = 'retweet:trending';
+    protected $signature = 'twitter:retweet-trending';
 
     /**
      * The console command description.
@@ -44,10 +44,10 @@ class RetweetTrending extends Command
         $topTrend = $trends[0]['trends'][(rand(0,4))]['name'];
 
         /* Getting trending tweets */
-        $tweets = \Twitter::getSearch(['q' => $topTrend, 'format' => 'array']);
+        $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
         $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
 
-        /* Retweeting */
+        /* Retweeting one */
         \Twitter::postRt($topTweet);
     }
 }
