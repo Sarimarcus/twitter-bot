@@ -46,7 +46,6 @@ class TweetInterest extends Command
             'ellefrance',
             'vogueparis',
             'CausetteLeMag',
-            'Galeries_Laf',
             'FashionMagFR',
             'VanityFairFR',
             'marieclaire_fr',
@@ -92,7 +91,7 @@ class TweetInterest extends Command
             /* Tweeting the link */
             Log::info('Tweeting something interesting : '.$tweet);
 
-            \Twitter::postTweet(['status' => $tweet, 'format' => 'array']);
+            \Twitter::postTweet(['status' => $tweet . ' - @'.$username, 'format' => 'array']);
         }
     }
 }
