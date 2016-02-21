@@ -71,6 +71,8 @@ class TweetInspire extends Command
 
         ])->random();
 
+        Log::info('Tweeting quote : '.$quote);
+
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
     }
 }
