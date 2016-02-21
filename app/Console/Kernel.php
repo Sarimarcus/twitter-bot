@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
                  ->everyThirtyMinutes();
 
         $schedule->command('twitter:retweet-trending')
-                 ->hourly();
+                 ->weekdays()->at('14:00');
 
         $schedule->command('twitter:tweet-inspire')
                  ->weekly()->fridays()->at('16:00');
