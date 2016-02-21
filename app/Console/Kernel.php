@@ -26,7 +26,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('twitter:retweet-trending')->hourly();
-        $schedule->command('twitter:tweet-inspire')->weekly()->fridays()->at('16:00');
+        $schedule->command('twitter:retweet-trending')
+                 ->hourly();
+
+        $schedule->command('twitter:tweet-inspire')
+                 ->weekly()->fridays()->at('16:00');
     }
 }
