@@ -92,7 +92,7 @@ class TweetInterest extends Command
             /* Tweeting the link */
             Log::info('Tweeting something interesting : '.$tweet);
 
-            \Twitter::postTweet(['status' => $interesting, 'format' => 'array']);
+            \Twitter::postTweet(['status' => $tweet, 'format' => 'array']);
         }
     }
 }
