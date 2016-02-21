@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Log;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -38,7 +39,6 @@ class TweetInspire extends Command
      */
     public function handle()
     {
-
         $quote = Collection::make([
 
             'Ils ne savaient pas que c’était impossible alors ils l’ont fait. - Mark Twain',
