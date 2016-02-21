@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Log;
 use Illuminate\Console\Command;
 
 class RetweetTrending extends Command
@@ -46,6 +47,8 @@ class RetweetTrending extends Command
         /* Getting trending tweets */
         $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
         $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
+
+        Log::info('Retweeting tweet : '.$topTweet);
 
         /* Retweeting one */
         \Twitter::postRt($topTweet);
