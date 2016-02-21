@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\RetweetTrending::class,
         Commands\TweetInspire::class,
-        Commands\TweetInterest::class
+        Commands\TweetInterest::class,
+        Commands\FollowUsers::class
     ];
 
     /**
@@ -28,6 +29,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('twitter:tweet-interest')
+                 ->everyThirtyMinutes();
+
+        $schedule->command('twitter:follow-users')
                  ->everyThirtyMinutes();
 
         $schedule->command('twitter:retweet-trending')

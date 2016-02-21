@@ -20,7 +20,7 @@ class TweetInterest extends Command
      *
      * @var string
      */
-    protected $description = 'Tweet un lien d\'un compte intéressant';
+    protected $description = 'Tweet a link from interesting user';
 
     /**
      * Create a new command instance.
