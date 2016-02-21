@@ -50,7 +50,11 @@ class TweetInterest extends Command
             'VanityFairFR',
             'marieclaire_fr',
             'TheBeautyst',
-            'TTTmagazine'
+            'TTTmagazine',
+            'stylistfrance',
+            'puretrend',
+            'lofficielparis',
+            'grazia_fr'
 
         ])->random();
 
