@@ -20,7 +20,7 @@ class TweetInspire extends Command
      *
      * @var string
      */
-    protected $description = 'Tweet une citation';
+    protected $description = 'Tweet a quote';
 
     /**
      * Create a new command instance.
