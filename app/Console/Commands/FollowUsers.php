@@ -50,7 +50,16 @@ class FollowUsers extends Command
             'VanityFairFR',
             'marieclaire_fr',
             'TheBeautyst',
-            'TTTmagazine'
+            'TTTmagazine',
+            'stylistfrance',
+            'puretrend',
+            'lofficielparis',
+            'grazia_fr',
+            'flowmagazine_fr',
+            'somanyparis',
+            'My_Little_Paris',
+            'LEXPRESS_Styles',
+            'Terrafemina'
 
         ])->random();
 

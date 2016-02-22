@@ -54,48 +54,77 @@ class TweetInterest extends Command
             'stylistfrance',
             'puretrend',
             'lofficielparis',
-            'grazia_fr'
+            'grazia_fr',
+            'flowmagazine_fr',
+            'somanyparis',
+            'My_Little_Paris',
+            'LEXPRESS_Styles',
+            'Terrafemina'
 
         ])->random();
 
         /* Getting tweets from account */
         $tweets = \Twitter::getUserTimeline(['screen_name' => $username, 'format' => 'array']);
 
-        /* Sometimes original text, sometimes we rewrite it */
-        if(rand(0,8) > 0){
-            $tweet = $tweets[(rand(0,10))]['text'];
+        switch (rand(0,8)) {
 
-        } else {
-            /* Some introduction to the tweet */
-            $intro = Collection::make([
+            /* Trying to fake a tweet */
+            case 0:
+            case 1:
 
-                'Vous aviez vu cet article ? C\'est un peu too much, non ? ',
-                'Ce genre de trucs me branche vraiment, pas vous les filles ? ',
-                'Non mais vraiment ? ',
-                'J\'aime beaucoup ! ',
-                'Jamais je ne pourrai croire un truc comme ça : ',
-                'Coup de coeur : ',
-                'Pourquoi ne pas y avoir pensé avant ? ',
-                'C\est étonnant, mais c\'est pourtant vrai : '
+                /* Some introduction to the tweet */
+                $intro = Collection::make([
 
-            ])->random();
+                    'Vous aviez vu cet article ? C\'est un peu too much, non ? ',
+                    'Ce genre de trucs me branche vraiment, pas vous les filles ? ',
+                    'Non mais vraiment ? ',
+                    'J\'aime beaucoup ! ',
+                    'Jamais je ne pourrai croire un truc comme ça : ',
+                    'Coup de coeur : ',
+                    'Pourquoi ne pas y avoir pensé avant ? ',
+                    'C\'est étonnant, mais c\'est pourtant vrai : '
 
-            /* Searching for an URL to tweet */
-            foreach ($tweets as $tweet) {
-                if(isset($tweet['entities']['urls'][0]['expanded_url'])){
-                    $url = $tweet['entities']['urls'][0]['expanded_url'];
-                    break;
+                ])->random();
+
+                /* Searching for an URL to tweet */
+                foreach ($tweets as $tweet) {
+                    if(isset($tweet['entities']['urls'][0]['expanded_url'])){
+                        $url = $tweet['entities']['urls'][0]['expanded_url'];
+                        break;
+                    }
                 }
-            }
 
-            if(isset($url)) $tweet = $intro . $url;
-        }
+                if(isset($url)){
+                    Log::info('Tweeting something interesting : '.$tweet);
+                    \Twitter::postTweet(['status' => $intro . $url, 'format' => 'array']);
+                }
 
-        if(isset($tweet)){
-            /* Tweeting the link */
-            Log::info('Tweeting something interesting : '.$tweet);
+                break;
 
-            \Twitter::postTweet(['status' => $tweet . ' - @'.$username, 'format' => 'array']);
+            /* Tweeting original content */
+            case 2:
+            case 3:
+            case 4:
+
+                $tweet = $tweets[(rand(0,10))]['text'];
+
+                Log::info('Tweeting something interesting : '.$tweet);
+                \Twitter::postTweet(['status' => $tweet, 'format' => 'array']);
+
+                break;
+
+            /* Retweeting  */
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+
+                $tweet = $tweets[(rand(0,10))]['id'];
+
+                Log::info('Retweeting something interesting : '.$tweet);
+                \Twitter::postRt($tweet);
+
+                break;
         }
     }
 }
