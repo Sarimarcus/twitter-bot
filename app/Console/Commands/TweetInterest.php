@@ -95,7 +95,7 @@ class TweetInterest extends Command
                 }
 
                 if(isset($url)){
-                    Log::info('Tweeting something interesting : '.$tweet);
+                    Log::info('Tweeting something interesting : '.$intro . $url);
                     \Twitter::postTweet(['status' => $intro . $url, 'format' => 'array']);
                 }
 
