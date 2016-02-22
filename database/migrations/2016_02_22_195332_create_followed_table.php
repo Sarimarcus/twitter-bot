@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateFollowedTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password', 60);
-            $table->rememberToken();
+            $table->bigInteger('id')->unique();
+            $table->string('screen_name');
+            $table->integer('followers_count');
+            $table->integer('statuses_count');
+            $table->string('lang');
+            $table->boolean('followed')->default(0);
             $table->timestamps();
         });
     }

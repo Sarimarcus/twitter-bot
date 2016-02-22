@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use Log;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class FollowUsers extends Command
 {
@@ -39,44 +37,6 @@ class FollowUsers extends Command
      */
     public function handle()
     {
-        /* Some interesting users */
-        $username = Collection::make([
-
-            'getthelook_fr',
-            'ellefrance',
-            'vogueparis',
-            'CausetteLeMag',
-            'FashionMagFR',
-            'VanityFairFR',
-            'marieclaire_fr',
-            'TheBeautyst',
-            'TTTmagazine',
-            'stylistfrance',
-            'puretrend',
-            'lofficielparis',
-            'grazia_fr',
-            'flowmagazine_fr',
-            'somanyparis',
-            'My_Little_Paris',
-            'LEXPRESS_Styles',
-            'Terrafemina'
-
-        ])->random();
-
-        /* Getting followers from account */
-        $followers = \Twitter::getFollowers(['screen_name' => $username, 'format' => 'array']);
-
-        $users = [];
-        foreach ($followers['users'] as $f) {
-            $users[$f['screen_name']] = $f['statuses_count'];
-        }
-
-        arsort($users);
-        $screen_name = key($users);
-
-        /* Following user */
-        Log::info('Following user : '.$screen_name);
-
-        \Twitter::postFollow(['screen_name' => $screen_name, 'format' => 'array']);
+        return \App\TwitterBot::FollowUsers();
     }
 }
