@@ -28,6 +28,7 @@ class Inspire extends Command
      */
     public function handle()
     {
+        \App\TwitterBot::retweetTrending();
         $this->comment(PHP_EOL.Inspiring::quote().PHP_EOL);
     }
 }

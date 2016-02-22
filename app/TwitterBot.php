@@ -6,6 +6,6 @@ class TwitterBot
 {
     public static function retweetTrending()
     {
-        dd('test')
+        dd('test');
     }
 }

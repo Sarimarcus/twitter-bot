@@ -66,14 +66,17 @@ class FollowUsers extends Command
         /* Getting followers from account */
         $followers = \Twitter::getFollowers(['screen_name' => $username, 'format' => 'array']);
 
-        /*
-         * @todo : don't follow user without bio, without tweet or with less than X followers/following
-         */
-        if($target = $followers['users'][(rand(0,19))]['screen_name']){
-            /* Tweeting the link */
-            Log::info('Following user : '.$target);
-
-            \Twitter::postFollow(['screen_name' => $target, 'format' => 'array']);
+        $users = [];
+        foreach ($followers['users'] as $f) {
+            $users[$f['screen_name']] = $f['statuses_count'];
         }
+
+        arsort($users);
+        $screen_name = key($users);
+
+        /* Following user */
+        Log::info('Following user : '.$screen_name);
+
+        \Twitter::postFollow(['screen_name' => $screen_name, 'format' => 'array']);
     }
 }
