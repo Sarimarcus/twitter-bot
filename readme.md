@@ -5,4 +5,4 @@ This is a Twitter BOT, doing a lot of smart things :
 - Each 30 minutes : tweet or retweet something interesting, depending of followed accounts, and follow users of those accounts
 - Each weekdays at 14:00 : retweeting a trending tweet in Paris
 - Each friday at 16:00 : tweet an inspiring quote
-- Daily a midnight : purge useless users
+- Daily a midnight : get suggested users and purge useless users
