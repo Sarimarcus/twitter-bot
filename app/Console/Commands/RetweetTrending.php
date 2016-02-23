@@ -38,19 +38,6 @@ class RetweetTrending extends Command
      */
     public function handle()
     {
-        /* Getting trends
-         * 615702 is the WOEID for Paris
-         */
-        $trends = \Twitter::getTrendsPlace(['id' => 615702, 'format' => 'array']);
-        $topTrend = $trends[0]['trends'][(rand(0,4))]['name'];
-
-        /* Getting trending tweets */
-        $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
-        $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
-
-        Log::info('Retweeting trending tweet : '.$topTweet);
-
-        /* Retweeting one */
-        \Twitter::postRt($topTweet);
+        \App\Classes\TwitterBot::retweetTrending();
     }
 }

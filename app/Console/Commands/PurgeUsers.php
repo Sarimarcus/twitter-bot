@@ -37,6 +37,6 @@ class PurgeUsers extends Command
      */
     public function handle()
     {
-        return \App\Classes\TwitterBot::purgeUsers();
+        \App\Classes\TwitterBot::purgeUsers();
     }
 }
