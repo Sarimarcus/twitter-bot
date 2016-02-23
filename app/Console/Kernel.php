@@ -18,8 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\TweetInspire::class,
         Commands\TweetInterest::class,
         Commands\FollowUsers::class,
-        Commands\PurgeUsers::class,
-        Commands\getSuggested::class
+        Commands\PurgeUsers::class
     ];
 
     /**
