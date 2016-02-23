@@ -48,7 +48,7 @@ class RetweetTrending extends Command
         $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
         $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
 
-        Log::info('Retweeting tweet : '.$topTweet);
+        Log::info('Retweeting trending tweet : '.$topTweet);
 
         /* Retweeting one */
         \Twitter::postRt($topTweet);
