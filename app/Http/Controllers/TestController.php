@@ -11,6 +11,6 @@ class TestController extends Controller
 {
     public function test()
     {
-        \App\TwitterBot::FollowUsers();
+        \App\Classes\TwitterBot::tweetInterest();
     }
 }

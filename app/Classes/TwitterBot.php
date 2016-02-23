@@ -10,27 +10,16 @@ class TwitterBot
 {
 
     const WOEID = 615702; // Paris, FR
+    const SUGG_SLUG = 'mode'; // Slug for suggestions
 
     public static $interestingUsers = [
 
-        'getthelook_fr',
-        'ellefrance',
-        'vogueparis',
-        'CausetteLeMag',
-        'FashionMagFR',
-        'VanityFairFR',
-        'marieclaire_fr',
-        'TheBeautyst',
-        'TTTmagazine',
-        'stylistfrance',
-        'puretrend',
-        'lofficielparis',
-        'grazia_fr',
-        'flowmagazine_fr',
-        'somanyparis',
-        'My_Little_Paris',
-        'LEXPRESS_Styles',
-        'Terrafemina'
+        'getthelook_fr', 'ellefrance', 'vogueparis',
+        'CausetteLeMag', 'FashionMagFR', 'VanityFairFR',
+        'marieclaire_fr', 'TheBeautyst', 'TTTmagazine',
+        'stylistfrance', 'puretrend', 'lofficielparis',
+        'grazia_fr', 'flowmagazine_fr', 'somanyparis',
+        'My_Little_Paris', 'LEXPRESS_Styles', 'Terrafemina'
 
     ];
 
@@ -43,7 +32,7 @@ class TwitterBot
         $target = Collection::make(self::$interestingUsers)->random();
 
         // Getting followers from account
-        $followers = \Twitter::getFollowers(['screen_name' => $target, 'count' => 10, 'format' => 'array']);
+        $followers = \Twitter::getFollowers(['screen_name' => $target, 'count' => 20, 'format' => 'array']);
 
         foreach ($followers['users'] as $f) {
 
@@ -55,16 +44,16 @@ class TwitterBot
                 'lang'            => $f['lang']
             ];
 
-            $flight = Users::updateOrCreate(['id' => $f['id']], $data);
+            $user = Users::updateOrCreate(['id' => $f['id']], $data);
         }
 
         // Getting and following best follower
         $winner = Users::getMostInteresting();
 
-        Log::info('Following user : '.$winner->screen_name);
-
-        \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
-        Users::flagFollowed($winner->id);
+        if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
+            Log::info('Following user : '.$winner->screen_name);
+            Users::flagFollowed($winner->id);
+        }
     }
 
     /*
@@ -95,10 +84,21 @@ class TwitterBot
         \Twitter::postRt($topTweet);
     }
 
+    /*
+     * Getting tweets from our interesting users and publish one
+     * in 3 ways : tweet with the URL, retweet, or tweet
+     * original content
+     */
+
     public static function tweetInterest()
     {
         // Some interesting users
-        $target = Collection::make(self::$interestingUsers)->random();
+        $interesting = Collection::make(self::$interestingUsers);
+
+        // Added some from the DB (the suggested ones), merging and picking one
+        $rows = Users::getSuggested();
+        $suggested = collect($rows)->pluck('screen_name');
+        $target = $interesting->merge($suggested)->unique()->random();
 
         // Getting tweets from account
         $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
@@ -163,7 +163,7 @@ class TwitterBot
     }
 
     /*
-     *
+     * Tweet an inspiring quote
      */
     public static function tweetInspire()
     {
@@ -201,5 +201,30 @@ class TwitterBot
 
         Log::info('Tweeting quote : '.$quote);
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
+    }
+
+    public static function getSuggested()
+    {
+        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['lang' => 'fr', 'format' => 'array']);
+        foreach ($suggestions['users'] as $f) {
+
+            $data = [
+                'id'              => $f['id'],
+                'screen_name'     => $f['screen_name'],
+                'followers_count' => $f['followers_count'],
+                'statuses_count'  => $f['statuses_count'],
+                'lang'            => $f['lang'],
+                'interesting'     => 1
+            ];
+
+            $user = Users::updateOrCreate(['id' => $f['id']], $data);
+
+            if($user->wasRecentlyCreated){
+                if(\Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
+                    Users::flagFollowed($user->id);
+                    Log::info('Following suggested user : '.$user->screen_name);
+                }
+            }
+        }
     }
 }

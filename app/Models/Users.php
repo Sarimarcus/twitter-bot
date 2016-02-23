@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Users extends Model
 {
     protected $table     = 'users';
-    protected $fillable  = ['id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'created_at', 'updated_at'];
+    protected $fillable  = ['id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'interesting', 'created_at', 'updated_at'];
 
     public $incrementing = false;
     public $primaryKey   = 'id';
@@ -18,15 +18,26 @@ class Users extends Model
     public static function getMostInteresting()
     {
         $user = \DB::table('users')
-                        ->where('lang', 'fr')
-                        ->where('statuses_count', '>=' , '100')
-                        ->where('followers_count', '>=' , '50')
-                        ->where('followed', 0)
-                        ->orderBy('statuses_count', 'desc')
-                        ->orderBy('followers_count', 'desc')
-                        ->first();
+                    ->where('lang', 'fr')
+                    ->where('statuses_count', '>=' , '100')
+                    ->where('followers_count', '>=' , '50')
+                    ->where('followed', 0)
+                    ->orderBy('statuses_count', 'desc')
+                    ->orderBy('followers_count', 'desc')
+                    ->first();
 
         return $user;
+    }
+
+    /*
+     * Returns the interesting users
+     */
+    public static function getSuggested()
+    {
+        return  \DB::table('users')
+                    ->select('screen_name')
+                    ->where('interesting', 1)
+                    ->get();
     }
 
     /*

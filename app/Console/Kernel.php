@@ -18,7 +18,8 @@ class Kernel extends ConsoleKernel
         Commands\TweetInspire::class,
         Commands\TweetInterest::class,
         Commands\FollowUsers::class,
-        Commands\PurgeUsers::class
+        Commands\PurgeUsers::class,
+        Commands\getSuggested::class
     ];
 
     /**
@@ -36,6 +37,9 @@ class Kernel extends ConsoleKernel
                  ->everyThirtyMinutes();
 
         $schedule->command('twitter:purge-users')
+                 ->daily();
+
+        $schedule->command('twitter:get-suggested')
                  ->daily();
 
         $schedule->command('twitter:retweet-trending')
