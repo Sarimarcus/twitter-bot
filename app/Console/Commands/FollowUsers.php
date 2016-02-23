@@ -37,6 +37,6 @@ class FollowUsers extends Command
      */
     public function handle()
     {
-        return \App\TwitterBot::FollowUsers();
+        return \App\Classes\TwitterBot::followUsers();
     }
 }

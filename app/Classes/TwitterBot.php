@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Classes;
 
 use Log;
 use Illuminate\Support\Collection;
-use App\Users;
+use App\Models\Users;
 
 class TwitterBot
 {
@@ -31,7 +31,10 @@ class TwitterBot
 
     ];
 
-    public static function FollowUsers()
+    /*
+     * Following followers from interesting accounts
+     */
+    public static function followUsers()
     {
         // Some interesting users to scan/
         $target = Collection::make(self::$interestingUsers)->random();
@@ -57,5 +60,14 @@ class TwitterBot
         Log::info('Following user : '.$winner->screen_name);
         \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
         Users::flagFollowed($winner->id);
+    }
+
+    /*
+     * Purge useless users
+     */
+    public static function purgeUsers()
+    {
+        Log::info('Purging users');
+        Users::purgeUsers();
     }
 }

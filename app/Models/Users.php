@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,5 +37,14 @@ class Users extends Model
         $user = Users::find($id);
         $user->followed = 1;
         return $user->save();
+    }
+
+    /*
+     * Removing useless ursers
+     */
+    public static function purgeUsers()
+    {
+        \DB::table('users')->where('statuses_count', 0)->delete();
+        \DB::table('users')->where('followers_count', '<=', 50)->delete();
     }
 }
