@@ -144,7 +144,7 @@ class TwitterBot
 
                 $tweet = $tweets[(rand(0,10))]['text'];
                 Log::info('Tweeting something interesting : '.$tweet);
-                \Twitter::postTweet(['status' => $tweet, 'format' => 'array']);
+                \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
 
                 break;
 
