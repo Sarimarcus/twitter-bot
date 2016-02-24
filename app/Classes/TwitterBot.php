@@ -50,8 +50,53 @@ class TwitterBot
         $winner = Users::getMostInteresting();
 
         if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
+
             \Log::info('Following user : '.$winner->screen_name);
             Users::flagFollowed($winner->id);
+
+        }
+    }
+
+    /*
+     * Unfollow old followed users
+     */
+    public static function unFollowUsers()
+    {
+        // Getting the users to unfollow (if he's not following me, i'm a gentleman)
+        $users = Users::getUsersToUnfollow();
+        $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
+
+        $results = \Twitter::getFriendshipsLookup(['screen_name' => $lookup, 'format' => 'array']);
+
+        // Checking their friendship
+        foreach ($results as $u) {
+            // He's following me, keep and flag him
+            if(isset($u['connection'][1]['following_by'])){
+
+                \Log::info($u['screen_name'].' is flagged as following');
+                Users::flagFollowing($u['id']);
+
+            // Let's unfollow him ! Ingrate !
+            } else {
+
+                if(\Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
+
+                    \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
+                    Users::deleteUser($u['id']);
+
+                }
+            }
+        }
+
+        dd($lookup);
+
+        if($lookup[0])
+
+        if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
+
+            \Log::info('Following user : '.$winner->screen_name);
+            Users::flagFollowed($winner->id);
+
         }
     }
 
@@ -122,13 +167,16 @@ class TwitterBot
 
                 // Searching for an URL to tweet
                 foreach ($tweets as $tweet) {
+
                     if(isset($tweet['entities']['urls'][0]['expanded_url'])){
                         $url = $tweet['entities']['urls'][0]['expanded_url'];
                         break;
                     }
+
                 }
 
                 if(isset($url)){
+
                     \Log::info('Tweeting something interesting : '.$intro . $url);
 
                     try {
@@ -236,8 +284,10 @@ class TwitterBot
 
             if($user->wasRecentlyCreated){
                 if(\Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
+
                     Users::flagFollowed($user->id);
                     \Log::info('Following suggested user : '.$user->screen_name);
+
                 }
             }
         }

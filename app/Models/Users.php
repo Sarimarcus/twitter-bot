@@ -45,9 +45,53 @@ class Users extends Model
      */
     public static function flagFollowed($id)
     {
-        $user = Users::find($id);
-        $user->followed = 1;
-        return $user->save();
+        if($id != null){
+
+            $user = Users::find($id);
+            $user->followed = 1;
+            return $user->save();
+
+        }
+    }
+
+    /*
+     * Flag a user as following
+     */
+    public static function flagFollowing($id)
+    {
+        if($id != null){
+
+            $user = Users::find($id);
+            $user->following = 1;
+            return $user->save();
+
+        }
+    }
+
+    /*
+     * Return a user to unfollow (rule : oldest followed)
+     */
+    public static function getUsersToUnfollow($limit = 1)
+    {
+        $user = \DB::table('users')
+                    ->where('followed', 1)
+                    ->where('following', 0)
+                    ->orderBy('created_at')
+                    ->take($limit)->get();
+
+        return $user;
+    }
+
+    /*
+     * Delete a user
+     */
+    public static function deleteUser($id)
+    {
+        if($id != null){
+
+            return \DB::table('users')->where('id', $id)->delete();
+
+        }
     }
 
     /*
