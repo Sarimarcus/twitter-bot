@@ -2,7 +2,6 @@
 
 namespace App\Classes;
 
-use Log;
 use Illuminate\Support\Collection;
 use App\Models\Users;
 
@@ -51,7 +50,7 @@ class TwitterBot
         $winner = Users::getMostInteresting();
 
         if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
-            Log::info('Following user : '.$winner->screen_name);
+            \Log::info('Following user : '.$winner->screen_name);
             Users::flagFollowed($winner->id);
         }
     }
@@ -61,7 +60,7 @@ class TwitterBot
      */
     public static function purgeUsers()
     {
-        Log::info('Purging users');
+        \Log::info('Purging users');
         Users::purgeUsers();
     }
 
@@ -78,7 +77,7 @@ class TwitterBot
         $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
         $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
 
-        Log::info('Retweeting trending tweet : '.$topTweet);
+        \Log::info('Retweeting trending tweet : '.$topTweet);
 
         // Retweeting one
         \Twitter::postRt($topTweet);
@@ -121,7 +120,7 @@ class TwitterBot
 
                 ])->random();
 
-                //Searching for an URL to tweet
+                // Searching for an URL to tweet
                 foreach ($tweets as $tweet) {
                     if(isset($tweet['entities']['urls'][0]['expanded_url'])){
                         $url = $tweet['entities']['urls'][0]['expanded_url'];
@@ -130,8 +129,14 @@ class TwitterBot
                 }
 
                 if(isset($url)){
-                    Log::info('Tweeting something interesting : '.$intro . $url);
-                    \Twitter::postTweet(['status' => $intro . $url, 'format' => 'array']);
+                    \Log::info('Tweeting something interesting : '.$intro . $url);
+
+                    try {
+                        \Twitter::postTweet(['status' => $intro . $url, 'format' => 'array']);
+                    } catch (\Exception $e) {
+                        \Log::error($e);
+                    }
+
                 }
 
                 break;
@@ -143,8 +148,13 @@ class TwitterBot
             case 4:
 
                 $tweet = $tweets[(rand(0,10))]['text'];
-                Log::info('Tweeting something interesting : '.$tweet);
-                \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
+                \Log::info('Tweeting something interesting : '.$tweet);
+
+                try {
+                    \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
+                } catch (\Exception $e) {
+                    \Log::error($e);
+                }
 
                 break;
 
@@ -155,8 +165,13 @@ class TwitterBot
             case 8:
 
                 $tweet = $tweets[(rand(0,10))]['id'];
-                Log::info('Retweeting something interesting : '.$tweet);
-                \Twitter::postRt($tweet);
+                \Log::info('Retweeting something interesting : '.$tweet);
+
+                try {
+                    \Twitter::postRt($tweet);
+                } catch (\Exception $e) {
+                    \Log::error($e);
+                }
 
                 break;
         }
@@ -199,7 +214,7 @@ class TwitterBot
 
         ])->random();
 
-        Log::info('Tweeting quote : '.$quote);
+        \Log::info('Tweeting quote : '.$quote);
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
     }
 
@@ -222,7 +237,7 @@ class TwitterBot
             if($user->wasRecentlyCreated){
                 if(\Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
                     Users::flagFollowed($user->id);
-                    Log::info('Following suggested user : '.$user->screen_name);
+                    \Log::info('Following suggested user : '.$user->screen_name);
                 }
             }
         }
