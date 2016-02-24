@@ -83,7 +83,7 @@ class TwitterBot
                 // Let's unfollow him ! Ingrate !
                 } else {
 
-                    if(\Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
+                    if($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
 
                         \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
                         Users::deleteUser($u['id']);
@@ -272,13 +272,13 @@ class TwitterBot
                 'followers_count' => $f['followers_count'],
                 'statuses_count'  => $f['statuses_count'],
                 'lang'            => $f['lang'],
-                'interesting'     => 1
+                'suggested'       => 1
             ];
 
             $user = Users::updateOrCreate(['id' => $f['id']], $data);
 
             if($user->wasRecentlyCreated){
-                if(\Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
+                if($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
 
                     Users::flagFollowed($user->id);
                     \Log::info('Following suggested user : '.$user->screen_name);

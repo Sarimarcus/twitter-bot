@@ -36,7 +36,7 @@ class Users extends Model
     {
         return  \DB::table('users')
                     ->select('screen_name')
-                    ->where('interesting', 1)
+                    ->where('suggested', 1)
                     ->get();
     }
 
