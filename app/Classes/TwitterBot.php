@@ -64,29 +64,34 @@ class TwitterBot
     public static function unFollowUsers()
     {
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
-        $users = Users::getUsersToUnfollow(self::SUGG_SLUG);
-        $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
+        $users = Users::getUsersToUnfollow(self::NUMBER_UNFOLLOW);
 
-        $results = \Twitter::getFriendshipsLookup(['screen_name' => $lookup, 'format' => 'array']);
+        if(count($users>0)){
 
-        // Checking their friendship
-        foreach ($results as $u) {
-            // He's following me, keep and flag him
-            if(isset($u['connection'][1]['following_by'])){
+            // Preparing the lookup
+            $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
+            $results = \Twitter::getFriendshipsLookup(['screen_name' => $lookup, 'format' => 'array']);
 
-                \Log::info($u['screen_name'].' is flagged as following');
-                Users::flagFollowing($u['id']);
+            // Checking their friendship
+            foreach ($results as $u) {
+                // He's following me, keep and flag him
+                if(isset($u['connection'][1]['following_by'])){
 
-            // Let's unfollow him ! Ingrate !
-            } else {
+                    \Log::info($u['screen_name'].' is flagged as following');
+                    Users::flagFollowing($u['id']);
 
-                if(\Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
+                // Let's unfollow him ! Ingrate !
+                } else {
 
-                    \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
-                    Users::deleteUser($u['id']);
+                    if(\Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
 
+                        \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
+                        Users::deleteUser($u['id']);
+
+                    }
                 }
             }
+
         }
     }
 
