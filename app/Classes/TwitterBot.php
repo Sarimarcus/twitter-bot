@@ -10,6 +10,7 @@ class TwitterBot
 
     const WOEID = 615702; // Paris, FR
     const SUGG_SLUG = 'mode'; // Slug for suggestions
+    const NUMBER_UNFOLLOW = 10; // How many should we unfollow each day
 
     public static $interestingUsers = [
 
@@ -63,7 +64,7 @@ class TwitterBot
     public static function unFollowUsers()
     {
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
-        $users = Users::getUsersToUnfollow();
+        $users = Users::getUsersToUnfollow(self::SUGG_SLUG);
         $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
 
         $results = \Twitter::getFriendshipsLookup(['screen_name' => $lookup, 'format' => 'array']);
