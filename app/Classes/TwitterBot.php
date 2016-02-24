@@ -87,17 +87,6 @@ class TwitterBot
                 }
             }
         }
-
-        dd($lookup);
-
-        if($lookup[0])
-
-        if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
-
-            \Log::info('Following user : '.$winner->screen_name);
-            Users::flagFollowed($winner->id);
-
-        }
     }
 
     /*
