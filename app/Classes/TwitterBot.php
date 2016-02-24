@@ -96,6 +96,36 @@ class TwitterBot
     }
 
     /*
+     * Getting suggested users by slug
+     */
+    public static function getSuggested()
+    {
+        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['lang' => 'fr', 'format' => 'array']);
+        foreach ($suggestions['users'] as $f) {
+
+            $data = [
+                'id'              => $f['id'],
+                'screen_name'     => $f['screen_name'],
+                'followers_count' => $f['followers_count'],
+                'statuses_count'  => $f['statuses_count'],
+                'lang'            => $f['lang'],
+                'suggested'       => 1
+            ];
+
+            $user = Users::updateOrCreate(['id' => $f['id']], $data);
+
+            if($user->wasRecentlyCreated){
+                if($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
+
+                    Users::flagFollowed($user->id);
+                    \Log::info('Following suggested user : '.$user->screen_name);
+
+                }
+            }
+        }
+    }
+
+    /*
      * Purge useless users
      */
     public static function purgeUsers()
@@ -259,32 +289,5 @@ class TwitterBot
 
         \Log::info('Tweeting quote : '.$quote);
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
-    }
-
-    public static function getSuggested()
-    {
-        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['lang' => 'fr', 'format' => 'array']);
-        foreach ($suggestions['users'] as $f) {
-
-            $data = [
-                'id'              => $f['id'],
-                'screen_name'     => $f['screen_name'],
-                'followers_count' => $f['followers_count'],
-                'statuses_count'  => $f['statuses_count'],
-                'lang'            => $f['lang'],
-                'suggested'       => 1
-            ];
-
-            $user = Users::updateOrCreate(['id' => $f['id']], $data);
-
-            if($user->wasRecentlyCreated){
-                if($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
-
-                    Users::flagFollowed($user->id);
-                    \Log::info('Following suggested user : '.$user->screen_name);
-
-                }
-            }
-        }
     }
 }

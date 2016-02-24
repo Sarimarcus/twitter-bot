@@ -76,6 +76,7 @@ class Users extends Model
         $user = \DB::table('users')
                     ->where('followed', 1)
                     ->where('following', 0)
+                    ->where('suggested', 0)
                     ->orderBy('created_at')
                     ->take($limit)->get();
 
