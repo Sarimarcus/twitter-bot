@@ -252,6 +252,7 @@ class TwitterBot
 
     /*
      * Tweet an inspiring quote
+     * @todo : use : http://quotes.rest/qod.json maybe
      */
     public static function tweetInspire()
     {
