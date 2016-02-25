@@ -35,7 +35,6 @@ class TwitterBot
         $followers = \Twitter::getFollowers(['screen_name' => $target, 'count' => 20, 'format' => 'array']);
 
         foreach ($followers['users'] as $f) {
-
             $data = [
                 'id'              => $f['id'],
                 'screen_name'     => $f['screen_name'],
@@ -50,11 +49,9 @@ class TwitterBot
         // Getting and following best follower
         $winner = Users::getMostInteresting();
 
-        if(\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])){
-
+        if (\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])) {
             \Log::info('Following user : '.$winner->screen_name);
             Users::flagFollowed($winner->id);
-
         }
     }
 
@@ -66,7 +63,7 @@ class TwitterBot
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
         $users = Users::getUsersToUnfollow(self::NUMBER_UNFOLLOW);
 
-        if(count($users>0)){
+        if (count($users>0)) {
 
             // Preparing the lookup
             $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
@@ -75,23 +72,18 @@ class TwitterBot
             // Checking their friendship
             foreach ($results as $u) {
                 // He's following me, keep and flag him
-                if(isset($u['connection'][1]['following_by'])){
-
+                if (isset($u['connection'][1]['following_by'])) {
                     \Log::info($u['screen_name'].' is flagged as following');
                     Users::flagFollowing($u['id']);
 
                 // Let's unfollow him ! Ingrate !
                 } else {
-
-                    if($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])){
-
+                    if ($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])) {
                         \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
                         Users::deleteUser($u['id']);
-
                     }
                 }
             }
-
         }
     }
 
@@ -102,7 +94,6 @@ class TwitterBot
     {
         $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['lang' => 'fr', 'format' => 'array']);
         foreach ($suggestions['users'] as $f) {
-
             $data = [
                 'id'              => $f['id'],
                 'screen_name'     => $f['screen_name'],
@@ -114,12 +105,10 @@ class TwitterBot
 
             $user = Users::updateOrCreate(['id' => $f['id']], $data);
 
-            if($user->wasRecentlyCreated){
-                if($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])){
-
+            if ($user->wasRecentlyCreated) {
+                if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
                     Users::flagFollowed($user->id);
                     \Log::info('Following suggested user : '.$user->screen_name);
-
                 }
             }
         }
@@ -141,11 +130,11 @@ class TwitterBot
     {
         // Getting trends
         $trends = \Twitter::getTrendsPlace(['id' => self::WOEID, 'format' => 'array']);
-        $topTrend = $trends[0]['trends'][(rand(0,4))]['name'];
+        $topTrend = $trends[0]['trends'][(rand(0, 4))]['name'];
 
         // Getting trending tweets
         $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
-        $topTweet = $tweets['statuses'][(rand(0,4))]['id'];
+        $topTweet = $tweets['statuses'][(rand(0, 4))]['id'];
 
         \Log::info('Retweeting trending tweet : '.$topTweet);
 
@@ -172,7 +161,7 @@ class TwitterBot
         // Getting tweets from account
         $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
 
-        switch (rand(0,8)) {
+        switch (rand(0, 8)) {
 
             // Trying to fake a tweet
             case 0:
@@ -192,16 +181,13 @@ class TwitterBot
 
                 // Searching for an URL to tweet
                 foreach ($tweets as $tweet) {
-
-                    if(isset($tweet['entities']['urls'][0]['expanded_url'])){
+                    if (isset($tweet['entities']['urls'][0]['expanded_url'])) {
                         $url = $tweet['entities']['urls'][0]['expanded_url'];
                         break;
                     }
-
                 }
 
-                if(isset($url)){
-
+                if (isset($url)) {
                     \Log::info('Tweeting something interesting : '.$intro . $url);
 
                     try {
@@ -209,7 +195,6 @@ class TwitterBot
                     } catch (\Exception $e) {
                         \Log::error($e);
                     }
-
                 }
 
                 break;
@@ -220,7 +205,7 @@ class TwitterBot
             case 3:
             case 4:
 
-                $tweet = $tweets[(rand(0,10))]['text'];
+                $tweet = $tweets[(rand(0, 10))]['text'];
                 \Log::info('Tweeting something interesting : '.$tweet);
 
                 try {
@@ -237,7 +222,7 @@ class TwitterBot
             case 7:
             case 8:
 
-                $tweet = $tweets[(rand(0,10))]['id'];
+                $tweet = $tweets[(rand(0, 10))]['id'];
                 \Log::info('Retweeting something interesting : '.$tweet);
 
                 try {
