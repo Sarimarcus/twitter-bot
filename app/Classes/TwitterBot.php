@@ -163,7 +163,6 @@ class TwitterBot
         $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
 
         $random = rand(0, 8);
-        $random = 0;
         switch ($random) {
 
             // Retweet from the database
