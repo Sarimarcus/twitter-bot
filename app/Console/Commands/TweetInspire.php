@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Log;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 

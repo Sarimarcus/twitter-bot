@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class RetweetTrending extends Command
+class SavePopularTweets extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'twitter:retweet-trending';
+    protected $signature = 'twitter:save-popular-tweets';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Retweet one trending tweet from Paris';
+    protected $description = 'Save popular tweets from search';
 
     /**
      * Create a new command instance.
@@ -37,6 +37,6 @@ class RetweetTrending extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::retweetTrending();
+        \App\Classes\TwitterBot::savePopularTweets();
     }
 }

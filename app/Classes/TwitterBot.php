@@ -4,12 +4,14 @@ namespace App\Classes;
 
 use Illuminate\Support\Collection;
 use App\Models\Users;
+use App\Models\Tweets;
 
 class TwitterBot
 {
 
     const WOEID = 615702; // Paris, FR
     const SUGG_SLUG = 'mode'; // Slug for suggestions
+    const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
     const NUMBER_UNFOLLOW = 10; // How many should we unfollow each day
 
     public static $interestingUsers = [
@@ -147,7 +149,6 @@ class TwitterBot
      * in 3 ways : tweet with the URL, retweet, or tweet
      * original content
      */
-
     public static function tweetInterest()
     {
         // Some interesting users
@@ -161,40 +162,20 @@ class TwitterBot
         // Getting tweets from account
         $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
 
-        switch (rand(0, 8)) {
+        $random = rand(0, 8);
+        $random = 0;
+        switch ($random) {
 
-            // Trying to fake a tweet
+            // Retweet from the database
             case 0:
+                $tweet = Tweets::getNext();
+                \Log::info('Retweeting from the DB : '.$tweet->id);
 
-                // Some introduction to the tweet
-                $intro = Collection::make([
-
-                    'Vous aviez vu cet article ? C\'est un peu too much, non ? ',
-                    'Ce genre de trucs me branche vraiment, pas vous les filles ? ',
-                    'J\'aime beaucoup ! ',
-                    'Jamais je ne pourrai croire un truc comme ça : ',
-                    'Coup de coeur : ',
-                    'Pourquoi ne pas y avoir pensé avant ? ',
-                    'C\'est étonnant, mais c\'est pourtant vrai : '
-
-                ])->random();
-
-                // Searching for an URL to tweet
-                foreach ($tweets as $tweet) {
-                    if (isset($tweet['entities']['urls'][0]['expanded_url'])) {
-                        $url = $tweet['entities']['urls'][0]['expanded_url'];
-                        break;
-                    }
-                }
-
-                if (isset($url)) {
-                    \Log::info('Tweeting something interesting : '.$intro . $url);
-
-                    try {
-                        \Twitter::postTweet(['status' => $intro . $url, 'format' => 'array']);
-                    } catch (\Exception $e) {
-                        \Log::error($e);
-                    }
+                try {
+                    \Twitter::postRt($tweet->id);
+                    Tweets::flagRetweeted($tweet->id);
+                } catch (\Exception $e) {
+                    \Log::error($e);
                 }
 
                 break;
@@ -275,5 +256,33 @@ class TwitterBot
 
         \Log::info('Tweeting quote : '.$quote);
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
+    }
+
+    /*
+     * Save popular tweets by hashtags
+     */
+    public static function savePopularTweets()
+    {
+        $parameters = array(
+            'q' => self::SEARCH_QUERY,
+            'result_type' => 'popular',
+            'format' => 'array'
+            );
+
+        $tweets = \Twitter::getSearch($parameters);
+
+        \Log::info('Retrieving search from search query : '.self::SEARCH_QUERY);
+        foreach ($tweets['statuses'] as $t) {
+            $data = [
+                'id'             => $t['id'],
+                'user_id'        => $t['user']['id'],
+                'text'           => $t['text'],
+                'retweet_count'  => $t['retweet_count'],
+                'favorite_count' => $t['favorite_count'],
+                'lang'           => $t['lang']
+            ];
+
+            $tweet = Tweets::updateOrCreate(['id' => $t['id']], $data);
+        }
     }
 }

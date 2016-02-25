@@ -31,4 +31,5 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
-Route::get('test', 'TestController@test');
+Route::get('get', 'TestController@get');
+Route::get('save', 'TestController@save');

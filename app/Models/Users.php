@@ -19,8 +19,8 @@ class Users extends Model
     {
         $user = \DB::table('users')
                     ->where('lang', 'fr')
-                    ->where('statuses_count', '>=' , '100')
-                    ->where('followers_count', '>=' , '50')
+                    ->where('statuses_count', '>=', '100')
+                    ->where('followers_count', '>=', '50')
                     ->where('followed', 0)
                     ->orderBy('statuses_count', 'desc')
                     ->orderBy('followers_count', 'desc')
@@ -45,12 +45,10 @@ class Users extends Model
      */
     public static function flagFollowed($id)
     {
-        if($id != null){
-
+        if ($id != null) {
             $user = Users::find($id);
             $user->followed = 1;
             return $user->save();
-
         }
     }
 
@@ -59,12 +57,10 @@ class Users extends Model
      */
     public static function flagFollowing($id)
     {
-        if($id != null){
-
+        if ($id != null) {
             $user = Users::find($id);
             $user->following = 1;
             return $user->save();
-
         }
     }
 
@@ -88,10 +84,8 @@ class Users extends Model
      */
     public static function deleteUser($id)
     {
-        if($id != null){
-
+        if ($id != null) {
             return \DB::table('users')->where('id', $id)->delete();
-
         }
     }
 

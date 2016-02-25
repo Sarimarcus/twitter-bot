@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
         Commands\UnfollowUsers::class,
         Commands\PurgeUsers::class,
         Commands\PurgeUsers::class,
-        Commands\GetSuggested::class
+        Commands\GetSuggested::class,
+        Commands\SavePopularTweets::class
     ];
 
     /**
@@ -37,6 +38,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('twitter:follow-users')
                  ->everyThirtyMinutes();
+
+        $schedule->command('twitter:twitter:save-popular-tweets')
+                 ->twiceDaily(1, 13);
 
         $schedule->command('twitter:unfollow-users')
                  ->daily();
