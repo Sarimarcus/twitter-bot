@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('twitter:follow-users')
                  ->everyThirtyMinutes();
 
-        $schedule->command('twitter:twitter:save-popular-tweets')
+        $schedule->command('twitter:save-popular-tweets')
                  ->twiceDaily(1, 13);
 
         $schedule->command('twitter:unfollow-users')
