@@ -10,7 +10,7 @@ class TwitterBot
 {
 
     const WOEID = 615702; // Paris, FR
-    const SUGG_SLUG = 'mode'; // Slug for suggestions
+    const SUGG_SLUG = 'fashion'; // Slug for suggestions
     const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
     const NUMBER_UNFOLLOW = 20; // How many should we unfollow each day
 
@@ -94,7 +94,7 @@ class TwitterBot
      */
     public static function getSuggested()
     {
-        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['lang' => 'fr', 'format' => 'array']);
+        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['format' => 'array']);
         foreach ($suggestions['users'] as $f) {
             $data = [
                 'id'              => $f['id'],
