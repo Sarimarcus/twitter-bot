@@ -91,6 +91,7 @@ class TwitterBot
 
     /*
      * Getting suggested users by slug
+     * @todo Handle suggestions for EN (fashion.json?lang=en)
      */
     public static function getSuggested()
     {
@@ -151,17 +152,6 @@ class TwitterBot
      */
     public static function tweetInterest()
     {
-        // Some interesting users
-        $interesting = Collection::make(self::$interestingUsers);
-
-        // Added some from the DB (the suggested ones), merging and picking one
-        $rows = Users::getSuggested();
-        $suggested = collect($rows)->pluck('screen_name');
-        $target = $interesting->merge($suggested)->unique()->random();
-
-        // Getting tweets from account
-        $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
-
         $random = rand(0, 8);
         switch ($random) {
 
@@ -185,6 +175,7 @@ class TwitterBot
             case 3:
             case 4:
 
+                $tweets = $this->getRandomTweets();
                 $tweet = $tweets[(rand(0, 10))]['text'];
                 \Log::info('Tweeting something interesting : '.$tweet);
 
@@ -202,6 +193,7 @@ class TwitterBot
             case 7:
             case 8:
 
+                $tweets = $this->getRandomTweets();
                 $tweet = $tweets[(rand(0, 10))]['id'];
                 \Log::info('Retweeting something interesting : '.$tweet);
 
@@ -283,5 +275,24 @@ class TwitterBot
 
             $tweet = Tweets::updateOrCreate(['id' => $t['id']], $data);
         }
+    }
+
+    /*
+     *  Get some random tweets
+     */
+    private function getRandomTweets()
+    {
+        // From hardcoded interesting users
+        $interesting = Collection::make(self::$interestingUsers);
+
+        // Some from the DB (the suggested ones), merging and picking one
+        $rows = Users::getSuggested();
+        $suggested = collect($rows)->pluck('screen_name');
+        $target = $interesting->merge($suggested)->unique()->random();
+
+        // Getting tweets from account
+        $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
+
+        return $tweets;
     }
 }
