@@ -12,7 +12,7 @@ class TwitterBot
     const WOEID = 615702; // Paris, FR
     const SUGG_SLUG = 'mode'; // Slug for suggestions
     const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
-    const NUMBER_UNFOLLOW = 15; // How many should we unfollow
+    const NUMBER_UNFOLLOW = 20; // How many should we unfollow
 
     public static $interestingUsers = [
 
@@ -158,10 +158,11 @@ class TwitterBot
             // Retweet from the database
             case 0:
                 $tweet = Tweets::getNext();
-                \Log::info('Retweeting from the DB : '.$tweet->id);
+                \Log::info('Retweeting and liking from the DB : '.$tweet->id);
 
                 try {
                     \Twitter::postRt($tweet->id);
+                    \Twitter::postFavorite($tweet->id);
                     Tweets::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
                     \Log::error($e);
@@ -195,10 +196,11 @@ class TwitterBot
 
                 $tweets = self::getRandomTweets();
                 $tweet = $tweets[(rand(0, 10))]['id'];
-                \Log::info('Retweeting something interesting : '.$tweet);
+                \Log::info('Retweeting and liking something interesting : '.$tweet);
 
                 try {
                     \Twitter::postRt($tweet);
+                    \Twitter::postFavorite($tweet->id);
                 } catch (\Exception $e) {
                     \Log::error($e);
                 }
