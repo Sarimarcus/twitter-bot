@@ -162,7 +162,7 @@ class TwitterBot
 
                 try {
                     \Twitter::postRt($tweet->id);
-                    \Twitter::postFavorite($tweet->id);
+                    \Twitter::postFavorite(['id' => $tweet->id]);
                     Tweets::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
                     \Log::error($e);
@@ -195,12 +195,12 @@ class TwitterBot
             case 8:
 
                 $tweets = self::getRandomTweets();
-                $tweet = $tweets[(rand(0, 10))]['id'];
-                \Log::info('Retweeting and liking something interesting : '.$tweet);
+                $tweetId = $tweets[(rand(0, 10))]['id'];
+                \Log::info('Retweeting and liking something interesting : '.$tweetId);
 
                 try {
-                    \Twitter::postRt($tweet);
-                    \Twitter::postFavorite($tweet);
+                    \Twitter::postRt($tweetId);
+                    \Twitter::postFavorite(['id' => $tweetId]);
                 } catch (\Exception $e) {
                     \Log::error($e);
                 }
