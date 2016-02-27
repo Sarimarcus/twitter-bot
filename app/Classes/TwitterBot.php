@@ -280,7 +280,7 @@ class TwitterBot
     /*
      *  Get some random tweets
      */
-    private function getRandomTweets()
+    private static function getRandomTweets()
     {
         // From hardcoded interesting users
         $interesting = Collection::make(self::$interestingUsers);
