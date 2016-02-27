@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
                  ->twiceDaily(1, 13);
 
         $schedule->command('twitter:unfollow-users')
-                 ->daily();
+                 ->twiceDaily(2, 14);
 
         $schedule->command('twitter:purge-users')
                  ->daily();
