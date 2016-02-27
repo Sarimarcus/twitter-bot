@@ -175,7 +175,7 @@ class TwitterBot
             case 3:
             case 4:
 
-                $tweets = $this->getRandomTweets();
+                $tweets = self::getRandomTweets();
                 $tweet = $tweets[(rand(0, 10))]['text'];
                 \Log::info('Tweeting something interesting : '.$tweet);
 
@@ -193,7 +193,7 @@ class TwitterBot
             case 7:
             case 8:
 
-                $tweets = $this->getRandomTweets();
+                $tweets = self::getRandomTweets();
                 $tweet = $tweets[(rand(0, 10))]['id'];
                 \Log::info('Retweeting something interesting : '.$tweet);
 
