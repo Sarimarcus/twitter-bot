@@ -200,7 +200,7 @@ class TwitterBot
 
                 try {
                     \Twitter::postRt($tweet);
-                    \Twitter::postFavorite($tweet->id);
+                    \Twitter::postFavorite($tweet);
                 } catch (\Exception $e) {
                     \Log::error($e);
                 }
