@@ -14,6 +14,18 @@ class TwitterBot
     const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
     const NUMBER_UNFOLLOW = 20; // How many should we unfollow
 
+
+    /*
+     * The slugs for suggestions
+     */
+    public static $slugSuggestions = [
+      //  'fr' => 'mode',
+        'en' => 'fashion'
+    ];
+
+    /*
+     * Some default users to follow
+     */
     public static $interestingUsers = [
 
         'getthelook_fr', 'ellefrance', 'vogueparis',
@@ -91,27 +103,28 @@ class TwitterBot
 
     /*
      * Getting suggested users by slug
-     * @todo Handle suggestions for EN (fashion.json?lang=en)
      */
     public static function getSuggested()
     {
-        $suggestions = \Twitter::getSuggesteds(self::SUGG_SLUG, ['format' => 'array']);
-        foreach ($suggestions['users'] as $f) {
-            $data = [
-                'id'              => $f['id'],
-                'screen_name'     => $f['screen_name'],
-                'followers_count' => $f['followers_count'],
-                'statuses_count'  => $f['statuses_count'],
-                'lang'            => $f['lang'],
-                'suggested'       => 1
-            ];
+        foreach (self::$slugSuggestions as $lang => $slug) {
+            $suggestions = \Twitter::getSuggesteds($slug, ['lang' => $lang, 'format' => 'array']);
+            foreach ($suggestions['users'] as $f) {
+                $data = [
+                    'id'              => $f['id'],
+                    'screen_name'     => $f['screen_name'],
+                    'followers_count' => $f['followers_count'],
+                    'statuses_count'  => $f['statuses_count'],
+                    'lang'            => $f['lang'],
+                    'suggested'       => 1
+                ];
 
-            $user = Users::updateOrCreate(['id' => $f['id']], $data);
+                $user = Users::updateOrCreate(['id' => $f['id']], $data);
 
-            if ($user->wasRecentlyCreated) {
-                if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
-                    Users::flagFollowed($user->id);
-                    \Log::info('Following suggested user : '.$user->screen_name);
+                if ($user->wasRecentlyCreated) {
+                    if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
+                        Users::flagFollowed($user->id);
+                        \Log::info('Following suggested user : '.$user->screen_name);
+                    }
                 }
             }
         }
@@ -165,7 +178,7 @@ class TwitterBot
                     \Twitter::postFavorite(['id' => $tweet->id]);
                     Tweets::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
-                    \Log::error($e);
+                    \Log::error($e->getMessage());
                 }
 
                 break;
@@ -183,7 +196,7 @@ class TwitterBot
                 try {
                     \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
                 } catch (\Exception $e) {
-                    \Log::error($e);
+                    \Log::error($e->getMessage());
                 }
 
                 break;
@@ -202,7 +215,7 @@ class TwitterBot
                     \Twitter::postRt($tweetId);
                     \Twitter::postFavorite(['id' => $tweetId]);
                 } catch (\Exception $e) {
-                    \Log::error($e);
+                    \Log::error($e->getMessage());
                 }
 
                 break;
@@ -290,10 +303,11 @@ class TwitterBot
         // Some from the DB (the suggested ones), merging and picking one
         $rows = Users::getSuggested();
         $suggested = collect($rows)->pluck('screen_name');
-        $target = $interesting->merge($suggested)->unique()->random();
 
         // Getting tweets from account
-        $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
+        if ($target = $interesting->merge($suggested)->unique()->random()) {
+            $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
+        }
 
         return $tweets;
     }

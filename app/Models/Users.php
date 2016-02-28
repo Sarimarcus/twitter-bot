@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Users extends Model
 {
     protected $table     = 'users';
-    protected $fillable  = ['id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'interesting', 'created_at', 'updated_at'];
+    protected $fillable  = ['id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'suggested', 'created_at', 'updated_at'];
 
     public $incrementing = false;
     public $primaryKey   = 'id';
