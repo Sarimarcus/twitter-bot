@@ -33,7 +33,8 @@ class TwitterBot
         'marieclaire_fr', 'TheBeautyst', 'TTTmagazine',
         'stylistfrance', 'puretrend', 'lofficielparis',
         'grazia_fr', 'flowmagazine_fr', 'somanyparis',
-        'My_Little_Paris', 'LEXPRESS_Styles', 'Terrafemina'
+        'My_Little_Paris', 'LEXPRESS_Styles', 'Terrafemina',
+        'Madamefigaro'
 
     ];
 
@@ -42,7 +43,7 @@ class TwitterBot
      */
     public static function followUsers()
     {
-        // Some interesting users to scan/
+        // Some interesting users to scan
         $target = Collection::make(self::$interestingUsers)->random();
 
         // Getting followers from account
