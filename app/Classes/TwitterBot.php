@@ -3,13 +3,13 @@
 namespace App\Classes;
 
 use Illuminate\Support\Collection;
+use App\Models\Bots;
 use App\Models\Users;
 use App\Models\Tweets;
 
 class TwitterBot
 {
     const WOEID = 615702; // Paris, FR
-    const SUGG_SLUG = 'mode'; // Slug for suggestions
     const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
     const NUMBER_UNFOLLOW = 20; // How many should we unfollow
 
@@ -287,6 +287,25 @@ class TwitterBot
 
             $tweet = Tweets::updateOrCreate(['id' => $t['id']], $data);
         }
+    }
+
+    /*
+     * Get and update information about a bot
+     */
+    public static function updateBotInfo()
+    {
+        $parameters = array(
+            'screen_name' => 'LydwineParis',
+            'format' => 'array'
+            );
+
+        $user = \Twitter::getUsers($parameters);
+        $bot = Bots::find($user['id']);
+        foreach ($bot->getFillable() as $p) {
+            $bot->$p = $user[$p];
+        }
+
+        return $bot->save();
     }
 
     /*
