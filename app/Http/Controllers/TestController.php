@@ -8,13 +8,8 @@ use App\Http\Controllers\Controller;
 
 class TestController extends Controller
 {
-    public function save()
+    public function test()
     {
-        \App\Classes\TwitterBot::getPopularTweets();
-    }
-
-    public function get()
-    {
-        \App\Classes\TwitterBot::getTweets();
+        \App\Classes\TwitterBot::getInstagram();
     }
 }
