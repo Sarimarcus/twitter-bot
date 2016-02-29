@@ -175,7 +175,7 @@ class TwitterBot
                     \Twitter::postFavorite(['id' => $tweet->id]);
                     Tweets::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
-                    \Log::error($e->getMessage());
+                    \Log::error('Retweeting and liking from the DB : '.$e->getMessage());
                 }
 
                 break;
@@ -193,7 +193,7 @@ class TwitterBot
                 try {
                     \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
                 } catch (\Exception $e) {
-                    \Log::error($e->getMessage());
+                    \Log::error('Tweeting something interesting : '.$e->getMessage());
                 }
 
                 break;
@@ -212,7 +212,7 @@ class TwitterBot
                     \Twitter::postRt($tweetId);
                     \Twitter::postFavorite(['id' => $tweetId]);
                 } catch (\Exception $e) {
-                    \Log::error($e->getMessage());
+                    \Log::error('Retweeting and liking something interesting : '.$e->getMessage());
                 }
 
                 break;
