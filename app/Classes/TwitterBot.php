@@ -35,6 +35,18 @@ class TwitterBot
     ];
 
     /*
+     * Run a task for every online bot
+     */
+    public static function runTask($task)
+    {
+        $bots = Bot::online()->orderBy('created_at')->get();
+        foreach ($bots as $bot) {
+            # code...
+            self::$task();
+        }
+    }
+
+    /*
      * Following followers from interesting accounts
      */
     public static function followUsers()
@@ -167,6 +179,7 @@ class TwitterBot
 
             // Retweet from the database
             case 0:
+
                 $tweet = Tweet::getNext();
                 \Log::info('Retweeting and liking from the DB : '.$tweet->id);
 
@@ -300,6 +313,7 @@ class TwitterBot
             );
 
         $user = \Twitter::getUsers($parameters);
+
         $bot = Bot::find($user['id']);
         foreach ($bot->getFillable() as $p) {
             $bot->$p = $user[$p];

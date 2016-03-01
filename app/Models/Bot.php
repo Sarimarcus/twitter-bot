@@ -10,4 +10,12 @@ class Bot extends Model
 
     public $incrementing = false;
     public $primaryKey   = 'id';
+
+    /*
+     * Returns the online bots
+     */
+    public static function scopeOnline($query)
+    {
+        return $query->where('online', 1);
+    }
 }

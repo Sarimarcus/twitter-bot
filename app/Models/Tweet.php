@@ -17,7 +17,7 @@ class Tweet extends Model
     public static function flagRetweeted($id)
     {
         if ($id != null) {
-            $tweet = Tweets::find($id);
+            $tweet = Tweet::find($id);
             $tweet->retweeted = 1;
             return $tweet->save();
         }

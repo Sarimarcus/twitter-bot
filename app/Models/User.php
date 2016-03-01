@@ -45,7 +45,7 @@ class User extends Model
     public static function flagFollowed($id)
     {
         if ($id != null) {
-            $user = Users::find($id);
+            $user = User::find($id);
             $user->followed = 1;
             return $user->save();
         }
@@ -57,7 +57,7 @@ class User extends Model
     public static function flagFollowing($id)
     {
         if ($id != null) {
-            $user = Users::find($id);
+            $user = User::find($id);
             $user->following = 1;
             return $user->save();
         }
