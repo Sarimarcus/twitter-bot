@@ -3,9 +3,9 @@
 namespace App\Classes;
 
 use Illuminate\Support\Collection;
-use App\Models\Bots;
-use App\Models\Users;
-use App\Models\Tweets;
+use App\Models\Bot;
+use App\Models\User;
+use App\Models\Tweet;
 
 class TwitterBot
 {
@@ -54,15 +54,15 @@ class TwitterBot
                 'lang'            => $f['lang']
             ];
 
-            $user = Users::updateOrCreate(['id' => $f['id']], $data);
+            $user = User::updateOrCreate(['id' => $f['id']], $data);
         }
 
         // Getting and following best follower
-        $winner = Users::getMostInteresting();
+        $winner = User::getMostInteresting();
 
         if (\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])) {
             \Log::info('Following user : '.$winner->screen_name);
-            Users::flagFollowed($winner->id);
+            User::flagFollowed($winner->id);
         }
     }
 
@@ -72,7 +72,7 @@ class TwitterBot
     public static function unFollowUsers()
     {
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
-        $users = Users::getUsersToUnfollow(self::NUMBER_UNFOLLOW);
+        $users = User::getUsersToUnfollow(self::NUMBER_UNFOLLOW);
 
         if (count($users>0)) {
 
@@ -85,13 +85,13 @@ class TwitterBot
                 // He's following me, keep and flag him
                 if (isset($u['connection'][1]['following_by'])) {
                     \Log::info($u['screen_name'].' is flagged as following');
-                    Users::flagFollowing($u['id']);
+                    User::flagFollowing($u['id']);
 
                 // Let's unfollow him ! Ingrate !
                 } else {
                     if ($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])) {
                         \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
-                        Users::deleteUser($u['id']);
+                        User::deleteUser($u['id']);
                     }
                 }
             }
@@ -115,11 +115,11 @@ class TwitterBot
                     'suggested'       => 1
                 ];
 
-                $user = Users::updateOrCreate(['id' => $f['id']], $data);
+                $user = User::updateOrCreate(['id' => $f['id']], $data);
 
                 if ($user->wasRecentlyCreated) {
                     if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
-                        Users::flagFollowed($user->id);
+                        User::flagFollowed($user->id);
                         \Log::info('Following suggested user : '.$user->screen_name);
                     }
                 }
@@ -133,7 +133,7 @@ class TwitterBot
     public static function purgeUsers()
     {
         \Log::info('Purging users');
-        Users::purgeUsers();
+        User::purgeUsers();
     }
 
     /*
@@ -167,13 +167,13 @@ class TwitterBot
 
             // Retweet from the database
             case 0:
-                $tweet = Tweets::getNext();
+                $tweet = Tweet::getNext();
                 \Log::info('Retweeting and liking from the DB : '.$tweet->id);
 
                 try {
                     \Twitter::postRt($tweet->id);
                     \Twitter::postFavorite(['id' => $tweet->id]);
-                    Tweets::flagRetweeted($tweet->id);
+                    Tweet::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
                     \Log::error('Retweeting and liking from the DB : '.$e->getMessage());
                 }
@@ -285,7 +285,7 @@ class TwitterBot
                 'lang'           => $t['lang']
             ];
 
-            $tweet = Tweets::updateOrCreate(['id' => $t['id']], $data);
+            $tweet = Tweet::updateOrCreate(['id' => $t['id']], $data);
         }
     }
 
@@ -300,7 +300,7 @@ class TwitterBot
             );
 
         $user = \Twitter::getUsers($parameters);
-        $bot = Bots::find($user['id']);
+        $bot = Bot::find($user['id']);
         foreach ($bot->getFillable() as $p) {
             $bot->$p = $user[$p];
         }
@@ -317,7 +317,7 @@ class TwitterBot
         $interesting = Collection::make(self::$interestingUsers);
 
         // Some from the DB (the suggested ones), merging and picking one
-        $rows = Users::getSuggested();
+        $rows = User::getSuggested();
         $suggested = collect($rows)->pluck('screen_name');
 
         // Getting tweets from account

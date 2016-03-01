@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tweets extends Model
+class Tweet extends Model
 {
-    protected $table     = 'tweets';
     protected $fillable  = ['id', 'user_id', 'text', 'retweet_count', 'favorite_count', 'lang', 'created_at', 'updated_at'];
 
     public $incrementing = false;
