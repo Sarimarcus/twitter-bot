@@ -42,7 +42,7 @@ class TwitterBot
         $bots = Bot::online()->orderBy('created_at')->get();
         foreach ($bots as $bot) {
             # code...
-            self::$task();
+            self::$task($bot->screen_name);
         }
     }
 
@@ -305,10 +305,10 @@ class TwitterBot
     /*
      * Get and update information about a bot
      */
-    public static function updateBotInfo()
+    public static function updateBotInfo($screen_name)
     {
         $parameters = array(
-            'screen_name' => 'LydwineParis',
+            'screen_name' => $screen_name,
             'format' => 'array'
             );
 
