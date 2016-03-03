@@ -38,6 +38,6 @@ class TweetInterest extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::tweetInterest();
+        \App\Classes\TwitterBot::runTask('tweetInterest');
     }
 }

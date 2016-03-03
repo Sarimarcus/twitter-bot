@@ -10,6 +10,6 @@ class TestController extends Controller
 {
     public function test()
     {
-        \App\Classes\TwitterBot::runTask('updateBotInfo');
+        \App\Classes\TwitterBot::runTask('sendSomething');
     }
 }

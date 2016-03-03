@@ -37,6 +37,6 @@ class GetSuggested extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::getSuggested();
+        \App\Classes\TwitterBot::runTask('getSuggested');
     }
 }

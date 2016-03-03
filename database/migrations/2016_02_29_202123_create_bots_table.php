@@ -25,7 +25,7 @@ class CreateBotsTable extends Migration
             $table->integer('favourites_count');
             $table->integer('followers_count');
             $table->integer('friends_count');
-            $table->string('configuration');
+            $table->text('configuration');
             $table->boolean('online')->default(0);
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $fillable  = ['id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'suggested', 'created_at', 'updated_at'];
+    protected $fillable  = ['id', 'bot_id', 'screen_name', 'followers_count', 'statuses_count', 'lang', 'suggested', 'created_at', 'updated_at'];
 
     public $incrementing = false;
     public $primaryKey   = 'id';
@@ -14,9 +14,10 @@ class User extends Model
     /*
      * Returning a french user with some followers and tweets
      */
-    public static function getMostInteresting()
+    public static function getMostInteresting(Bot $bot)
     {
         $user = \DB::table('users')
+                    ->where('bot_id', $bot->id)
                     ->where('lang', 'fr')
                     ->where('statuses_count', '>=', '100')
                     ->where('followers_count', '>=', '50')
@@ -31,12 +32,29 @@ class User extends Model
     /*
      * Returns the interesting users
      */
-    public static function getSuggested()
+    public static function getSuggested(Bot $bot)
     {
         return  \DB::table('users')
                     ->select('screen_name')
+                    ->where('bot_id', $bot->id)
                     ->where('suggested', 1)
                     ->get();
+    }
+
+    /*
+     * Return a user to unfollow (rule : oldest followed)
+     */
+    public static function getUsersToUnfollow(Bot $bot, $limit = 1)
+    {
+        $user = \DB::table('users')
+                    ->where('bot_id', $bot->id)
+                    ->where('followed', 1)
+                    ->where('following', 0)
+                    ->where('suggested', 0)
+                    ->orderBy('created_at')
+                    ->take($limit)->get();
+
+        return $user;
     }
 
     /*
@@ -61,21 +79,6 @@ class User extends Model
             $user->following = 1;
             return $user->save();
         }
-    }
-
-    /*
-     * Return a user to unfollow (rule : oldest followed)
-     */
-    public static function getUsersToUnfollow($limit = 1)
-    {
-        $user = \DB::table('users')
-                    ->where('followed', 1)
-                    ->where('following', 0)
-                    ->where('suggested', 0)
-                    ->orderBy('created_at')
-                    ->take($limit)->get();
-
-        return $user;
     }
 
     /*

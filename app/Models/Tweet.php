@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tweet extends Model
 {
-    protected $fillable  = ['id', 'user_id', 'text', 'retweet_count', 'favorite_count', 'lang', 'created_at', 'updated_at'];
+    protected $fillable  = ['id', 'bot_id', 'user_id', 'text', 'retweet_count', 'favorite_count', 'lang', 'created_at', 'updated_at'];
 
     public $incrementing = false;
     public $primaryKey   = 'id';
@@ -26,9 +26,10 @@ class Tweet extends Model
     /*
      * Get the newt tweet to retweet
      */
-    public static function getNext()
+    public static function getNext(Bot $bot)
     {
         $user = \DB::table('tweets')
+                    ->where('bot_id', $bot->id)
                     ->where('retweeted', 0)
                     ->first();
 

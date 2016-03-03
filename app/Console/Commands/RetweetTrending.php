@@ -37,6 +37,6 @@ class RetweetTrending extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::retweetTrending();
+        \App\Classes\TwitterBot::runTask('retweetTrending');
     }
 }

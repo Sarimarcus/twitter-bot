@@ -37,6 +37,6 @@ class SavePopularTweets extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::savePopularTweets();
+        \App\Classes\TwitterBot::runTask('savePopularTweets');
     }
 }

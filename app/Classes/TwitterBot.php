@@ -9,14 +9,14 @@ use App\Models\Tweet;
 
 class TwitterBot
 {
-    const WOEID = 615702; // Paris, FR
-    const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
+    // const WOEID = 615702; // Paris, FR
+   // const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
     const NUMBER_UNFOLLOW = 20; // How many should we unfollow
 
     /*
      * The slugs for suggestions
      */
-    public static $slugSuggestions = [
+   /* public static $slugSuggestions = [
         'fr' => 'mode',
         'en' => 'fashion'
     ];
@@ -24,7 +24,7 @@ class TwitterBot
     /*
      * Some default users to follow
      */
-    public static $interestingUsers = [
+    /*public static $interestingUsers = [
         'getthelook_fr', 'ellefrance', 'vogueparis',
         'CausetteLeMag', 'FashionMagFR', 'VanityFairFR',
         'marieclaire_fr', 'TheBeautyst', 'TTTmagazine',
@@ -32,7 +32,7 @@ class TwitterBot
         'grazia_fr', 'flowmagazine_fr', 'somanyparis',
         'My_Little_Paris', 'LEXPRESS_Styles', 'Terrafemina',
         'Madamefigaro'
-    ];
+    ];*/
 
     /*
      * Run a task for every online bot
@@ -41,18 +41,30 @@ class TwitterBot
     {
         $bots = Bot::online()->orderBy('created_at')->get();
         foreach ($bots as $bot) {
-            # code...
-            self::$task($bot->screen_name);
+            $bot::setConfiguration($bot);
+            self::$task($bot);
         }
+    }
+
+    /*
+     * Test function
+     */
+    public static function sendSomething(Bot $bot)
+    {
+        self::setOAuth($bot);
+        \Twitter::postTweet(['status' => 'je teste quelque chose !', 'format' => 'array']);
     }
 
     /*
      * Following followers from interesting accounts
      */
-    public static function followUsers()
+    public static function followUsers(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         // Some interesting users to scan
-        $target = Collection::make(self::$interestingUsers)->random();
+        $target = Collection::make($bot->interestingUsers)->random();
 
         // Getting followers from account
         $followers = \Twitter::getFollowers(['screen_name' => $target, 'count' => 20, 'format' => 'array']);
@@ -60,6 +72,7 @@ class TwitterBot
         foreach ($followers['users'] as $f) {
             $data = [
                 'id'              => $f['id'],
+                'bot_id'          => $bot->id,
                 'screen_name'     => $f['screen_name'],
                 'followers_count' => $f['followers_count'],
                 'statuses_count'  => $f['statuses_count'],
@@ -70,10 +83,10 @@ class TwitterBot
         }
 
         // Getting and following best follower
-        $winner = User::getMostInteresting();
+        $winner = User::getMostInteresting($bot);
 
         if (\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])) {
-            \Log::info('Following user : '.$winner->screen_name);
+            \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
             User::flagFollowed($winner->id);
         }
     }
@@ -81,10 +94,13 @@ class TwitterBot
     /*
      * Unfollow old followed users
      */
-    public static function unFollowUsers()
+    public static function unFollowUsers(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
-        $users = User::getUsersToUnfollow(self::NUMBER_UNFOLLOW);
+        $users = User::getUsersToUnfollow($bot, self::NUMBER_UNFOLLOW);
 
         if (count($users>0)) {
 
@@ -96,13 +112,13 @@ class TwitterBot
             foreach ($results as $u) {
                 // He's following me, keep and flag him
                 if (isset($u['connection'][1]['following_by'])) {
-                    \Log::info($u['screen_name'].' is flagged as following');
+                    \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'].' is flagged as following');
                     User::flagFollowing($u['id']);
 
                 // Let's unfollow him ! Ingrate !
                 } else {
                     if ($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])) {
-                        \Log::info('Unfollowing and deleting user : '.$u['screen_name']);
+                        \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : '.$u['screen_name']);
                         User::deleteUser($u['id']);
                     }
                 }
@@ -113,13 +129,17 @@ class TwitterBot
     /*
      * Getting suggested users by slug
      */
-    public static function getSuggested()
+    public static function getSuggested(Bot $bot)
     {
-        foreach (self::$slugSuggestions as $lang => $slug) {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
+        foreach ($bot->slugSuggestions as $lang => $slug) {
             $suggestions = \Twitter::getSuggesteds($slug, ['lang' => $lang, 'format' => 'array']);
             foreach ($suggestions['users'] as $f) {
                 $data = [
                     'id'              => $f['id'],
+                    'bot_id'          => $bot->id,
                     'screen_name'     => $f['screen_name'],
                     'followers_count' => $f['followers_count'],
                     'statuses_count'  => $f['statuses_count'],
@@ -132,7 +152,7 @@ class TwitterBot
                 if ($user->wasRecentlyCreated) {
                     if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
                         User::flagFollowed($user->id);
-                        \Log::info('Following suggested user : '.$user->screen_name);
+                        \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
                     }
                 }
             }
@@ -151,17 +171,20 @@ class TwitterBot
     /*
      * Retweet trending from local
      */
-    public static function retweetTrending()
+    public static function retweetTrending(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         // Getting trends
-        $trends = \Twitter::getTrendsPlace(['id' => self::WOEID, 'format' => 'array']);
+        $trends = \Twitter::getTrendsPlace(['id' => $bot->woeid, 'format' => 'array']);
         $topTrend = $trends[0]['trends'][(rand(0, 4))]['name'];
 
         // Getting trending tweets
-        $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => 'fr', 'format' => 'array']);
+        $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => $bot->lang, 'format' => 'array']);
         $topTweet = $tweets['statuses'][(rand(0, 4))]['id'];
 
-        \Log::info('Retweeting trending tweet : '.$topTweet);
+        \Log::info('[' . $bot->screen_name . '] Retweeting trending tweet : '.$topTweet);
 
         // Retweeting one
         \Twitter::postRt($topTweet);
@@ -172,23 +195,26 @@ class TwitterBot
      * in 3 ways : tweet with the URL, retweet, or tweet
      * original content
      */
-    public static function tweetInterest()
+    public static function tweetInterest(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         $random = rand(0, 8);
         switch ($random) {
 
             // Retweet from the database
             case 0:
 
-                $tweet = Tweet::getNext();
-                \Log::info('Retweeting and liking from the DB : '.$tweet->id);
+                $tweet = Tweet::getNext($bot);
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$tweet->id);
 
                 try {
                     \Twitter::postRt($tweet->id);
                     \Twitter::postFavorite(['id' => $tweet->id]);
                     Tweet::flagRetweeted($tweet->id);
                 } catch (\Exception $e) {
-                    \Log::error('Retweeting and liking from the DB : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$e->getMessage());
                 }
 
                 break;
@@ -199,14 +225,14 @@ class TwitterBot
             case 3:
             case 4:
 
-                $tweets = self::getRandomTweets();
+                $tweets = self::getRandomTweets($bot);
                 $tweet = $tweets[(rand(0, 10))]['text'];
-                \Log::info('Tweeting something interesting : '.$tweet);
+                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.$tweet);
 
                 try {
                     \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
                 } catch (\Exception $e) {
-                    \Log::error('Tweeting something interesting : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Tweeting something interesting : '.$e->getMessage());
                 }
 
                 break;
@@ -217,15 +243,15 @@ class TwitterBot
             case 7:
             case 8:
 
-                $tweets = self::getRandomTweets();
+                $tweets = self::getRandomTweets($bot);
                 $tweetId = $tweets[(rand(0, 10))]['id'];
-                \Log::info('Retweeting and liking something interesting : '.$tweetId);
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$tweetId);
 
                 try {
                     \Twitter::postRt($tweetId);
                     \Twitter::postFavorite(['id' => $tweetId]);
                 } catch (\Exception $e) {
-                    \Log::error('Retweeting and liking something interesting : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$e->getMessage());
                 }
 
                 break;
@@ -236,8 +262,11 @@ class TwitterBot
      * Tweet an inspiring quote
      * @todo : use : http://quotes.rest/qod.json maybe
      */
-    public static function tweetInspire()
+    public static function tweetInspire(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         $quote = Collection::make([
 
             'Ils ne savaient pas que c’était impossible alors ils l’ont fait. - Mark Twain',
@@ -270,27 +299,31 @@ class TwitterBot
 
         ])->random();
 
-        \Log::info('Tweeting quote : '.$quote);
+        \Log::info('[' . $bot->screen_name . '] Tweeting quote : '.$quote);
         \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
     }
 
     /*
      * Save popular tweets by hashtags
      */
-    public static function savePopularTweets()
+    public static function savePopularTweets(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         $parameters = array(
-            'q' => self::SEARCH_QUERY,
+            'q' => $bot->searchQuery,
             'result_type' => 'popular',
             'format' => 'array'
             );
 
         $tweets = \Twitter::getSearch($parameters);
 
-        \Log::info('Retrieving search from search query : '.self::SEARCH_QUERY);
+        \Log::info('[' . $bot->screen_name . '] Retrieving search from search query : '.$bot->searchQuery);
         foreach ($tweets['statuses'] as $t) {
             $data = [
                 'id'             => $t['id'],
+                'bot_id'         => $bot->id,
                 'user_id'        => $t['user']['id'],
                 'text'           => $t['text'],
                 'retweet_count'  => $t['retweet_count'],
@@ -307,6 +340,9 @@ class TwitterBot
      */
     public static function updateBotInfo($screen_name)
     {
+        // Setting OAuth parameters
+        \Twitter::reconfig($botConfig);
+
         $parameters = array(
             'screen_name' => $screen_name,
             'format' => 'array'
@@ -325,13 +361,16 @@ class TwitterBot
     /*
      *  Get some random tweets
      */
-    private static function getRandomTweets()
+    private static function getRandomTweets(Bot $bot)
     {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
         // From hardcoded interesting users
-        $interesting = Collection::make(self::$interestingUsers);
+        $interesting = Collection::make($bot->interestingUsers);
 
         // Some from the DB (the suggested ones), merging and picking one
-        $rows = User::getSuggested();
+        $rows = User::getSuggested($bot);
         $suggested = collect($rows)->pluck('screen_name');
 
         // Getting tweets from account
@@ -340,5 +379,20 @@ class TwitterBot
         }
 
         return $tweets;
+    }
+
+    /*
+     * Set OAuth parameters for the bot
+     */
+    private static function setOAuth(Bot $bot)
+    {
+        $botConfig = [
+            'consumer_key'    => $bot->twitter_consumer_key,
+            'consumer_secret' => $bot->twitter_consumer_secret,
+            'token'           => $bot->twitter_access_token,
+            'secret'          => $bot->twitter_access_token_secret
+        ];
+
+        \Twitter::reconfig($botConfig);
     }
 }

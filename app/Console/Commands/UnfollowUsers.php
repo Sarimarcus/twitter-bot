@@ -37,6 +37,6 @@ class UnfollowUsers extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::unFollowUsers();
+        \App\Classes\TwitterBot::runTask('unFollowUsers');
     }
 }

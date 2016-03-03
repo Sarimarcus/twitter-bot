@@ -38,6 +38,6 @@ class TweetInspire extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::tweetInspire();
+        \App\Classes\TwitterBot::runTask('tweetInspire');
     }
 }
