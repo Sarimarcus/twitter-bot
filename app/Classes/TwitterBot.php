@@ -135,7 +135,12 @@ class TwitterBot
         self::setOAuth($bot);
 
         foreach ($bot->slugSuggestions as $lang => $slug) {
-            $suggestions = \Twitter::getSuggesteds($slug, ['lang' => $lang, 'format' => 'array']);
+
+            if($lang != 'fr'){
+                $parameters = ['lang' => $lang, 'format' => 'array'];
+            } else $parameters = ['format' => 'array'];
+
+            $suggestions = \Twitter::getSuggesteds($slug, $parameters);
             foreach ($suggestions['users'] as $f) {
                 $data = [
                     'id'              => $f['id'],
