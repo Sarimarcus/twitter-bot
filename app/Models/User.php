@@ -96,7 +96,7 @@ class User extends Model
      */
     public static function purgeUsers()
     {
-        \DB::table('users')->where('statuses_count', 0)->delete();
+        \DB::table('users')->where('statuses_count', '<=', 50)->delete();
         \DB::table('users')->where('followers_count', '<=', 50)->delete();
     }
 }

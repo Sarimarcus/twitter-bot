@@ -9,30 +9,7 @@ use App\Models\Tweet;
 
 class TwitterBot
 {
-    // const WOEID = 615702; // Paris, FR
-   // const SEARCH_QUERY = '#mode OR #fashion'; // Query for search
-    const NUMBER_UNFOLLOW = 20; // How many should we unfollow
-
-    /*
-     * The slugs for suggestions
-     */
-   /* public static $slugSuggestions = [
-        'fr' => 'mode',
-        'en' => 'fashion'
-    ];
-
-    /*
-     * Some default users to follow
-     */
-    /*public static $interestingUsers = [
-        'getthelook_fr', 'ellefrance', 'vogueparis',
-        'CausetteLeMag', 'FashionMagFR', 'VanityFairFR',
-        'marieclaire_fr', 'TheBeautyst', 'TTTmagazine',
-        'stylistfrance', 'puretrend', 'lofficielparis',
-        'grazia_fr', 'flowmagazine_fr', 'somanyparis',
-        'My_Little_Paris', 'LEXPRESS_Styles', 'Terrafemina',
-        'Madamefigaro'
-    ];*/
+    const NUMBER_UNFOLLOW = 30; // How many should we unfollow
 
     /*
      * Run a task for every online bot

@@ -33,10 +33,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('twitter:tweet-interest')
-                 ->everyThirtyMinutes();
-
         $schedule->command('twitter:follow-users')
+                 ->everyTenMinutes();
+
+        $schedule->command('twitter:tweet-interest')
                  ->everyThirtyMinutes();
 
         $schedule->command('twitter:save-popular-tweets')
