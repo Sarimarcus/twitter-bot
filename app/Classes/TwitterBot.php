@@ -4,8 +4,9 @@ namespace App\Classes;
 
 use Illuminate\Support\Collection;
 use App\Models\Bot;
-use App\Models\User;
+use App\Models\Stat;
 use App\Models\Tweet;
+use App\Models\User;
 
 class TwitterBot
 {
@@ -323,13 +324,13 @@ class TwitterBot
     /*
      * Get and update information about a bot
      */
-    public static function updateBotInfo($screen_name)
+    public static function updateBotInformation(Bot $bot)
     {
         // Setting OAuth parameters
-        \Twitter::reconfig($botConfig);
+        self::setOAuth($bot);
 
         $parameters = array(
-            'screen_name' => $screen_name,
+            'screen_name' => $bot->screen_name,
             'format' => 'array'
             );
 
@@ -340,7 +341,19 @@ class TwitterBot
             $bot->$p = $user[$p];
         }
 
-        return $bot->save();
+        $bot->save();
+
+        // Also fill the stats
+        $stat = new Stat;
+        $stat->bot_id = $user['id'];
+        $stat->date = date('Y-m-d');
+        foreach ($stat->getFillable() as $p) {
+            $stat->$p = $user[$p];
+        }
+
+        \Log::info('[' . $bot->screen_name . '] Getting daily stats');
+
+        return $stat->save();
     }
 
     /*
