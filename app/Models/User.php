@@ -18,7 +18,6 @@ class User extends Model
     {
         $user = \DB::table('users')
                     ->where('bot_id', $bot->id)
-                    ->where('lang', 'fr')
                     ->where('statuses_count', '>=', '100')
                     ->where('followers_count', '>=', '50')
                     ->where('followed', 0)

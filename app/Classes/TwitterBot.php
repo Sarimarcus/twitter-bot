@@ -61,9 +61,8 @@ class TwitterBot
         }
 
         // Getting and following best follower
-        $winner = User::getMostInteresting($bot);
-
-        if (\Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array'])) {
+        if ($winner = User::getMostInteresting($bot)) {
+            \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
             \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
             User::flagFollowed($winner->id);
         }
@@ -113,10 +112,11 @@ class TwitterBot
         self::setOAuth($bot);
 
         foreach ($bot->slugSuggestions as $lang => $slug) {
-
-            if($lang != 'fr'){
+            if ($lang != 'fr') {
                 $parameters = ['lang' => $lang, 'format' => 'array'];
-            } else $parameters = ['format' => 'array'];
+            } else {
+                $parameters = ['format' => 'array'];
+            }
 
             $suggestions = \Twitter::getSuggesteds($slug, $parameters);
             foreach ($suggestions['users'] as $f) {
