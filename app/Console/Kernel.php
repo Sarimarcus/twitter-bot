@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
                  ->everyTenMinutes();
 
         $schedule->command('twitter:tweet-interest')
-                 ->everyThirtyMinutes();
+                 ->everyTenMinutes();
 
         $schedule->command('twitter:save-popular-tweets')
                  ->twiceDaily(1, 13);
