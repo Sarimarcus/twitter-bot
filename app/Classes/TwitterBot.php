@@ -189,7 +189,7 @@ class TwitterBot
             case 0:
 
                 $tweet = Tweet::getNext($bot);
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$tweet->id);
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$tweet->text);
 
                 try {
                     \Twitter::postRt($tweet->id);
@@ -208,11 +208,11 @@ class TwitterBot
             case 4:
 
                 $tweets = self::getRandomTweets($bot);
-                $tweet = $tweets[(rand(0, 10))]['text'];
-                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.$tweet);
+                $tweet = $tweets[(rand(0, 10))];
+                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.$tweet['text']);
 
                 try {
-                    \Twitter::postTweet(['status' => html_entity_decode($tweet), 'format' => 'array']);
+                    \Twitter::postTweet(['status' => html_entity_decode($tweet['text']), 'format' => 'array']);
                 } catch (\Exception $e) {
                     \Log::error('[' . $bot->screen_name . '] Tweeting something interesting : '.$e->getMessage());
                 }
@@ -226,12 +226,12 @@ class TwitterBot
             case 8:
 
                 $tweets = self::getRandomTweets($bot);
-                $tweetId = $tweets[(rand(0, 10))]['id'];
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$tweetId);
+                $tweet = $tweets[(rand(0, 10))];
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$tweet['text]']);
 
                 try {
-                    \Twitter::postRt($tweetId);
-                    \Twitter::postFavorite(['id' => $tweetId]);
+                    \Twitter::postRt($tweet['id']);
+                    \Twitter::postFavorite(['id' => $tweet['id']]);
                 } catch (\Exception $e) {
                     \Log::error('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$e->getMessage());
                 }
