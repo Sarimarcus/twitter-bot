@@ -183,13 +183,14 @@ class TwitterBot
         self::setOAuth($bot);
 
         $random = rand(0, 8);
+        $random = 8;
         switch ($random) {
 
             // Retweet from the database
             case 0:
 
                 $tweet = Tweet::getNext($bot);
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$tweet->text);
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.html_entity_decode($tweet->text));
 
                 try {
                     \Twitter::postRt($tweet->id);
@@ -209,7 +210,8 @@ class TwitterBot
 
                 $tweets = self::getRandomTweets($bot);
                 $tweet = $tweets[(rand(0, 10))];
-                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.$tweet['text']);
+
+                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.html_entity_decode($tweet['text']));
 
                 try {
                     \Twitter::postTweet(['status' => html_entity_decode($tweet['text']), 'format' => 'array']);
@@ -227,7 +229,8 @@ class TwitterBot
 
                 $tweets = self::getRandomTweets($bot);
                 $tweet = $tweets[(rand(0, 10))];
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$tweet['text]']);
+
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.html_entity_decode($tweet['text']));
 
                 try {
                     \Twitter::postRt($tweet['id']);
