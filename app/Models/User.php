@@ -21,8 +21,8 @@ class User extends Model
                     ->where('statuses_count', '>=', '100')
                     ->where('followers_count', '>=', '50')
                     ->where('followed', 0)
-                    ->orderBy('statuses_count', 'desc')
                     ->orderBy('followers_count', 'desc')
+                    ->orderBy('statuses_count', 'desc')
                     ->first();
 
         return $user;
