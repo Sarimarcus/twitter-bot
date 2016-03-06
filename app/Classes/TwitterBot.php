@@ -62,8 +62,8 @@ class TwitterBot
 
         // Getting and following best follower
         if ($winner = User::getMostInteresting($bot)) {
-            \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
             \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
+            \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
             User::flagFollowed($winner->id);
         }
     }
