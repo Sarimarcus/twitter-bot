@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('twitter:follow-users')
-                 ->everyTenMinutes();
+                 ->everyFiveMinutes();
 
         $schedule->command('twitter:tweet-interest')
                  ->everyThirtyMinutes();
@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
                  ->twiceDaily(1, 13);
 
         $schedule->command('twitter:unfollow-users')
-                 ->twiceDaily(2, 14);
+                 ->hourly();
 
         $schedule->command('twitter:purge-users')
                  ->daily();
