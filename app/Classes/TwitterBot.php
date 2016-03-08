@@ -190,7 +190,6 @@ class TwitterBot
         self::setOAuth($bot);
 
         $random = rand(0, 8);
-        $random = 8;
         switch ($random) {
 
             // Retweet from the database
