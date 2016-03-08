@@ -30,6 +30,7 @@ class Tweet extends Model
     {
         $user = \DB::table('tweets')
                     ->where('bot_id', $bot->id)
+                    ->where('lang', $bot->lang)
                     ->where('retweeted', 0)
                     ->first();
 

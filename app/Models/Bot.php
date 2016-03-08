@@ -12,6 +12,7 @@ class Bot extends Model
     public $searchQuery;
     public $slugSuggestions;
     public $interestingUsers;
+    public $lang;
 
     public $incrementing = false;
     public $primaryKey   = 'id';
