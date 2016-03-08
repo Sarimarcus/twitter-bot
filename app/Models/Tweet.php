@@ -28,12 +28,12 @@ class Tweet extends Model
      */
     public static function getNext(Bot $bot)
     {
-        $user = \DB::table('tweets')
+        $tweet = \DB::table('tweets')
                     ->where('bot_id', $bot->id)
-                    ->where('lang', $bot->lang)
+                    ->whereIn('lang', (array)$bot->lang)
                     ->where('retweeted', 0)
                     ->first();
 
-        return $user;
+        return $tweet;
     }
 }
