@@ -10,7 +10,7 @@ use App\Models\User;
 
 class TwitterBot
 {
-    const NUMBER_UNFOLLOW = 15; // How many should we unfollow
+    const NUMBER_UNFOLLOW = 10; // How many should we unfollow
 
     /*
      * Run a task for every online bot
