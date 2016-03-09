@@ -396,6 +396,10 @@ class TwitterBot
             'secret'          => $bot->twitter_access_token_secret
         ];
 
-        \Twitter::reconfig($botConfig);
+        try {
+            \Twitter::reconfig($botConfig);
+        } catch (\Exception $e) {
+            \Log::error('[' . $bot->screen_name . '] Can\'t authentificate : '.$e->getMessage());
+        }
     }
 }
