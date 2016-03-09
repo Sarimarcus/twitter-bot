@@ -100,9 +100,12 @@ class TwitterBot
 
                 // Let's unfollow him ! Ingrate !
                 } else {
-                    if ($return = \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array'])) {
+                    try {
+                        \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array']);
                         \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : '.$u['screen_name']);
                         User::deleteUser($u['id']);
+                    } catch (\Exception $e) {
+                        \Log::error('[' . $bot->screen_name . '] Can\'t unfollow user '.$u['screen_name'].', deleting it : '.$e->getMessage());
                     }
                 }
             }
