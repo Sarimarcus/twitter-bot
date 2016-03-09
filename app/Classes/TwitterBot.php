@@ -189,7 +189,7 @@ class TwitterBot
                     \Log::info('[' . $bot->screen_name . '] Retweeting trending : '.$topTweet);
                     \Twitter::postRt($topTweet);
                 } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Can\'t tetweeting trending : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Can\'t retweet trending : '.$e->getMessage());
                 }
             }
         }
@@ -234,12 +234,7 @@ class TwitterBot
                 $tweet = $tweets[(rand(0, 10))];
 
                 \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.html_entity_decode($tweet['text']));
-
-                try {
-                    \Twitter::postTweet(['status' => html_entity_decode($tweet['text']), 'format' => 'array']);
-                } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Tweeting something interesting : '.$e->getMessage());
-                }
+                self::runRequest($bot, 'postTweet', ['status' => html_entity_decode($tweet['text'])]);
 
                 break;
 
@@ -292,7 +287,7 @@ class TwitterBot
             'Ils le peuvent, parce qu’ils pensent qu’ils le peuvent. - Virgile',
             'Si vous pouvez le rêver, vous pouvez le faire. - Walt Disney',
             'Les grandes réalisations sont toujours précédées par de grandes pensées. - Steve Jobs',
-            'C’est à l’âge de dix ans que j’ai gagné Wimbledon pour la première fois… dans ma tête. - André Agassi',
+            'C’est à l’âge de dix ans que j’ai gagné Wimbledon pour la première fois... dans ma tête. - André Agassi',
             'Il n’est pas de vent favorable pour celui qui ne sait pas où il va. - Sénèque',
             'Il faut se concentrer sur ce qu’il nous reste et non sur ce qu’on a perdu. - Yann Arthus Bertrand',
             'Il est toujours trop tôt pour abandonner. - Norman Vincent Peale',
@@ -307,7 +302,7 @@ class TwitterBot
         ])->random();
 
         \Log::info('[' . $bot->screen_name . '] Tweeting quote : '.$quote);
-        \Twitter::postTweet(['status' => $quote, 'format' => 'array']);
+        self::runRequest($bot, 'postTweet', ['status' => html_entity_decode($quote)]);
     }
 
     /*
@@ -321,24 +316,23 @@ class TwitterBot
         $parameters = array(
             'q' => $bot->searchQuery,
             'result_type' => 'popular',
-            'format' => 'array'
-            );
-
-        $tweets = \Twitter::getSearch($parameters);
+        );
 
         \Log::info('[' . $bot->screen_name . '] Retrieving search from search query : '.$bot->searchQuery);
-        foreach ($tweets['statuses'] as $t) {
-            $data = [
-                'id'             => $t['id'],
-                'bot_id'         => $bot->id,
-                'user_id'        => $t['user']['id'],
-                'text'           => $t['text'],
-                'retweet_count'  => $t['retweet_count'],
-                'favorite_count' => $t['favorite_count'],
-                'lang'           => $t['lang']
-            ];
+        if ($tweets = self::runRequest($bot, 'getSearch', $parameters)) {
+            foreach ($tweets['statuses'] as $t) {
+                $data = [
+                    'id'             => $t['id'],
+                    'bot_id'         => $bot->id,
+                    'user_id'        => $t['user']['id'],
+                    'text'           => $t['text'],
+                    'retweet_count'  => $t['retweet_count'],
+                    'favorite_count' => $t['favorite_count'],
+                    'lang'           => $t['lang']
+                ];
 
-            $tweet = Tweet::updateOrCreate(['id' => $t['id']], $data);
+                $tweet = Tweet::updateOrCreate(['id' => $t['id']], $data);
+            }
         }
     }
 
