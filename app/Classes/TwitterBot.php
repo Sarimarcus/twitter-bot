@@ -10,7 +10,8 @@ use App\Models\User;
 
 class TwitterBot
 {
-    const NUMBER_UNFOLLOW = 10; // How many should we unfollow
+    const NUMBER_TO_UNFOLLOW = 20; // How many should we unfollow each time
+    const NUMBER_LIMIT_FOR_UNFOLLOW = 250; // When begin to unfollow people ?
 
     /*
      * Run a task for every online bot
@@ -81,22 +82,27 @@ class TwitterBot
      */
     public static function unFollowUsers(Bot $bot)
     {
+        // Not good to unfollow too early
+        if ($bot->friends_count <= self::NUMBER_LIMIT_FOR_UNFOLLOW) {
+            return;
+        }
+
         // Setting OAuth parameters
         self::setOAuth($bot);
 
         // Getting the users to unfollow (if he's not following me, i'm a gentleman)
-        $users = User::getUsersToUnfollow($bot, self::NUMBER_UNFOLLOW);
+        $users = User::getUsersToUnfollow($bot, self::NUMBER_TO_UNFOLLOW);
 
         if (count($users>0)) {
 
             // Preparing the lookup
             $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
 
-            if ($results = self::runRequest($bot, 'getFriendshipsLookup', ['screen_name' => $lookup, 'count' => 20])) {
+            if ($results = self::runRequest($bot, 'getFriendshipsLookup', ['screen_name' => $lookup])) {
                 // Checking their friendship
                 foreach ($results as $u) {
                     // He's following me, keep and flag him
-                    if (isset($u['connection'][1]['following_by'])) {
+                    if (isset($u['connections'][1]['followed_by'])) {
                         \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'].' is flagged as following');
                         User::flagFollowing($u['id']);
 
