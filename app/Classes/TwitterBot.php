@@ -181,7 +181,7 @@ class TwitterBot
             $topTrend = $trends[0]['trends'][(rand(0, count($trends[0]['trends'])))]['name'];
 
             // Getting trending tweets
-            if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $topTrend, 'result-type' => 'popular', 'lang' => $bot->lang])) {
+            if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $topTrend, 'result-type' => 'popular'])) {
                 $topTweet = $tweets['statuses'][(rand(0, count($tweets['statuses'])))]['id'];
 
                 // Retweeting one
