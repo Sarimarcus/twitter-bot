@@ -313,13 +313,8 @@ class TwitterBot
         // Setting OAuth parameters
         self::setOAuth($bot);
 
-        $parameters = array(
-            'q' => $bot->searchQuery,
-            'result_type' => 'popular',
-        );
-
         \Log::info('[' . $bot->screen_name . '] Retrieving search from search query : '.$bot->searchQuery);
-        if ($tweets = self::runRequest($bot, 'getSearch', $parameters)) {
+        if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $bot->searchQuery, 'result_type' => 'popular'])) {
             foreach ($tweets['statuses'] as $t) {
                 $data = [
                     'id'             => $t['id'],
@@ -344,31 +339,25 @@ class TwitterBot
         // Setting OAuth parameters
         self::setOAuth($bot);
 
-        $parameters = array(
-            'screen_name' => $bot->screen_name,
-            'format' => 'array'
-            );
+        if ($user = self::runRequest($bot, 'getUsers', ['screen_name' => $bot->screen_name])) {
+            $bot = Bot::find($user['id']);
+            foreach ($bot->getFillable() as $p) {
+                $bot->$p = $user[$p];
+            }
 
-        $user = \Twitter::getUsers($parameters);
+            $bot->save();
 
-        $bot = Bot::find($user['id']);
-        foreach ($bot->getFillable() as $p) {
-            $bot->$p = $user[$p];
+            // Also fill the stats
+            $stat = new Stat;
+            $stat->bot_id = $user['id'];
+            $stat->date = date('Y-m-d');
+            foreach ($stat->getFillable() as $p) {
+                $stat->$p = $user[$p];
+            }
+
+            \Log::info('[' . $bot->screen_name . '] Getting daily stats');
+            $stat->save();
         }
-
-        $bot->save();
-
-        // Also fill the stats
-        $stat = new Stat;
-        $stat->bot_id = $user['id'];
-        $stat->date = date('Y-m-d');
-        foreach ($stat->getFillable() as $p) {
-            $stat->$p = $user[$p];
-        }
-
-        \Log::info('[' . $bot->screen_name . '] Getting daily stats');
-
-        return $stat->save();
     }
 
     /*
@@ -406,11 +395,10 @@ class TwitterBot
         $suggested = collect($rows)->pluck('screen_name');
 
         // Getting tweets from account
-        if ($target = $interesting->merge($suggested)->unique()->random()) {
-            $tweets = \Twitter::getUserTimeline(['screen_name' => $target, 'format' => 'array']);
+        $target = $interesting->merge($suggested)->unique()->random();
+        if ($tweets = self::runRequest($bot, 'getUserTimeline', ['screen_name' => $target])) {
+            return $tweets;
         }
-
-        return $tweets;
     }
 
     /*
