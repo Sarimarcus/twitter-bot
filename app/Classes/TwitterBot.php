@@ -45,29 +45,28 @@ class TwitterBot
         $target = Collection::make($bot->interestingUsers)->random();
 
         // Getting followers from account
-        $followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 20]);
+        if ($followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 20])) {
+            foreach ($followers['users'] as $f) {
+                $data = [
+                    'id'              => $f['id'],
+                    'bot_id'          => $bot->id,
+                    'screen_name'     => $f['screen_name'],
+                    'followers_count' => $f['followers_count'],
+                    'statuses_count'  => $f['statuses_count'],
+                    'lang'            => $f['lang']
+                ];
 
-        foreach ($followers['users'] as $f) {
-            $data = [
-                'id'              => $f['id'],
-                'bot_id'          => $bot->id,
-                'screen_name'     => $f['screen_name'],
-                'followers_count' => $f['followers_count'],
-                'statuses_count'  => $f['statuses_count'],
-                'lang'            => $f['lang']
-            ];
-
-            $user = User::updateOrCreate(['id' => $f['id']], $data);
+                $user = User::updateOrCreate(['id' => $f['id']], $data);
+            }
         }
 
         // Getting and following best follower
         if ($winner = User::getMostInteresting($bot)) {
             try {
-                if(self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])){
+                if (self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])) {
                     \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
                     User::flagFollowed($winner->id);
                 }
-
             } catch (\Exception $e) {
                 \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it : '.$e->getMessage());
                 User::destroy($winner->id);
@@ -91,23 +90,21 @@ class TwitterBot
 
             // Preparing the lookup
             $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
-            $results = \Twitter::getFriendshipsLookup(['screen_name' => $lookup, 'format' => 'array']);
 
-            // Checking their friendship
-            foreach ($results as $u) {
-                // He's following me, keep and flag him
-                if (isset($u['connection'][1]['following_by'])) {
-                    \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'].' is flagged as following');
-                    User::flagFollowing($u['id']);
+            if ($results = self::runRequest($bot, 'getFriendshipsLookup', ['screen_name' => $lookup, 'count' => 20])) {
+                // Checking their friendship
+                foreach ($results as $u) {
+                    // He's following me, keep and flag him
+                    if (isset($u['connection'][1]['following_by'])) {
+                        \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'].' is flagged as following');
+                        User::flagFollowing($u['id']);
 
-                // Let's unfollow him ! Ingrate !
-                } else {
-                    try {
-                        \Twitter::postUnfollow(['user_id' => $u['id'], 'format' => 'array']);
-                        \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : '.$u['screen_name']);
-                        User::deleteUser($u['id']);
-                    } catch (\Exception $e) {
-                        \Log::error('[' . $bot->screen_name . '] Can\'t unfollow user '.$u['screen_name'].', deleting it : '.$e->getMessage());
+                    // Let's unfollow him ! Ingrate !
+                    } else {
+                        if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u['id']])) {
+                            \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : '.$u['screen_name']);
+                            User::deleteUser($u['id']);
+                        }
                     }
                 }
             }
@@ -378,7 +375,7 @@ class TwitterBot
         $params = array_merge($params, $defaultParams);
 
         try {
-           return \Twitter::$method($params);
+            return \Twitter::$method($params);
         } catch (\Exception $e) {
             \Log::error('[' . $bot->screen_name . '] Method ' . $method . ' : ' . $e->getMessage());
             return false;
