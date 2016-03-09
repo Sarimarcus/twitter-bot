@@ -122,13 +122,11 @@ class TwitterBot
 
         foreach ($bot->slugSuggestions as $lang => $slug) {
             if ($lang != 'fr') {
-                $parameters = ['lang' => $lang, 'format' => 'array'];
-            } else {
-                $parameters = ['format' => 'array'];
+                $parameters = ['lang' => $lang];
             }
 
             try {
-                \Log::info('[' . $bot->screen_name . '] Getting suggested users : ');
+                \Log::info('[' . $bot->screen_name . '] Getting suggested users');
                 $suggestions = \Twitter::getSuggesteds($slug, $parameters);
             } catch (\Exception $e) {
                 \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
