@@ -128,12 +128,14 @@ class TwitterBot
             }
 
             try {
+                \Log::info('[' . $bot->screen_name . '] Getting suggested users : ');
                 $suggestions = \Twitter::getSuggesteds($slug, $parameters);
             } catch (\Exception $e) {
                 \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
             }
 
             if (isset($suggestions)) {
+
                 foreach ($suggestions['users'] as $f) {
                     $data = [
                         'id'              => $f['id'],
