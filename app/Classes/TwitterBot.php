@@ -178,11 +178,11 @@ class TwitterBot
 
         // Getting trends
         if ($trends = self::runRequest($bot, 'getTrendsPlace', ['id' => $bot->woeid])) {
-            $topTrend = $trends[0]['trends'][(rand(0, 4))]['name'];
+            $topTrend = $trends[0]['trends'][(rand(0, count($trends)))]['name'];
 
             // Getting trending tweets
             if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $topTrend, 'result-type' => 'popular', 'lang' => $bot->lang])) {
-                $topTweet = $tweets['statuses'][(rand(0, 4))]['id'];
+                $topTweet = $tweets['statuses'][(rand(0, count($tweets)))]['id'];
 
                 // Retweeting one
                 try {
