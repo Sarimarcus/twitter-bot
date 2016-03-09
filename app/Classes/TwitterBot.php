@@ -128,7 +128,7 @@ class TwitterBot
             }
 
             try {
-                \Log::info('[' . $bot->screen_name . '] Getting suggested users for'.$slug);
+                \Log::info('[' . $bot->screen_name . '] Getting suggested users for : '.$slug);
                 $suggestions = \Twitter::getSuggesteds($slug, $parameters);
             } catch (\Exception $e) {
                 \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
@@ -177,17 +177,22 @@ class TwitterBot
         self::setOAuth($bot);
 
         // Getting trends
-        $trends = \Twitter::getTrendsPlace(['id' => $bot->woeid, 'format' => 'array']);
-        $topTrend = $trends[0]['trends'][(rand(0, 4))]['name'];
+        if ($trends = self::runRequest($bot, 'getTrendsPlace', ['id' => $bot->woeid])) {
+            $topTrend = $trends[0]['trends'][(rand(0, 4))]['name'];
 
-        // Getting trending tweets
-        $tweets = \Twitter::getSearch(['q' => $topTrend, 'result-type' => 'popular', 'lang' => $bot->lang, 'format' => 'array']);
-        $topTweet = $tweets['statuses'][(rand(0, 4))]['id'];
+            // Getting trending tweets
+            if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $topTrend, 'result-type' => 'popular', 'lang' => $bot->lang])) {
+                $topTweet = $tweets['statuses'][(rand(0, 4))]['id'];
 
-        \Log::info('[' . $bot->screen_name . '] Retweeting trending tweet : '.$topTweet);
-
-        // Retweeting one
-        \Twitter::postRt($topTweet);
+                // Retweeting one
+                try {
+                    \Log::info('[' . $bot->screen_name . '] Retweeting trending : '.$topTweet);
+                    \Twitter::postRt($topTweet);
+                } catch (\Exception $e) {
+                    \Log::error('[' . $bot->screen_name . '] Can\'t tetweeting trending : '.$e->getMessage());
+                }
+            }
+        }
     }
 
     /*
