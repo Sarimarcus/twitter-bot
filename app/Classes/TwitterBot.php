@@ -77,6 +77,7 @@ class TwitterBot
 
     /*
      * Unfollow old followed users
+     * @todo : need to check this method
      */
     public static function unFollowUsers(Bot $bot)
     {
@@ -126,24 +127,31 @@ class TwitterBot
                 $parameters = ['format' => 'array'];
             }
 
-            $suggestions = \Twitter::getSuggesteds($slug, $parameters);
-            foreach ($suggestions['users'] as $f) {
-                $data = [
-                    'id'              => $f['id'],
-                    'bot_id'          => $bot->id,
-                    'screen_name'     => $f['screen_name'],
-                    'followers_count' => $f['followers_count'],
-                    'statuses_count'  => $f['statuses_count'],
-                    'lang'            => $f['lang'],
-                    'suggested'       => 1
-                ];
+            try {
+                $suggestions = \Twitter::getSuggesteds($slug, $parameters);
+            } catch (\Exception $e) {
+                \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
+            }
 
-                $user = User::updateOrCreate(['id' => $f['id']], $data);
+            if (isset($suggestions)) {
+                foreach ($suggestions['users'] as $f) {
+                    $data = [
+                        'id'              => $f['id'],
+                        'bot_id'          => $bot->id,
+                        'screen_name'     => $f['screen_name'],
+                        'followers_count' => $f['followers_count'],
+                        'statuses_count'  => $f['statuses_count'],
+                        'lang'            => $f['lang'],
+                        'suggested'       => 1
+                    ];
 
-                if ($user->wasRecentlyCreated) {
-                    if ($return = \Twitter::postFollow(['screen_name' =>  $f['screen_name'], 'format' => 'array'])) {
-                        User::flagFollowed($user->id);
-                        \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
+                    $user = User::updateOrCreate(['id' => $f['id']], $data);
+
+                    if ($user->wasRecentlyCreated) {
+                        if ($return = self::runRequest($bot, 'postFollow', ['screen_name' => $f['screen_name']])) {
+                            User::flagFollowed($user->id);
+                            \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
+                        }
                     }
                 }
             }
