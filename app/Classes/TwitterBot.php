@@ -45,7 +45,7 @@ class TwitterBot
         $target = Collection::make($bot->interestingUsers)->random();
 
         // Getting followers from account
-        $followers = \Twitter::getFollowers(['screen_name' => $target, 'count' => 20, 'format' => 'array']);
+        $followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 20]);
 
         foreach ($followers['users'] as $f) {
             $data = [
@@ -63,9 +63,11 @@ class TwitterBot
         // Getting and following best follower
         if ($winner = User::getMostInteresting($bot)) {
             try {
-                \Twitter::postFollow(['screen_name' => $winner->screen_name, 'format' => 'array']);
-                \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
-                User::flagFollowed($winner->id);
+                if(self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])){
+                    \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
+                    User::flagFollowed($winner->id);
+                }
+
             } catch (\Exception $e) {
                 \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it : '.$e->getMessage());
                 User::destroy($winner->id);
@@ -362,6 +364,25 @@ class TwitterBot
         \Log::info('[' . $bot->screen_name . '] Getting daily stats');
 
         return $stat->save();
+    }
+
+    /*
+     * Run a Twitter request
+     */
+    private static function runRequest(Bot $bot, $method, $params)
+    {
+        $defaultParams = [
+            'format' => 'array'
+        ];
+
+        $params = array_merge($params, $defaultParams);
+
+        try {
+           return \Twitter::$method($params);
+        } catch (\Exception $e) {
+            \Log::error('[' . $bot->screen_name . '] Method ' . $method . ' : ' . $e->getMessage());
+            return false;
+        }
     }
 
     /*
