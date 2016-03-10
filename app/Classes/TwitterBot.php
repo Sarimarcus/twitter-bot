@@ -63,12 +63,10 @@ class TwitterBot
 
         // Getting and following best follower
         if ($winner = User::getMostInteresting($bot)) {
-            try {
-                if (self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])) {
-                    \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
-                    User::flagFollowed($winner->id);
-                }
-            } catch (\Exception $e) {
+            if (self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])) {
+                \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
+                User::flagFollowed($winner->id);
+            } else {
                 \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it : '.$e->getMessage());
                 User::destroy($winner->id);
                 self::followUsers($bot);
