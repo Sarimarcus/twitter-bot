@@ -186,12 +186,12 @@ class TwitterBot
 
             // Getting trending tweets
             if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $topTrend, 'result-type' => 'popular'])) {
-                $topTweet = $tweets['statuses'][(rand(0, count($tweets['statuses'])))]['id'];
+                $topTweet = $tweets['statuses'][(rand(0, count($tweets['statuses'])))];
 
                 // Retweeting one
                 try {
-                    \Log::info('[' . $bot->screen_name . '] Retweeting trending : '.$topTweet);
-                    \Twitter::postRt($topTweet);
+                    \Log::info('[' . $bot->screen_name . '] Retweeting trending : '.$topTweet['text']);
+                    \Twitter::postRt($topTweet['id']);
                 } catch (\Exception $e) {
                     \Log::error('[' . $bot->screen_name . '] Can\'t retweet trending : '.$e->getMessage());
                 }
