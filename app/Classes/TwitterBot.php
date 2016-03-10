@@ -67,7 +67,7 @@ class TwitterBot
                 \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
                 User::flagFollowed($winner->id);
             } else {
-                \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it : '.$e->getMessage());
+                \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it');
                 User::destroy($winner->id);
                 self::followUsers($bot);
             }
