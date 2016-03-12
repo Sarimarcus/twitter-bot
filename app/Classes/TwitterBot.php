@@ -11,7 +11,7 @@ use App\Models\User;
 class TwitterBot
 {
     const NUMBER_TO_UNFOLLOW = 25; // How many should we unfollow each time
-    const NUMBER_LIMIT_FOR_UNFOLLOW = 300; // When begin to unfollow people ?
+    const NUMBER_LIMIT_FOR_UNFOLLOW = 400; // When begin to unfollow people ?
 
     /*
      * Run a task for every online bot
