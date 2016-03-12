@@ -10,7 +10,7 @@ use App\Models\User;
 
 class TwitterBot
 {
-    const NUMBER_TO_UNFOLLOW = 20; // How many should we unfollow each time
+    const NUMBER_TO_UNFOLLOW = 25; // How many should we unfollow each time
     const NUMBER_LIMIT_FOR_UNFOLLOW = 300; // When begin to unfollow people ?
 
     /*
@@ -215,15 +215,16 @@ class TwitterBot
             // Retweet from the database
             case 0:
 
-                $tweet = Tweet::getNext($bot);
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.html_entity_decode($tweet->text));
+                if ($tweet = Tweet::getNext($bot)) {
+                    \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.html_entity_decode($tweet->text));
 
-                try {
-                    \Twitter::postRt($tweet->id);
-                    \Twitter::postFavorite(['id' => $tweet->id]);
-                    Tweet::flagRetweeted($tweet->id);
-                } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$e->getMessage());
+                    try {
+                        \Twitter::postRt($tweet->id);
+                        \Twitter::postFavorite(['id' => $tweet->id]);
+                        Tweet::flagRetweeted($tweet->id);
+                    } catch (\Exception $e) {
+                        \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$e->getMessage());
+                    }
                 }
 
                 break;
