@@ -46,7 +46,7 @@ class TwitterBot
         $target = Collection::make($bot->interestingUsers)->random();
 
         // Getting followers from account
-        if ($followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 20])) {
+        if ($followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 30])) {
             foreach ($followers['users'] as $f) {
                 $data = [
                     'id'              => $f['id'],
@@ -71,6 +71,8 @@ class TwitterBot
                 User::destroy($winner->id);
                 self::followUsers($bot);
             }
+        } else {
+            \Log::info('[' . $bot->screen_name . '] Can\'t find new users to follow');
         }
     }
 
