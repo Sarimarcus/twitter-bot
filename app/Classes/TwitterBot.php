@@ -64,10 +64,10 @@ class TwitterBot
         // Getting and following best follower
         if ($winner = User::getMostInteresting($bot)) {
             if (self::runRequest($bot, 'postFollow', ['screen_name' => $winner->screen_name])) {
-                \Log::info('[' . $bot->screen_name . '] Following user : '.$winner->screen_name);
+                \Log::info('[' . $bot->screen_name . '] Following user : ' . $winner->screen_name);
                 User::flagFollowed($winner->id);
             } else {
-                \Log::error('[' . $bot->screen_name . '] Can\'t follow user '.$winner->screen_name.', deleting it');
+                \Log::error('[' . $bot->screen_name . '] Can\'t follow user ' . $winner->screen_name . ', deleting it');
                 User::destroy($winner->id);
                 self::followUsers($bot);
             }
@@ -103,13 +103,13 @@ class TwitterBot
                 foreach ($results as $u) {
                     // He's following me, keep and flag him
                     if (isset($u['connections'][1]['followed_by'])) {
-                        \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'].' is flagged as following');
+                        \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'] . ' is flagged as following');
                         User::flagFollowing($u['id']);
 
                     // Let's unfollow him ! Ingrate !
                     } else {
                         if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u['id']])) {
-                            \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : '.$u['screen_name']);
+                            \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u['screen_name']);
                             User::deleteUser($u['id']);
                         }
                     }
@@ -135,10 +135,12 @@ class TwitterBot
                 }
 
                 try {
-                    \Log::info('[' . $bot->screen_name . '] Getting suggested users for : '.$slug);
+                    \Log::info('[' . $bot->screen_name . '] Getting suggested users for : ' . $slug);
                     $suggestions = \Twitter::getSuggesteds($slug, $parameters);
+                    Bot::isFine($bot);
                 } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : ' . $e->getMessage());
+                    Bot::addError($bot);
                 }
 
                 if (isset($suggestions)) {
@@ -158,7 +160,7 @@ class TwitterBot
                         if ($user->wasRecentlyCreated) {
                             if ($return = self::runRequest($bot, 'postFollow', ['screen_name' => $f['screen_name']])) {
                                 User::flagFollowed($user->id);
-                                \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
+                                \Log::info('[' . $bot->screen_name . '] Following suggested user : ' . $user->screen_name);
                             }
                         }
                     }
@@ -194,10 +196,12 @@ class TwitterBot
 
                 // Retweeting one
                 try {
-                    \Log::info('[' . $bot->screen_name . '] Retweeting trending : '.$topTweet['text']);
+                    \Log::info('[' . $bot->screen_name . '] Retweeting trending : ' . $topTweet['text']);
                     \Twitter::postRt($topTweet['id']);
+                    Bot::isFine($bot);
                 } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Can\'t retweet trending : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Can\'t retweet trending : ' . $e->getMessage());
+                    Bot::addError($bot);
                 }
             }
         }
@@ -220,14 +224,16 @@ class TwitterBot
             case 0:
 
                 if ($tweet = Tweet::getNext($bot)) {
-                    \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.html_entity_decode($tweet->text));
+                    \Log::info('[' . $bot->screen_name . '] Retweeting and liking from the DB : ' . html_entity_decode($tweet->text));
 
                     try {
                         \Twitter::postRt($tweet->id);
                         \Twitter::postFavorite(['id' => $tweet->id]);
                         Tweet::flagRetweeted($tweet->id);
+                        Bot::isFine($bot);
                     } catch (\Exception $e) {
-                        \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : '.$e->getMessage());
+                        \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : ' . $e->getMessage());
+                        Bot::addError($bot);
                     }
                 }
 
@@ -242,7 +248,7 @@ class TwitterBot
                 $tweets = self::getRandomTweets($bot);
                 $tweet = $tweets[(rand(0, 10))];
 
-                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : '.html_entity_decode($tweet['text']));
+                \Log::info('[' . $bot->screen_name . '] Tweeting something interesting : ' . html_entity_decode($tweet['text']));
                 self::runRequest($bot, 'postTweet', ['status' => html_entity_decode($tweet['text'])]);
 
                 break;
@@ -256,13 +262,15 @@ class TwitterBot
                 $tweets = self::getRandomTweets($bot);
                 $tweet = $tweets[(rand(0, 10))];
 
-                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.html_entity_decode($tweet['text']));
+                \Log::info('[' . $bot->screen_name . '] Retweeting and liking something interesting : ' . html_entity_decode($tweet['text']));
 
                 try {
                     \Twitter::postRt($tweet['id']);
                     \Twitter::postFavorite(['id' => $tweet['id']]);
+                    Bot::isFine($bot);
                 } catch (\Exception $e) {
-                    \Log::error('[' . $bot->screen_name . '] Retweeting and liking something interesting : '.$e->getMessage());
+                    \Log::error('[' . $bot->screen_name . '] Retweeting and liking something interesting : ' . $e->getMessage());
+                    Bot::addError($bot);
                 }
 
                 break;
@@ -310,7 +318,7 @@ class TwitterBot
 
         ])->random();
 
-        \Log::info('[' . $bot->screen_name . '] Tweeting quote : '.$quote);
+        \Log::info('[' . $bot->screen_name . '] Tweeting quote : ' . $quote);
         self::runRequest($bot, 'postTweet', ['status' => html_entity_decode($quote)]);
     }
 
@@ -322,7 +330,7 @@ class TwitterBot
         // Setting OAuth parameters
         self::setOAuth($bot);
 
-        \Log::info('[' . $bot->screen_name . '] Retrieving search from search query : '.$bot->searchQuery);
+        \Log::info('[' . $bot->screen_name . '] Retrieving search from search query : ' . $bot->searchQuery);
         if ($tweets = self::runRequest($bot, 'getSearch', ['q' => $bot->searchQuery, 'result_type' => 'popular'])) {
             foreach ($tweets['statuses'] as $t) {
                 $data = [
@@ -381,9 +389,13 @@ class TwitterBot
         $params = array_merge($params, $defaultParams);
 
         try {
-            return \Twitter::$method($params);
+            if (\Twitter::$method($params)) {
+                Bot::isFine($bot);
+                return true;
+            };
         } catch (\Exception $e) {
             \Log::error('[' . $bot->screen_name . '] Method ' . $method . ' : ' . $e->getMessage());
+            Bot::addError($bot);
             return false;
         }
     }
@@ -423,9 +435,13 @@ class TwitterBot
         ];
 
         try {
-            \Twitter::reconfig($botConfig);
+            if (\Twitter::reconfig($botConfig)) {
+                Bot::isFine($bot);
+                return true;
+            };
         } catch (\Exception $e) {
-            \Log::error('[' . $bot->screen_name . '] Can\'t authentificate : '.$e->getMessage());
+            \Log::error('[' . $bot->screen_name . '] Can\'t authentificate : ' . $e->getMessage());
+            Bot::addError($bot);
         }
     }
 }
