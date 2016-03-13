@@ -389,10 +389,10 @@ class TwitterBot
         $params = array_merge($params, $defaultParams);
 
         try {
-            if (\Twitter::$method($params)) {
+            if ($return = \Twitter::$method($params)) {
                 Bot::isFine($bot);
-                return true;
-            };
+                return $return;
+            }
         } catch (\Exception $e) {
             \Log::error('[' . $bot->screen_name . '] Method ' . $method . ' : ' . $e->getMessage());
             Bot::addError($bot);
