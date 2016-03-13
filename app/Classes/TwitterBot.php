@@ -10,7 +10,7 @@ use App\Models\User;
 
 class TwitterBot
 {
-    const NUMBER_TO_UNFOLLOW = 25; // How many should we unfollow each time
+    const NUMBER_TO_UNFOLLOW = 15; // How many should we unfollow each time
     const NUMBER_LIMIT_FOR_UNFOLLOW = 400; // When begin to unfollow people ?
 
     /*
@@ -124,23 +124,24 @@ class TwitterBot
         // Setting OAuth parameters
         self::setOAuth($bot);
 
-        foreach ($bot->slugSuggestions as $lang => $slug) {
-            if ($lang != 'fr') {
-                $parameters = ['lang' => $lang, 'format' => 'array'];
-            } else {
-                $parameters = ['format' => 'array'];
-            }
+        if (isset($bot->slugSuggestions)) {
+            foreach ($bot->slugSuggestions as $lang => $slug) {
+                if ($lang != 'fr') {
+                    $parameters = ['lang' => $lang, 'format' => 'array'];
+                } else {
+                    $parameters = ['format' => 'array'];
+                }
 
-            try {
-                \Log::info('[' . $bot->screen_name . '] Getting suggested users for : '.$slug);
-                $suggestions = \Twitter::getSuggesteds($slug, $parameters);
-            } catch (\Exception $e) {
-                \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
-            }
+                try {
+                    \Log::info('[' . $bot->screen_name . '] Getting suggested users for : '.$slug);
+                    $suggestions = \Twitter::getSuggesteds($slug, $parameters);
+                } catch (\Exception $e) {
+                    \Log::error('[' . $bot->screen_name . '] Can\'t get suggestions : '.$e->getMessage());
+                }
 
-            if (isset($suggestions)) {
-                foreach ($suggestions['users'] as $f) {
-                    $data = [
+                if (isset($suggestions)) {
+                    foreach ($suggestions['users'] as $f) {
+                        $data = [
                         'id'              => $f['id'],
                         'bot_id'          => $bot->id,
                         'screen_name'     => $f['screen_name'],
@@ -150,12 +151,13 @@ class TwitterBot
                         'suggested'       => 1
                     ];
 
-                    $user = User::updateOrCreate(['id' => $f['id']], $data);
+                        $user = User::updateOrCreate(['id' => $f['id']], $data);
 
-                    if ($user->wasRecentlyCreated) {
-                        if ($return = self::runRequest($bot, 'postFollow', ['screen_name' => $f['screen_name']])) {
-                            User::flagFollowed($user->id);
-                            \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
+                        if ($user->wasRecentlyCreated) {
+                            if ($return = self::runRequest($bot, 'postFollow', ['screen_name' => $f['screen_name']])) {
+                                User::flagFollowed($user->id);
+                                \Log::info('[' . $bot->screen_name . '] Following suggested user : '.$user->screen_name);
+                            }
                         }
                     }
                 }
