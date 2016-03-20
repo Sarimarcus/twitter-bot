@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Dashboard@homepage');
 
 /*
 |--------------------------------------------------------------------------
@@ -31,4 +29,7 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
+/*
+ * My routes
+ */
 Route::get('test', 'TestController@test');
