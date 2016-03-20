@@ -11,7 +11,7 @@ use App\Models\User;
 class TwitterBot
 {
     const NUMBER_TO_UNFOLLOW = 20; // How many should we unfollow each time
-    const NUMBER_LIMIT_FOR_UNFOLLOW = 500; // When begin to unfollow people ?
+    const DIFFERENCE_BEFORE_UNFOLLOW = 200; // Difference between friend and followers before mass unfollow
 
     /*
      * Run a task for every online bot
@@ -82,8 +82,8 @@ class TwitterBot
      */
     public static function unFollowUsers(Bot $bot)
     {
-        // Not good to unfollow too early
-        if ($bot->friends_count <= self::NUMBER_LIMIT_FOR_UNFOLLOW) {
+        // It looks Twitter need enough difference between friend and followers to mass unfollow
+        if (($bot->friends_count - $bot->followers_count) <= self::DIFFERENCE_BEFORE_UNFOLLOW) {
             return;
         }
 
