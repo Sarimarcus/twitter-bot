@@ -46,7 +46,7 @@ class TwitterBot
         $target = Collection::make($bot->interestingUsers)->random();
 
         // Getting followers from account
-        if ($followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 30])) {
+        if ($followers = self::runRequest($bot, 'getFollowers', ['screen_name' => $target, 'count' => 50])) {
             foreach ($followers['users'] as $f) {
                 $data = [
                     'id'              => $f['id'],
@@ -375,6 +375,19 @@ class TwitterBot
             \Log::info('[' . $bot->screen_name . '] Getting daily stats');
             $stat->save();
         }
+    }
+
+    /*
+     * Check API requests remaining
+     */
+    public static function checkBotApiLimits(Bot $bot)
+    {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+        echo $bot->screen_name;
+        $apiLimits = self::runRequest($bot, 'getAppRateLimit', ['resources' => 'help,users,search,statuses']);
+        echo '<xmp>'; print_r($apiLimits); echo '</xmp>';
+
     }
 
     /*
