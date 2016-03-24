@@ -19,6 +19,14 @@ class Bot extends Model
 
     const ERRORS_FOR_OFFLINE = 5;
 
+    /**
+     * Get the stats for the bot.
+     */
+    public function stats()
+    {
+        return $this->hasMany('App\Models\Stat')->orderBy('date');
+    }
+
     /*
      * Returns the online bots
      */

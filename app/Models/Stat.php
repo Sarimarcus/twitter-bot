@@ -10,4 +10,12 @@ class Stat extends Model
     public $incrementing = false;
 
     protected $fillable  = ['statuses_count', 'favourites_count', 'followers_count', 'friends_count'];
+
+    /**
+     * Get the bot that owns the stat.
+     */
+    public function bot()
+    {
+        return $this->belongsTo('App\Model\Bot');
+    }
 }

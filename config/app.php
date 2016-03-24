@@ -161,6 +161,7 @@ return [
          */
         Thujohn\Twitter\TwitterServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class
 
     ],
 
