@@ -15,8 +15,8 @@
         </ul>
     @endif
 
-    <div id="stocks-div"></div>
-    @linechart('Stocks', 'stocks-div');
+    {{--<div id="stocks-div"></div>
+    @linechart('Stocks', 'stocks-div');--}}
 
 </div>
 
