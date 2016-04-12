@@ -39,6 +39,9 @@ class TwitterBot
      */
     public static function followUsers(Bot $bot)
     {
+        // If too many following, skip this
+        if($bot->friends_count >= 5000) return;
+
         // Setting OAuth parameters
         self::setOAuth($bot);
 
