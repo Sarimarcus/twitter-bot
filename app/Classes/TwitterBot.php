@@ -10,7 +10,7 @@ use App\Models\User;
 
 class TwitterBot
 {
-    const NUMBER_TO_UNFOLLOW = 30; // How many should we unfollow each time
+    const NUMBER_TO_UNFOLLOW = 10; // How many should we unfollow each time
     const DIFFERENCE_BEFORE_UNFOLLOW = 400; // Difference between friend and followers before mass unfollow
 
     /*
@@ -403,6 +403,9 @@ class TwitterBot
         ];
 
         $params = array_merge($params, $defaultParams);
+
+        // Let's try some random
+        sleep(rand(0,40));
 
         try {
             if ($return = \Twitter::$method($params)) {
