@@ -40,7 +40,7 @@ class TwitterBot
     public static function followUsers(Bot $bot)
     {
         // If too many following, skip this
-        if($bot->friends_count >= 5000) return;
+        if($bot->friends_count >= 4900) return;
 
         // Setting OAuth parameters
         self::setOAuth($bot);
@@ -72,7 +72,6 @@ class TwitterBot
             } else {
                 \Log::error('[' . $bot->screen_name . '] Can\'t follow user ' . $winner->screen_name . ', deleting it');
                 User::destroy($winner->id);
-                self::followUsers($bot);
             }
         } else {
             \Log::info('[' . $bot->screen_name . '] Can\'t find new users to follow');
