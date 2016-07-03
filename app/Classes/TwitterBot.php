@@ -40,7 +40,7 @@ class TwitterBot
     public static function followUsers(Bot $bot)
     {
         // If too many following, skip this
-        if ($bot->friends_count >= 4900) {
+        if ($bot->friends_count >= self::MAX_FOLLOW_UNTIL_STOP) {
             return;
         }
 
