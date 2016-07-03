@@ -100,9 +100,9 @@ class TwitterBot
         if (count($users>0)) {
             foreach ($users as $u) {
                 // Let's unfollow him !
-                if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u['id']])) {
-                    \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u['screen_name']);
-                    User::deleteUser($u['id']);
+                if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u->id])) {
+                    \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u->screen_name);
+                    User::deleteUser($u->id);
                 }
             }
         }
