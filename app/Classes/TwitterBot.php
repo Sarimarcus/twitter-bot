@@ -102,8 +102,11 @@ class TwitterBot
                 // Let's unfollow him !
                 if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u->id])) {
                     \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u->screen_name);
-                    User::deleteUser($u->id);
+                } else {
+                    \Log::error('[' . $bot->screen_name . '] Can\'t unfollow user ' . $u->screen_name . ', deleting it');
                 }
+
+                User::destroy($u->id);
             }
         }
     }

@@ -81,16 +81,6 @@ class User extends Model
     }
 
     /*
-     * Delete a user
-     */
-    public static function deleteUser($id)
-    {
-        if ($id != null) {
-            return \DB::table('users')->where('id', $id)->delete();
-        }
-    }
-
-    /*
      * Removing useless ursers
      */
     public static function purgeUsers()
