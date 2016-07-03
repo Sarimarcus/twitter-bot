@@ -11,6 +11,7 @@ use App\Models\User;
 class TwitterBot
 {
     const NUMBER_TO_UNFOLLOW = 10; // How many should we unfollow each time
+    const MAX_FOLLOW_UNTIL_STOP = 4500; // Difference between friend and followers before mass unfollow
     const DIFFERENCE_BEFORE_UNFOLLOW = 400; // Difference between friend and followers before mass unfollow
 
     /*
