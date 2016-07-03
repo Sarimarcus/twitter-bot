@@ -40,7 +40,9 @@ class TwitterBot
     public static function followUsers(Bot $bot)
     {
         // If too many following, skip this
-        if($bot->friends_count >= 4900) return;
+        if ($bot->friends_count >= 4900) {
+            return;
+        }
 
         // Setting OAuth parameters
         self::setOAuth($bot);
@@ -96,25 +98,11 @@ class TwitterBot
         $users = User::getUsersToUnfollow($bot, self::NUMBER_TO_UNFOLLOW);
 
         if (count($users>0)) {
-
-            // Preparing the lookup
-            $lookup = (count($users>1)) ?  implode(',', collect($users)->pluck('screen_name')->toArray()) : $users[0]['screen_name'];
-
-            if ($results = self::runRequest($bot, 'getFriendshipsLookup', ['screen_name' => $lookup])) {
-                // Checking their friendship
-                foreach ($results as $u) {
-                    // He's following me, keep and flag him
-                    if (isset($u['connections'][1]['followed_by'])) {
-                        \Log::info('[' . $bot->screen_name . '] ' . $u['screen_name'] . ' is flagged as following');
-                        User::flagFollowing($u['id']);
-
-                    // Let's unfollow him ! Ingrate !
-                    } else {
-                        if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u['id']])) {
-                            \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u['screen_name']);
-                            User::deleteUser($u['id']);
-                        }
-                    }
+            foreach ($results as $u) {
+                // Let's unfollow him !
+                if (self::runRequest($bot, 'postUnfollow', ['user_id' => $u['id']])) {
+                    \Log::info('[' . $bot->screen_name . '] Unfollowing and deleting user : ' . $u['screen_name']);
+                    User::deleteUser($u['id']);
                 }
             }
         }
@@ -388,8 +376,9 @@ class TwitterBot
         self::setOAuth($bot);
         echo $bot->screen_name;
         $apiLimits = self::runRequest($bot, 'getAppRateLimit', ['resources' => 'help,users,search,statuses']);
-        echo '<xmp>'; print_r($apiLimits); echo '</xmp>';
-
+        echo '<xmp>';
+        print_r($apiLimits);
+        echo '</xmp>';
     }
 
     /*
@@ -404,7 +393,9 @@ class TwitterBot
         $params = array_merge($params, $defaultParams);
 
         // Let's try some random
-        sleep(rand(0,40));
+        if (\App::environment('live')) {
+            sleep(rand(0, 40));
+        }
 
         try {
             if ($return = \Twitter::$method($params)) {
