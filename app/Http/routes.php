@@ -32,4 +32,5 @@ Route::group(['middleware' => ['web']], function () {
 /*
  * My routes
  */
-Route::get('test', 'TestController@test');
+Route::get('test/hello', 'Test@hello');
+Route::get('test/api-limits', 'Test@apiLimits');

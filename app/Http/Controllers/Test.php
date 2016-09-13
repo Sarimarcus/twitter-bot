@@ -8,7 +8,12 @@ use App\Http\Controllers\Controller;
 
 class Test extends Controller
 {
-    public function ApiLimits()
+    public function hello()
+    {
+        echo 'Hello World !';
+    }
+
+    public function apiLimits()
     {
         \App\Classes\TwitterBot::runTask('checkBotApiLimits');
     }
