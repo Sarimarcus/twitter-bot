@@ -271,7 +271,7 @@ class TwitterBot
 
     /*
      * Tweet an inspiring quote
-     * @todo : use : http://quotes.rest/qod.json maybe
+     * @todo use : https://theysaidso.com/api/
      */
     public static function tweetInspire(Bot $bot)
     {
