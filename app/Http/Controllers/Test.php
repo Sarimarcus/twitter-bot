@@ -17,4 +17,11 @@ class Test extends Controller
     {
         \App\Classes\TwitterBot::runTask('checkBotApiLimits');
     }
+
+    public function qotd()
+    {
+        $call = new \App\Classes\Quote();
+        $response = $call->getQOTD();
+        echo $response->getBody();
+    }
 }

@@ -8,6 +8,9 @@ use App\Models\Stat;
 use App\Models\Tweet;
 use App\Models\User;
 
+/**
+* Tools for playing with Twitter API
+*/
 class TwitterBot
 {
     const NUMBER_TO_UNFOLLOW = 10; // How many should we unfollow each time
@@ -271,7 +274,6 @@ class TwitterBot
 
     /*
      * Tweet an inspiring quote
-     * @todo use : https://theysaidso.com/api/
      */
     public static function tweetInspire(Bot $bot)
     {
