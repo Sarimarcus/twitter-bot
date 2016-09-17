@@ -21,7 +21,6 @@ class Test extends Controller
     public function qotd()
     {
         $call = new \App\Classes\Quote();
-        $response = $call->getQOTD();
-        echo $response->getBody();
+        $r = $call->getQOTD();
     }
 }

@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
         Commands\PurgeUsers::class,
         Commands\GetSuggested::class,
         Commands\SavePopularTweets::class,
-        Commands\UpdateBotInformation::class
+        Commands\UpdateBotInformation::class,
+        Commands\GetQOTD::class
     ];
 
     /**
@@ -53,6 +54,9 @@ class Kernel extends ConsoleKernel
                  ->daily();
 
         $schedule->command('twitter:update-bot-information')
+                 ->daily();
+
+        $schedule->command('quote:getQOTD')
                  ->daily();
 
         $schedule->command('twitter:retweet-trending')
