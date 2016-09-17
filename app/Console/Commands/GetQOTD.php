@@ -11,7 +11,7 @@ class GetQOTD extends Command
      *
      * @var string
      */
-    protected $signature = 'quote:getQOTD';
+    protected $signature = 'quote:get-qotd';
 
     /**
      * The console command description.
