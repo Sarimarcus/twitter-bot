@@ -13,7 +13,7 @@ class CreateQuotesTable extends Migration
     public function up()
     {
         Schema::create('quotes', function (Blueprint $table) {
-            $table->bigInteger('id')->unique();
+            $table->increments('id');
             $table->string('text');
             $table->string('author');
             $table->string('illustration');
