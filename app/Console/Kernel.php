@@ -47,6 +47,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('twitter:unfollow-users')
                  ->hourly();
 
+        $schedule->command('twitter:retweet-trending')
+                 ->weekdays()->at('14:00');
+
+        $schedule->command('twitter:tweet-inspire')
+                 ->weekly()->fridays()->at('16:00');
+
         $schedule->command('twitter:purge-users')
                  ->daily();
 
@@ -58,11 +64,5 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('quote:getQOTD')
                  ->daily();
-
-        $schedule->command('twitter:retweet-trending')
-                 ->weekdays()->at('14:00');
-
-        $schedule->command('twitter:tweet-inspire')
-                 ->weekly()->fridays()->at('16:00');
     }
 }
