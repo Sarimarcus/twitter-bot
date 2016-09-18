@@ -7,7 +7,7 @@ use App\Models\Quote;
 /**
 *  Retrieve quotes from  https://theysaidso.com/api/
 */
-class Quote
+class QuoteApi
 {
     const API_URL = 'http://quotes.rest/';
 

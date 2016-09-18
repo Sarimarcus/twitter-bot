@@ -37,7 +37,7 @@ class GetQOTD extends Command
      */
     public function handle()
     {
-        $call = new \App\Classes\Quote();
+        $call = new \App\Classes\QuoteApi();
         $r = $call->getQOTD();
     }
 }

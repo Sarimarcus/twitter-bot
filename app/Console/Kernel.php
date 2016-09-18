@@ -62,7 +62,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('twitter:update-bot-information')
                  ->daily();
 
-        $schedule->command('quote:getQOTD')
+        $schedule->command('quote:get-qotd')
                  ->daily();
     }
 }
