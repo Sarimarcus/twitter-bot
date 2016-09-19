@@ -14,10 +14,6 @@
             @endforeach
         </ul>
     @endif
-
-    {{--<div id="stocks-div"></div>
-    @linechart('Stocks', 'stocks-div');--}}
-
 </div>
 
 @stop
