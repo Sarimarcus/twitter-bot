@@ -51,7 +51,7 @@ class Kernel extends ConsoleKernel
                  ->weekdays()->at('14:00');
 
         $schedule->command('twitter:tweet-inspire')
-                 ->weekly()->fridays()->at('16:00');
+                 ->weekdays()->at('10:00');
 
         $schedule->command('twitter:purge-users')
                  ->daily();
