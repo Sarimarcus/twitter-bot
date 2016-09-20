@@ -283,6 +283,12 @@ class TwitterBot
 
         $quote = Quote::last();
         $tweet = $quote->text . ' — ' . $quote->author;
+
+        // Don't tweet if it's too long
+        if (strlen($tweet) > 140) {
+            return;
+        }
+
         \Log::info('[' . $bot->screen_name . '] Tweeting quote : ' . $tweet);
         self::runRequest($bot, 'postTweet', ['status' => html_entity_decode($tweet)]);
     }
