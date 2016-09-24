@@ -36,4 +36,14 @@ class Tweet extends Model
 
         return $tweet;
     }
+
+    /*
+     * Get tweets by language
+     */
+    public static function getTweetsByLanguage($language)
+    {
+        return \DB::table('tweets')
+                    ->where('lang', $language)
+                    ->get();
+    }
 }

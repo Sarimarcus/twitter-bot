@@ -18,9 +18,18 @@ class Test extends Controller
         \App\Classes\TwitterBot::runTask('checkBotApiLimits');
     }
 
-    public function qotd()
+    public function geo()
     {
-        $call = new \App\Classes\Quote();
-        $r = $call->getQOTD();
+        $o = new \App\Classes\PoemMaker('fr');
+        $data =  $o->getInspiration();
+        dd($data);
+   }
+
+    public function isAlexandrine()
+    {
+        $text = 'Je partirai. Vois-tu, je sais que tu m\'attends.';
+        $o = new \App\Classes\PoemMaker('fr');
+        $data =  $o->isAlexandrine($text);
+        dd($data);
     }
 }

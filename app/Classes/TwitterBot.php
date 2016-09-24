@@ -15,7 +15,7 @@ use App\Models\Quote;
 class TwitterBot
 {
     const NUMBER_TO_UNFOLLOW = 10; // How many should we unfollow each time
-    const MAX_FOLLOW_UNTIL_STOP = 4500; // Difference between friend and followers before mass unfollow
+    const MAX_FOLLOW_UNTIL_STOP = 4600; // Limit of following before stop
     const DIFFERENCE_BEFORE_UNFOLLOW = 400; // Difference between friend and followers before mass unfollow
 
     /*
@@ -28,15 +28,6 @@ class TwitterBot
             $bot::setConfiguration($bot);
             self::$task($bot);
         }
-    }
-
-    /*
-     * Test function
-     */
-    public static function sendSomething(Bot $bot)
-    {
-        self::setOAuth($bot);
-        \Twitter::postTweet(['status' => 'je teste quelque chose !', 'format' => 'array']);
     }
 
     /*
@@ -363,6 +354,28 @@ class TwitterBot
     }
 
     /*
+     *  Get some random tweets
+     */
+    private static function getRandomTweets(Bot $bot)
+    {
+        // Setting OAuth parameters
+        self::setOAuth($bot);
+
+        // From hardcoded interesting users
+        $interesting = Collection::make($bot->interestingUsers);
+
+        // Some from the DB (the suggested ones), merging and picking one
+        $rows = User::getSuggested($bot);
+        $suggested = collect($rows)->pluck('screen_name');
+
+        // Getting tweets from account
+        $target = $interesting->merge($suggested)->unique()->random();
+        if ($tweets = self::runRequest($bot, 'getUserTimeline', ['screen_name' => $target])) {
+            return $tweets;
+        }
+    }
+
+    /*
      * Run a Twitter request
      */
     private static function runRequest(Bot $bot, $method, $params)
@@ -387,28 +400,6 @@ class TwitterBot
             \Log::error('[' . $bot->screen_name . '] Method ' . $method . ' : ' . $e->getMessage());
             Bot::addError($bot);
             return false;
-        }
-    }
-
-    /*
-     *  Get some random tweets
-     */
-    private static function getRandomTweets(Bot $bot)
-    {
-        // Setting OAuth parameters
-        self::setOAuth($bot);
-
-        // From hardcoded interesting users
-        $interesting = Collection::make($bot->interestingUsers);
-
-        // Some from the DB (the suggested ones), merging and picking one
-        $rows = User::getSuggested($bot);
-        $suggested = collect($rows)->pluck('screen_name');
-
-        // Getting tweets from account
-        $target = $interesting->merge($suggested)->unique()->random();
-        if ($tweets = self::runRequest($bot, 'getUserTimeline', ['screen_name' => $target])) {
-            return $tweets;
         }
     }
 
