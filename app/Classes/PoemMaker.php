@@ -13,7 +13,7 @@ class PoemMaker
     // Poem language
     private $language;
 
-    public function __construct(String $language)
+    public function __construct($language)
     {
         // Set language
         $this->language = $language;
