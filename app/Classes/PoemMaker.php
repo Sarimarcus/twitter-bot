@@ -48,6 +48,7 @@ class PoemMaker
                 $inspiration = \Twitter::getSearch($params);
 
                 // Looking for an alexandrine !
+                $found = [];
                 foreach ($inspiration['statuses'] as $key => $tweet) {
                     // Not taking tweets with mentions or links
                     if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
@@ -61,6 +62,7 @@ class PoemMaker
 
                             try {
                                 $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
+                                $found[] = $data;
                                 \Log::info('Found alexandrine : '  . $tweet['text']);
                             } catch (Exception $e) {
                                 \Log::error('Can\'t dave to DB : ' . $e->getMessage());
@@ -68,6 +70,8 @@ class PoemMaker
                         }
                     }
                 }
+
+                return $found;
             };
         } catch (\Exception $e) {
             \Log::error('Can\'t authentificate : ' . $e->getMessage());
