@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
          */
 
         $schedule->command('poem:get-inspiration')
-                 ->everyTenMinutes();
+                 ->everyFiveMinutes();
 
          /*
           * Twitter Bot tasks

@@ -106,4 +106,19 @@ class PoemMaker
 
         return $sum;
     }
+
+    public function getLastSyllabe($text)
+    {
+        // Getting last word
+        $words = mb_split('[^\'[:alpha:]]+', $text);
+        $words = array_reverse($words);
+        foreach ($words as $w) {
+            if (mb_strlen($w)) {
+                $lastWord = $w;
+                break;
+            }
+        }
+      /*  $syllable = new \Syllable('fr');
+        return $syllable->parseWord($lastWord);*/
+    }
 }
