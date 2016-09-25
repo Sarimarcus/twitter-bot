@@ -5,21 +5,21 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
-class TweetInterest extends Command
+class StatusUpdate extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'twitter:tweet-interest';
+    protected $signature = 'twitter:status-update';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Tweet a link from interesting user';
+    protected $description = 'Update status with something interesting';
 
     /**
      * Create a new command instance.
@@ -38,6 +38,6 @@ class TweetInterest extends Command
      */
     public function handle()
     {
-        \App\Classes\TwitterBot::runTask('tweetInterest');
+        \App\Classes\TwitterBot::runTask('statusUpdate');
     }
 }

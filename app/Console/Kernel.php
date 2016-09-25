@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\Inspire::class,
         Commands\RetweetTrending::class,
         Commands\TweetInspire::class,
-        Commands\TweetInterest::class,
+        Commands\StatusUpdate::class,
         Commands\FollowUsers::class,
         Commands\UnfollowUsers::class,
         Commands\PurgeUsers::class,
@@ -36,7 +36,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
         /*
          * Poem Maker tasks
          */
@@ -51,7 +50,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('twitter:follow-users')
                  ->everyTenMinutes();
 
-        $schedule->command('twitter:tweet-interest')
+        $schedule->command('twitter:status-update')
                  ->everyThirtyMinutes();
 
         $schedule->command('twitter:save-popular-tweets')

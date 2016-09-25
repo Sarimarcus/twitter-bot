@@ -9,6 +9,7 @@ use App\Models\Alexandrine;
 */
 class PoemMaker
 {
+    const THANK_MSG = 'Merci pour ton tweet, c\'est un bel alexandrin, je vais m\'en servir pour mon poème. Plus qu\' à trouver des rimes !';
 
     // Poem language
     private $language;
@@ -17,6 +18,10 @@ class PoemMaker
     {
         // Set language
         $this->language = $language;
+
+        // Configure the bot
+        $botConfig = $this->getBotConfig();
+        \Twitter::reconfig($botConfig);
 
         // Set cache folder
         \Syllable::setCacheDir(storage_path().'/framework/cache');
@@ -27,13 +32,6 @@ class PoemMaker
      */
     public function getInspiration()
     {
-        $botConfig = [
-            'consumer_key'    => 'VyGD7wzlcYP8N5JcLyhA',
-            'consumer_secret' => 'QAWyxUrd2oeGsMHN6FpSXk6QH0Wpr3WPdrAqCEC8pnE',
-            'token'           => '12261582-0Nj2Kjv5NxARWwa44tQQUHP3Ys00GP3Ua1qt3LizQ',
-            'secret'          => 'idQnDEMtw2xwlWsf8wRSA8LJVWJ21s8X3lhxshvC88'
-        ];
-
         $params = [
             'q'           => 'place:09f6a7707f18e0b1', // Hardcoding Paris, FR for now
             'lang'        => $this->language,
@@ -43,38 +41,38 @@ class PoemMaker
         ];
 
         try {
-            if (\Twitter::reconfig($botConfig)) {
-                \Log::info('// Poem Maker : getting inspiration');
-                $inspiration = \Twitter::getSearch($params);
+            \Log::info('// Poem Maker : getting inspiration');
+            $inspiration = \Twitter::getSearch($params);
 
-                // Looking for an alexandrine !
-                $found = [];
-                foreach ($inspiration['statuses'] as $key => $tweet) {
-                    // Not taking tweets with mentions or links
-                    if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
-                        if ($this->isAlexandrine($tweet['text'])) {
-                            $data = [
-                                'tweet_id' => $tweet['id'],
-                                'user_id'  => $tweet['user']['id'],
-                                'text'     => $tweet['text'],
-                                'lang'     => $tweet['lang']
-                            ];
+            // Looking for an alexandrine !
+            $found = [];
+            foreach ($inspiration['statuses'] as $key => $tweet) {
+                // Not taking tweets with mentions or links
+                if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
+                    if ($this->isAlexandrine($tweet['text'])) {
+                        $data = [
+                            'tweet_id' => $tweet['id'],
+                            'user_id'  => $tweet['user']['id'],
+                            'text'     => $tweet['text'],
+                            'lang'     => $tweet['lang']
+                        ];
 
-                            try {
-                                $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
-                                $found[] = $data;
-                                \Log::info('Found alexandrine : '  . $tweet['text']);
-                            } catch (Exception $e) {
-                                \Log::error('Can\'t dave to DB : ' . $e->getMessage());
-                            }
-                        }
+                        // Store in DB
+                        $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
+
+                        // Let's thank the author of this !
+                        $this->thankSource($tweet);
+
+                        $found[] = $data;
                     }
                 }
+            }
 
-                return $found;
-            };
+            \Log::info('// Found ' . count($found) . ' alexandrine(s)');
+
+            return $found;
         } catch (\Exception $e) {
-            \Log::error('Can\'t authentificate : ' . $e->getMessage());
+            \Log::error('// Can\'t get inspiration : ' . $e->getMessage());
         }
     }
 
@@ -107,6 +105,32 @@ class PoemMaker
         return $sum;
     }
 
+    /*
+     * Send a tweet to the writer of the alexandrin and like the tweet
+     * $param array the original tweet
+     * @return boolean
+     */
+    public function thankSource($tweet)
+    {
+        try {
+            // Like the tweet
+            \Twitter::postFavorite(['id' => $tweet['id_str']]);
+
+            // Send the message
+            $params = [
+                'status'                => html_entity_decode('@' . $tweet['user']['screen_name'] . ' ' . self::THANK_MSG),
+                'in_reply_to_status_id' => $tweet['id_str'],
+                'format'                => 'array'
+            ];
+            \Twitter::postTweet($params);
+        } catch (\Exception $e) {
+            \Log::error('// Can\'t thank the source : ' . $e->getMessage());
+        }
+    }
+
+    /*
+     * Still working on this :/
+     */
     public function getLastSyllabe($text)
     {
         // Getting last word
@@ -120,5 +144,20 @@ class PoemMaker
         }
       /*  $syllable = new \Syllable('fr');
         return $syllable->parseWord($lastWord);*/
+    }
+
+    /*
+     * Twitter app configuration
+     */
+    private function getBotConfig()
+    {
+        $botConfig = [
+            'consumer_key'    => env('TWITTER_CONSUMER_KEY', ''),
+            'consumer_secret' => env('TWITTER_CONSUMER_SECRET', ''),
+            'token'           => env('TWITTER_ACCESS_TOKEN', ''),
+            'secret'          => env('TWITTER_ACCESS_TOKEN_SECRET', '')
+        ];
+
+        return $botConfig;
     }
 }

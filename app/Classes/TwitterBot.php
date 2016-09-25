@@ -199,7 +199,7 @@ class TwitterBot
      * in 3 ways : tweet with the URL, retweet, or tweet
      * original content
      */
-    public static function tweetInterest(Bot $bot)
+    public static function statusUpdate(Bot $bot)
     {
         // Setting OAuth parameters
         self::setOAuth($bot);

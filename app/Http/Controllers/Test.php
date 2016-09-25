@@ -33,15 +33,4 @@ class Test extends Controller
         $data =  $o->getLastSyllabe($text);
         dd($data);
     }
-
-    public function alexandrine()
-    {
-        \Syllable::setCacheDir(storage_path().'/framework/cache');
-        $text = 'Je partirai. Vois-tu, je sais que tu m\'attends.';
-        echo $text;
-        $syllable = new \Syllable('fr');
-
-        $histogram = $syllable->histogramText($text);
-        dd($histogram);
-    }
 }

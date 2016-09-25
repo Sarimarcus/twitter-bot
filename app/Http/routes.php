@@ -37,7 +37,6 @@ Route::get('test/api-limits', 'Test@apiLimits');
 Route::get('test/syllabes', 'Test@isAlexandrine');
 Route::get('test/poem', 'Test@poem');
 Route::get('test/last', 'Test@last');
-Route::get('test/alexandrine', 'Test@alexandrine');
 Route::get('stats', 'Stats@test');
 
 /*
