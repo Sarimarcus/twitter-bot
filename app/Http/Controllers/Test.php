@@ -18,7 +18,7 @@ class Test extends Controller
         \App\Classes\TwitterBot::runTask('checkBotApiLimits');
     }
 
-    public function geo()
+    public function poem()
     {
         $o = new \App\Classes\PoemMaker('fr');
         $data =  $o->getInspiration();

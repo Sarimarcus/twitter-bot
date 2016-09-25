@@ -35,11 +35,11 @@ class PoemMaker
         ];
 
         $params = [
-            'q' => 'place:09f6a7707f18e0b1', // Hardcoding Paris, FR for now
-            'lang' => $this->language,
+            'q'           => 'place:09f6a7707f18e0b1', // Hardcoding Paris, FR for now
+            'lang'        => $this->language,
             'result_type' => 'recent',
-            'count' => 100,
-            'format' => 'array'
+            'count'       => 100,
+            'format'      => 'array'
         ];
 
         try {
@@ -58,6 +58,7 @@ class PoemMaker
                                 'lang'     => $tweet['lang']
                             ];
                             $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
+                            \Log::info('Found alexandrine : '  . $tweet['text']);
                         }
                     }
                 }
