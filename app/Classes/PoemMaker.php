@@ -44,6 +44,7 @@ class PoemMaker
 
         try {
             if (\Twitter::reconfig($botConfig)) {
+                \Log::info('// Poem Maker : getting inspiration');
                 $inspiration = \Twitter::getSearch($params);
 
                 // Looking for an alexandrine !
