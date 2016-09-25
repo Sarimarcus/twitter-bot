@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
         Commands\GetSuggested::class,
         Commands\SavePopularTweets::class,
         Commands\UpdateBotInformation::class,
-        Commands\GetQOTD::class
+        Commands\GetQOTD::class,
+        Commands\GetInspiration::class
     ];
 
     /**
@@ -35,6 +36,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
+        /*
+         * Poem Maker tasks
+         */
+
+        $schedule->command('twitter:follow-users')
+                 ->everyTenMinutes();
+
+         /*
+          * Twitter Bot tasks
+          */
+
         $schedule->command('twitter:follow-users')
                  ->everyTenMinutes();
 

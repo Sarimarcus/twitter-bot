@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Models\Alexandrine;
+
 /**
 *  Some methods to generate poems (with tweets ?)
 */
@@ -46,10 +48,19 @@ class PoemMaker
 
                 // Looking for an alexandrine !
                 foreach ($inspiration['statuses'] as $key => $tweet) {
-                   if($this->isAlexandrine($tweet['text'])) echo 'found one ! : ' . $tweet['text'] . '(https://twitter.com/statuses/' . $tweet['id'] .  ') <br>';
+                    // Not taking tweets with mentions or links
+                    if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
+                        if ($this->isAlexandrine($tweet['text'])) {
+                            $data = [
+                                'tweet_id' => $tweet['id'],
+                                'user_id'  => $tweet['user']['id'],
+                                'text'     => $tweet['text'],
+                                'lang'     => $tweet['lang']
+                            ];
+                            $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
+                        }
+                    }
                 }
-
-                return $inspiration;
             };
         } catch (\Exception $e) {
             \Log::error('Can\'t authentificate : ' . $e->getMessage());
@@ -65,8 +76,6 @@ class PoemMaker
     {
         $syllable = new \Syllable($this->language);
 
-        // Cleaning text of links
-        $text = preg_replace('#^https?://#', '', $text);
         $histogram = $syllable->histogramText($text);
         $syllabesCount = $this->sumSyllabes($histogram);
         return (12 == $syllabesCount) ? true : false;

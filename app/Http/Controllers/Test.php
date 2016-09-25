@@ -22,7 +22,6 @@ class Test extends Controller
     {
         $o = new \App\Classes\PoemMaker('fr');
         $data =  $o->getInspiration();
-        dd($data);
    }
 
     public function isAlexandrine()
