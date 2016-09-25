@@ -58,8 +58,13 @@ class PoemMaker
                                 'text'     => $tweet['text'],
                                 'lang'     => $tweet['lang']
                             ];
-                            $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
-                            \Log::info('Found alexandrine : '  . $tweet['text']);
+
+                            try {
+                                $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
+                                \Log::info('Found alexandrine : '  . $tweet['text']);
+                            } catch (Exception $e) {
+                                \Log::error('Can\'t dave to DB : ' . $e->getMessage());
+                            }
                         }
                     }
                 }
