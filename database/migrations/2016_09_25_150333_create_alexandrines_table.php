@@ -13,7 +13,8 @@ class CreateAlexandrinesTable extends Migration
     public function up()
     {
         Schema::create('alexandrines', function (Blueprint $table) {
-            $table->bigInteger('tweet_id')->unique();
+            $table->bigIncrements('id');
+            $table->bigInteger('tweet_id');
             $table->bigInteger('user_id');
             $table->string('text');
             $table->string('lang');
