@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAlexandrinesTable extends Migration
+class CreatePoemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,12 @@ class CreateAlexandrinesTable extends Migration
      */
     public function up()
     {
-        Schema::create('alexandrines', function (Blueprint $table) {
-            $table->bigInteger('tweet_id')->unique();
-            $table->bigInteger('user_id');
-            $table->string('text');
-            $table->string('lang');
+        Schema::create('poems', function (Blueprint $table) {
+            $table->increments('id');
+            $table->bigInteger('tweet_id');
+            $table->string('title');
+            $table->integer('rank');
+            $table->string('length');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateAlexandrinesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('alexandrines');
+        Schema::drop('poems');
     }
 }
