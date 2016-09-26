@@ -8,6 +8,11 @@ class Alexandrine extends Model
 {
     protected $fillable  = ['tweet_id', 'user_id', 'text', 'lang', 'created_at', 'updated_at'];
 
-    public $incrementing = false;
-    public $primaryKey   = 'tweet_id';
+    /**
+     * Get the poem that owns the alexandrine.
+     */
+    public function poem()
+    {
+        return $this->belongsTo('App\Models\Poem');
+    }
 }

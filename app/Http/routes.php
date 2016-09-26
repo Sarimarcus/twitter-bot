@@ -30,16 +30,25 @@ Route::group(['middleware' => ['web']], function () {
 
 
 /*
- * My routes
+ * Test
  */
 Route::get('test/hello', 'Test@hello');
 Route::get('test/api-limits', 'Test@apiLimits');
 Route::get('test/syllabes', 'Test@isAlexandrine');
 Route::get('test/poem', 'Test@poem');
 Route::get('test/last', 'Test@last');
+
+/*
+ * Stats
+ */
 Route::get('stats', 'Stats@test');
 
 /*
  * Wurstify
  */
 Route::get('wurstify', 'Wurstify@make');
+
+/*
+ * Poem Bundler
+ */
+Route::get('poem', 'PoemBundler@index');
