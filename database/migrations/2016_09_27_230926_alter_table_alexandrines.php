@@ -13,7 +13,7 @@ class AlterTableAlexandrines extends Migration
     public function up()
     {
         Schema::table('alexandrines', function (Blueprint $table) {
-            $table->string('phoneme')->after('rank');
+            $table->string('phoneme')->after('rank')->nullable();;
         });
     }
 

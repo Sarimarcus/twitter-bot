@@ -54,6 +54,11 @@ class PoemMaker
                         // Getting last phoneme for rhyme matching (i remember you we are here to build a poem)
                         $lastPhoneme = $this->getLastPhoneme($tweet['text']);
 
+                        // If we can't find the phoneme, skip it
+                        if (empty($lastPhoneme)) {
+                            continue;
+                        }
+
                         $data = [
                             'tweet_id' => $tweet['id'],
                             'user_id'  => $tweet['user']['id'],
@@ -140,6 +145,8 @@ class PoemMaker
      */
     private function getLastPhoneme($text)
     {
+        $lastPhoneme = '';
+
         // Getting last word
         $words = mb_split('[^\'[:alpha:]]+', $text);
         $words = array_reverse($words);
@@ -155,7 +162,9 @@ class PoemMaker
         $syllables = $syllable->splitWord($lastWord);
 
         // Finally, getting the phonem
-        return SoundexFr::phonetique(end($syllables));
+        $lastPhoneme = SoundexFr::phonetique(end($syllables));
+
+        return $lastPhoneme;
     }
 
     /*
