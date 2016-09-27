@@ -70,8 +70,8 @@ class PoemMaker
                         // Store in DB
                         $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
 
-                        // Let's thank the author of this !
-                        $this->thankSource($tweet);
+                        // Let's thank the author of this ! Or not, i'm spamming
+                        //$this->thankSource($tweet);
 
                         $found[] = $data;
                     }
