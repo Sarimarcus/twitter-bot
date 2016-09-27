@@ -50,11 +50,16 @@ class PoemMaker
                 // Not taking tweets with mentions or links
                 if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
                     if ($this->isAlexandrine($tweet['text'])) {
+
+                        // Getting last phoneme for rhyme matching (i remember you we are here to build a poem)
+                        $lastPhoneme = $this->getLastPhoneme($tweet['text']);
+
                         $data = [
                             'tweet_id' => $tweet['id'],
                             'user_id'  => $tweet['user']['id'],
                             'text'     => $tweet['text'],
-                            'lang'     => $tweet['lang']
+                            'lang'     => $tweet['lang'],
+                            'phoneme'  => $lastPhoneme
                         ];
 
                         // Store in DB
@@ -91,21 +96,6 @@ class PoemMaker
     }
 
     /*
-     * Calculate the total number of syllabes from a text histogram
-     * @param array $histogram array from \Syllable->histogramText
-     * @return int
-     */
-    private function sumSyllabes($histogram)
-    {
-        $sum = 0;
-        foreach ($histogram as $syllable_count => $number) {
-            $sum += $syllable_count * $number;
-        }
-
-        return $sum;
-    }
-
-    /*
      * Send a tweet to the writer of the alexandrin and like the tweet
      * $param array the original tweet
      * @return boolean
@@ -129,9 +119,26 @@ class PoemMaker
     }
 
     /*
-     * Still working on this :/
+     * Calculate the total number of syllabes from a text histogram
+     * @param array $histogram array from \Syllable->histogramText
+     * @return int
      */
-    public function getLastSyllabe($text)
+    private function sumSyllabes($histogram)
+    {
+        $sum = 0;
+        foreach ($histogram as $syllable_count => $number) {
+            $sum += $syllable_count * $number;
+        }
+
+        return $sum;
+    }
+
+    /*
+     * Retrieve the last phoneme of the alexandrine (for rhymes matching)
+     * @param text text to analyse
+     * @return text the phoneme
+     */
+    private function getLastPhoneme($text)
     {
         // Getting last word
         $words = mb_split('[^\'[:alpha:]]+', $text);
@@ -142,8 +149,13 @@ class PoemMaker
                 break;
             }
         }
-      /*  $syllable = new \Syllable('fr');
-        return $syllable->parseWord($lastWord);*/
+
+        // Getting last syllable
+        $syllable = new \Syllable('fr');
+        $syllables = $syllable->splitWord($lastWord);
+
+        // Finally, getting the phonem
+        return SoundexFr::phonetique(end($syllables));
     }
 
     /*
