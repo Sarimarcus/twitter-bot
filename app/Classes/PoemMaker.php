@@ -87,17 +87,33 @@ class PoemMaker
     }
 
     /*
-     * Check if a string is an alexandrine
-     * @param string $string
-     * @php return boolean
+     * Retrieve the last phoneme of the alexandrine (for rhymes matching)
+     * @param text text to analyse
+     * @return text the phoneme
      */
-    private function isAlexandrine($text)
+    public function getLastPhoneme($text)
     {
-        $syllable = new \Syllable($this->language);
+        $lastPhoneme = '';
 
-        $histogram = $syllable->histogramText($text);
-        $syllabesCount = $this->sumSyllabes($histogram);
-        return (12 == $syllabesCount) ? true : false;
+        // Getting last word
+        $words = mb_split('[^\'[:alpha:]]+', $text);
+        $words = array_reverse($words);
+        foreach ($words as $w) {
+            if (mb_strlen($w)) {
+                $lastWord = $w;
+                break;
+            }
+        }
+
+        // Getting last syllable
+        $syllable = new \Syllable('fr');
+        $syllables = $syllable->splitWord($lastWord);
+        $lastSyllable = end($syllables);
+
+        // Finally, getting the phonem
+        $lastPhoneme = SoundexFr::phonetique($lastSyllable);
+
+        return $lastPhoneme;
     }
 
     /*
@@ -124,6 +140,20 @@ class PoemMaker
     }
 
     /*
+     * Check if a string is an alexandrine
+     * @param string $string
+     * @php return boolean
+     */
+    private function isAlexandrine($text)
+    {
+        $syllable = new \Syllable($this->language);
+
+        $histogram = $syllable->histogramText($text);
+        $syllabesCount = $this->sumSyllabes($histogram);
+        return (12 == $syllabesCount) ? true : false;
+    }
+
+    /*
      * Calculate the total number of syllabes from a text histogram
      * @param array $histogram array from \Syllable->histogramText
      * @return int
@@ -136,35 +166,6 @@ class PoemMaker
         }
 
         return $sum;
-    }
-
-    /*
-     * Retrieve the last phoneme of the alexandrine (for rhymes matching)
-     * @param text text to analyse
-     * @return text the phoneme
-     */
-    private function getLastPhoneme($text)
-    {
-        $lastPhoneme = '';
-
-        // Getting last word
-        $words = mb_split('[^\'[:alpha:]]+', $text);
-        $words = array_reverse($words);
-        foreach ($words as $w) {
-            if (mb_strlen($w)) {
-                $lastWord = $w;
-                break;
-            }
-        }
-
-        // Getting last syllable
-        $syllable = new \Syllable('fr');
-        $syllables = $syllable->splitWord($lastWord);
-
-        // Finally, getting the phonem
-        $lastPhoneme = SoundexFr::phonetique(end($syllables));
-
-        return $lastPhoneme;
     }
 
     /*

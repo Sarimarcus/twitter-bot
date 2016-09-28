@@ -25,7 +25,8 @@ class Kernel extends ConsoleKernel
         Commands\SavePopularTweets::class,
         Commands\UpdateBotInformation::class,
         Commands\GetQOTD::class,
-        Commands\GetInspiration::class
+        Commands\GetInspiration::class,
+        Commands\SearchPhoneme::class
     ];
 
     /**
