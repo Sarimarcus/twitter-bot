@@ -11,11 +11,17 @@ use App\Models\Alexandrine;
 class PoemBundler extends Controller
 {
     /*
-     *
+     * Rendering homepage
      */
     public function index()
     {
-        $poem = Poem::find(1)->alexandrines;
-        dd($poem);
+        $poem = Poem::find(1)->alexandrines()->orderBy('rank')->get();
+
+        $data = [
+            'headTitle' => 'Poem Bundler',
+            'poem' => $poem
+        ];
+
+        return view('poem-bundler.homepage', $data);
     }
 }

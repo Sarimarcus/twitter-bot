@@ -16,6 +16,6 @@ class Dashboard extends Controller
          */
         $bots = Bot::all();
 
-        return view('dashboard.homepage', ['bots' => $bots]);
+        return view('dashboard.homepage', ['bots' => $bots, 'headTitle' => 'Bots farm']);
     }
 }
