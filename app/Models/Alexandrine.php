@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alexandrine extends Model
 {
-    protected $fillable  = ['tweet_id', 'user_id', 'text', 'lang', 'phoneme', 'created_at', 'updated_at'];
+    protected $fillable  = ['tweet_id', 'user_id', 'text', 'lang', 'screen_name', 'profile_image_url', 'phoneme', 'created_at', 'updated_at'];
 
     /**
      * Get the poem that owns the alexandrine.

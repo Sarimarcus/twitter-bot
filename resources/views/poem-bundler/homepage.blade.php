@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="content center-block">
+<div class="inner">
     @if (count($poem))
         <ul>
             @foreach ($poem as $alexandrine)

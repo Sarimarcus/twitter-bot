@@ -43,10 +43,10 @@ class PoemMaker
         try {
             \Log::info('// Poem Maker : getting inspiration');
             $inspiration = \Twitter::getSearch($params);
-
             // Looking for an alexandrine !
             $found = [];
             foreach ($inspiration['statuses'] as $key => $tweet) {
+
                 // Not taking tweets with mentions or links
                 if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
                     if ($this->isAlexandrine($tweet['text'])) {
@@ -60,11 +60,13 @@ class PoemMaker
                         }
 
                         $data = [
-                            'tweet_id' => $tweet['id'],
-                            'user_id'  => $tweet['user']['id'],
-                            'text'     => $tweet['text'],
-                            'lang'     => $tweet['lang'],
-                            'phoneme'  => $lastPhoneme
+                            'tweet_id'          => $tweet['id'],
+                            'user_id'           => $tweet['user']['id'],
+                            'text'              => $tweet['text'],
+                            'lang'              => $tweet['lang'],
+                            'screen_name'       => $tweet['user']['screen_name'],
+                            'profile_image_url' => $tweet['user']['profile_image_url'],
+                            'phoneme'           => $lastPhoneme
                         ];
 
                         // Store in DB
