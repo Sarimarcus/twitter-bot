@@ -4,13 +4,12 @@
 
 <div class="inner">
     @if (count($poem))
-        <ul>
             @foreach ($poem as $alexandrine)
-            <li>
-                {{ $alexandrine->text }}
-            </li>
+            <blockquote>
+                <p>{{ $alexandrine->text }}</p>
+                <footer><cite title="{{ '@' . $alexandrine->screen_name}}">{{ '@' . $alexandrine->screen_name}}</cite></footer>
+            </blockquote>
             @endforeach
-        </ul>
     @endif
 </div>
 

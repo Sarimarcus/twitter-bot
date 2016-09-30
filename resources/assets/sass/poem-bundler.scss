@@ -3,18 +3,15 @@
     text-align: center;
 }
 
-ul {
-    list-style: none;
 
-    li {
-        font-size: 2.0em;
-        font-family: Roboto;
-        font-weight: 300;
-        font-style: italic;
-        margin: 0.5em 0;
+blockquote p {
+    font-size: 2.0em;
+    font-family: Roboto;
+    font-weight: 300;
+    font-style: italic;
+    margin: 0.5em 0;
 
-        &:first-letter {
-            text-transform: uppercase;
-        }
+    &:first-letter {
+        text-transform: uppercase;
     }
 }
