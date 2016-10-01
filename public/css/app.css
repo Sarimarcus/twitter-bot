@@ -5766,18 +5766,26 @@ h2 {
   position: relative;
   width: 40px;
   height: 40px;
-  margin: 0 0.5em 0 1.5em;
+  margin: 0 .5em 0 1.5em;
   border-radius: 50%;
   box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0, 0, 0, 0.2); }
 
 blockquote {
+  margin-bottom: 10px;
+  padding: 0 10px;
   border-left: none; }
   blockquote p {
     font-family: 'Roboto';
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: 300;
-    font-style: italic; }
+    font-style: italic;
+    margin: 0; }
     blockquote p:first-letter {
       text-transform: uppercase; }
+  blockquote footer {
+    font-size: .7em;
+    color: #ccc; }
+    blockquote footer cite a {
+      color: #1dcaff; }
 
 /*# sourceMappingURL=app.css.map */

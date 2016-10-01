@@ -9,8 +9,11 @@
             <blockquote>
                 <p>{{ $alexandrine->text }}</p>
                 <footer>
-                    <img class="avatar" src="{{ $alexandrine->profile_image_url }}" alt="{{ '@' . $alexandrine->screen_name}}" />
-                    <cite title="{{ '@' . $alexandrine->screen_name}}">{{ '@' . $alexandrine->screen_name}}</cite>
+                    {{-- <img class="avatar" src="{{ $alexandrine->profile_image_url }}" alt="{{ '@' . $alexandrine->screen_name  }}" /> --}}
+                    <cite title="{{ '@' . $alexandrine->screen_name }}">Tweeté par
+                        <a href="//www.twitter.com/statuses/{{ $alexandrine->tweet_id }}" target="_blank">{{ '@' . $alexandrine->screen_name }}
+                        </a>
+                    </cite>
                 </footer>
             </blockquote>
             @endforeach

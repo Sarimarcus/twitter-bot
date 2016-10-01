@@ -15,4 +15,12 @@ class Alexandrine extends Model
     {
         return $this->belongsTo('App\Models\Poem');
     }
+
+    /*
+     * Get the alexandrines free to use
+     */
+    public function freeScope($query)
+    {
+        # code...
+    }
 }

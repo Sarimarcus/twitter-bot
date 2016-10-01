@@ -1,3 +1,5 @@
+$color-twitter: #1dcaff;
+
 .inner
 {
     padding: 45px 15px;
@@ -21,7 +23,7 @@ h2
 
     width: 40px;
     height: 40px;
-    margin: 0 0.5em 0 1.5em;
+    margin: 0 .5em 0 1.5em;
 
     -webkit-border-radius: 50%;
        -moz-border-radius: 50%;
@@ -33,16 +35,33 @@ h2
 
 blockquote
 {
+    margin-bottom: 10px;
+    padding: 0 10px;
+
     border-left: none;
     p
     {
         font-family: 'Roboto';
-        font-size: 1.2em;
+        font-size: 1.4em;
         font-weight: 300;
         font-style: italic;
+
+        margin: 0;
         &:first-letter
         {
             text-transform: uppercase;
+        }
+    }
+    footer
+    {
+        font-size: .7em;
+        color: #ccc;
+        cite
+        {
+            a
+            {
+                color: $color-twitter;
+            }
         }
     }
 }
