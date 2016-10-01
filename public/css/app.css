@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=Roboto:300i,400);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400);
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
  * Copyright 2011-2015 Twitter, Inc.
@@ -1052,7 +1053,7 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -5131,7 +5132,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Roboto", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -5244,7 +5245,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -5754,13 +5755,29 @@ button.close {
   padding: 45px 15px;
   text-align: center; }
 
-blockquote p {
-  font-size: 2.0em;
-  font-family: Roboto;
+h2 {
+  font-family: 'Source Sans Pro';
+  font-size: 3.5em;
   font-weight: 300;
-  font-style: italic;
-  margin: 0.5em 0; }
-  blockquote p:first-letter {
-    text-transform: uppercase; }
+  padding: 40px 10px; }
+
+/* Rounded avatars */
+.avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0 0.5em 0 1.5em;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0, 0, 0, 0.2); }
+
+blockquote {
+  border-left: none; }
+  blockquote p {
+    font-family: 'Roboto';
+    font-size: 1.2em;
+    font-weight: 300;
+    font-style: italic; }
+    blockquote p:first-letter {
+      text-transform: uppercase; }
 
 /*# sourceMappingURL=app.css.map */
