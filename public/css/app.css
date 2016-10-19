@@ -5774,6 +5774,8 @@ blockquote {
   margin-bottom: 10px;
   padding: 0 10px;
   border-left: none; }
+  blockquote:nth-child(odd) {
+    margin-bottom: 40px; }
   blockquote p {
     font-family: 'Roboto';
     font-size: 1.4em;

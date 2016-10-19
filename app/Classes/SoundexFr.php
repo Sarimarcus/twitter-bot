@@ -91,7 +91,8 @@ class SoundexFr
 
         // pré-traitements
         $sIn = preg_replace('`OIN[GT]$`', 'OIN', $sIn);                                   // terminaisons OING -> OIN
-        $sIn = preg_replace('`E[RS]$`', 'ER', $sIn);                                       // supression des terminaisons infinitifs et participes pluriels
+        //$sIn = preg_replace('`E[RS]$`', 'ER', $sIn);                                    // supression des terminaisons infinitifs et participes pluriels
+        $sIn = preg_replace('`ER`', 'É', $sIn);                                           // pré traitement OEU -> EU
         $sIn = preg_replace('`(C|CH)OEU`', 'KE', $sIn);                                   // pré traitement OEU -> EU
         $sIn = preg_replace('`MOEU`', 'ME', $sIn);                                        // pré traitement OEU -> EU
         $sIn = preg_replace('`OE([UI]+)([BCDFGHJKLMNPQRSTVWXZ])`', 'E$1$2', $sIn);        // pré traitement OEU OEI -> E

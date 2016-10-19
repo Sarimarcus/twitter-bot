@@ -39,6 +39,10 @@ blockquote
     padding: 0 10px;
 
     border-left: none;
+    &:nth-child(odd)
+    {
+        margin-bottom: 40px;
+    }
     p
     {
         font-family: 'Roboto';
@@ -55,6 +59,7 @@ blockquote
     footer
     {
         font-size: .7em;
+
         color: #ccc;
         cite
         {

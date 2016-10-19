@@ -43,12 +43,15 @@ class PoemMaker
         try {
             \Log::info('// Poem Maker : getting inspiration');
             $inspiration = \Twitter::getSearch($params);
+
             // Looking for an alexandrine !
             $found = [];
             foreach ($inspiration['statuses'] as $key => $tweet) {
 
-                // Not taking tweets with mentions or links
-                if (false === strpos($tweet['text'], '@') && false === strpos($tweet['text'], 'http')) {
+                // Not taking tweets with mentions or links or with numbers inside
+                if (false === strpos($tweet['text'], '@') &&
+                    false === strpos($tweet['text'], 'http') &&
+                    false === preg_match('~[0-9]+~', $tweet['text'])) {
                     if ($this->isAlexandrine($tweet['text'])) {
 
                         // Getting last phoneme for rhyme matching (i remember you we are here to build a poem)

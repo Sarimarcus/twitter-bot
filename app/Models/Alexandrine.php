@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Alexandrine extends Model
 {
@@ -19,8 +20,29 @@ class Alexandrine extends Model
     /*
      * Get the alexandrines free to use
      */
-    public function freeScope($query)
+    public static function scopeFree($query)
     {
-        # code...
+        return $query->whereNull('poem_id')->where('phoneme', '<>', '️');
+    }
+
+    /*
+     * Get the count of similar phonemes
+     */
+    public function getSimilarPhonemes()
+    {
+        return $this->select('phoneme', DB::raw('count(id) as total'))
+                    ->groupBy('phoneme')->whereNull('poem_id')
+                    ->where('phoneme', '<>', '️')->get();
+    }
+
+    /*
+     * Get alexandrines by rhymes
+     */
+    public function getAlexandrinesByPhoneeme($phoneme)
+    {
+        return $this->select('id')
+                    ->where('phoneme', $phoneme)
+                    ->whereNull('poem_id')
+                    ->get();
     }
 }
