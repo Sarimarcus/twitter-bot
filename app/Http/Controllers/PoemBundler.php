@@ -31,6 +31,20 @@ class PoemBundler extends Controller
      */
     public function create()
     {
+        $lines = [];
+        $rhymes = $this->getRhymes();
+        foreach ($rhymes as $k => $rhyme) {
+            $line = $this->assembleAlexandrines($rhyme)->all();
+            var_dump($line);
+        }
+
+    }
+
+    /*
+     * Return available rhymes
+     */
+    private function getRhymes()
+    {
         $o = new Alexandrine();
         $count = $o->getSimilarPhonemes();
 
@@ -39,11 +53,22 @@ class PoemBundler extends Controller
         foreach ($count as $c) {
             if ($c->total > 2) {
                 $rhymes[] = $c->phoneme;
-                $alexandrines = $o->getAlexandrinesByPhoneeme($c->phoneme);
-                dd($alexandrines);
             }
         }
 
-        dd($rhymes);
+        return $rhymes;
+    }
+
+    /*
+     * Return alexandrines by phoneme
+     */
+    private function assembleAlexandrines($phoneme)
+    {
+        $rhymes = [];
+        $o = new Alexandrine();
+        $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
+        $random = $alexandrines->random(2);
+
+        return $random;
     }
 }

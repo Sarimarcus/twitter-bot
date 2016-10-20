@@ -38,7 +38,7 @@ class Alexandrine extends Model
     /*
      * Get alexandrines by rhymes
      */
-    public function getAlexandrinesByPhoneeme($phoneme)
+    public function getAlexandrinesByPhoneme($phoneme)
     {
         return $this->select('id')
                     ->where('phoneme', $phoneme)
