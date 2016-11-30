@@ -14,7 +14,7 @@ class PoemBundler extends Controller
      */
     public function index()
     {
-        $poem = Poem::find(5);
+        $poem = Poem::orderBy('created_at', 'desc')->first();
         $alexandrines = $poem->alexandrines()->orderBy('rank')->get();
 
         $data = [
