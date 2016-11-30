@@ -276,10 +276,13 @@ class PoemMaker
         $q->save();
 
         $poemId = $q->id;
+        $rank = 1;
         foreach ($alexandrines as $id) {
             $a = Alexandrine::find($id);
             $a->poem_id = $poemId;
+            $a->rank = $rank;
             $a->save();
+            $rank++;
         }
     }
 }
