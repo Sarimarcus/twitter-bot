@@ -9,3 +9,7 @@ This is a Twitter Bot, doing a lot of smart things :
 - Each weekdays at 10:00 : tweet an inspiring quote from https://theysaidso.com
 - Each weekdays at 14:00 : retweeting a trending tweet of configured city
 - Daily a midnight : get suggested users, purge useless users & updating bot stats
+
+It can also :
+- Generate poem based on tweets (yes my dear)
+- Get some QOTD
