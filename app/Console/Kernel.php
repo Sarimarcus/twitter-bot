@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
         Commands\UpdateBotInformation::class,
         Commands\GetQOTD::class,
         Commands\GetInspiration::class,
-        Commands\SearchPhoneme::class
+        Commands\SearchPhoneme::class,
+        Commands\GeneratePoem::class
     ];
 
     /**
@@ -43,6 +44,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('poem:get-inspiration')
                  ->everyFiveMinutes();
+
+        $schedule->command('poem:generate')
+                 ->daily();
+
 
          /*
           * Twitter Bot tasks

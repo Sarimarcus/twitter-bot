@@ -3,13 +3,22 @@
 namespace App\Classes;
 
 use App\Models\Alexandrine;
+use App\Models\Poem;
+use Carbon\Carbon;
 
 /**
 *  Some methods to generate poems (with tweets ?)
 */
 class PoemMaker
 {
+    // Tweet for thanks
     const THANK_MSG = 'Merci pour ton tweet, c\'est un bel alexandrin, je vais m\'en servir pour mon poème. Plus qu\' à trouver des rimes !';
+
+    // Number of verse of the poem
+    const NUMBER_VERSE = 3;
+
+    // Number of alexandrine in a verse
+    const NUMBER_ALEXANDRINE = 2;
 
     // Poem language
     private $language;
@@ -18,6 +27,8 @@ class PoemMaker
     {
         // Set language
         $this->language = $language;
+        setlocale(LC_TIME, $this->language);
+        Carbon::setLocale($this->language);
 
         // Configure the bot
         $botConfig = $this->getBotConfig();
@@ -146,6 +157,28 @@ class PoemMaker
     }
 
     /*
+     * Generate the poem
+     */
+    public function generatePoem()
+    {
+        $lines = [];
+
+        // Get some random rhymes
+        $rhymes = array_rand(array_flip($this->getRhymes()), self::NUMBER_VERSE);
+        foreach ($rhymes as $k => $rhyme) {
+
+            // Getting the alexandrines for the rhyme
+            $output = $this->assembleAlexandrines($rhyme)->all();
+            foreach ($output as $key => $value) {
+                $lines[] = $value->id;
+            }
+        }
+
+        // Insert in DB
+        $this->insertPoem($lines);
+    }
+
+    /*
      * Check if a string is an alexandrine
      * @param string $string
      * @php return boolean
@@ -195,5 +228,58 @@ class PoemMaker
     private function removeEmoji($text)
     {
         return preg_replace('/([0-9#][\x{20E3}])|[\x{00ae}\x{00a9}\x{203C}\x{2047}\x{2048}\x{2049}\x{3030}\x{303D}\x{2139}\x{2122}\x{3297}\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F6FF}][\x{FE00}-\x{FEFF}]?/u', '', $text);
+    }
+
+    /*
+     * Return available rhymes
+     */
+    private function getRhymes()
+    {
+        $o = new Alexandrine();
+        $count = $o->getSimilarPhonemes();
+
+        // Let's take only available rhymes
+        $rhymes = [];
+        foreach ($count as $c) {
+            if ($c->total > 2) {
+                $rhymes[] = $c->phoneme;
+            }
+        }
+
+        return $rhymes;
+    }
+
+    /*
+     * Return alexandrines by phoneme
+     */
+    private function assembleAlexandrines($phoneme)
+    {
+        $rhymes = [];
+        $o = new Alexandrine();
+        $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
+        $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
+
+        return $random;
+    }
+
+    /*
+     * Insert the poem
+     */
+    private function insertPoem($alexandrines)
+    {
+
+        // Inserting quote in DB
+        $q = new Poem;
+        // $dt = Carbon::now();
+        // $q->title = $dt->formatLocalized('%A') . ' poem';
+        $q->title = 'Poème du jour';
+        $q->save();
+
+        $poemId = $q->id;
+        foreach ($alexandrines as $id) {
+            $a = Alexandrine::find($id);
+            $a->poem_id = $poemId;
+            $a->save();
+        }
     }
 }

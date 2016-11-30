@@ -14,8 +14,8 @@ class PoemBundler extends Controller
      */
     public function index()
     {
-        $poem = Poem::find(1);
-        $alexandrines = Poem::find(1)->alexandrines()->orderBy('rank')->get();
+        $poem = Poem::find(5);
+        $alexandrines = $poem->alexandrines()->orderBy('rank')->get();
 
         $data = [
             'headTitle' => 'Poem Bundler',
@@ -31,44 +31,7 @@ class PoemBundler extends Controller
      */
     public function create()
     {
-        $lines = [];
-        $rhymes = $this->getRhymes();
-        foreach ($rhymes as $k => $rhyme) {
-            $line = $this->assembleAlexandrines($rhyme)->all();
-            var_dump($line);
-        }
-
-    }
-
-    /*
-     * Return available rhymes
-     */
-    private function getRhymes()
-    {
-        $o = new Alexandrine();
-        $count = $o->getSimilarPhonemes();
-
-        // Let's take only available rhymes
-        $rhymes = [];
-        foreach ($count as $c) {
-            if ($c->total > 2) {
-                $rhymes[] = $c->phoneme;
-            }
-        }
-
-        return $rhymes;
-    }
-
-    /*
-     * Return alexandrines by phoneme
-     */
-    private function assembleAlexandrines($phoneme)
-    {
-        $rhymes = [];
-        $o = new Alexandrine();
-        $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
-        $random = $alexandrines->random(2);
-
-        return $random;
+        $call = new \App\Classes\PoemMaker('fr');
+        $call->generatePoem();
     }
 }

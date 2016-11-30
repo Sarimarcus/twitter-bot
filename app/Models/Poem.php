@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Poem extends Model
 {
+    protected $fillable  = ['title'];
+
     /*
      * Get the alexandrines of the poem
      */
