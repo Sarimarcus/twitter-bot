@@ -52,4 +52,5 @@ Route::get('wurstify', 'Wurstify@make');
  * Poem Bundler
  */
 Route::get('poem', 'PoemBundler@index');
+Route::get('poem/next/{limit}', 'PoemBundler@next');
 //Route::get('poem-create', 'PoemBundler@create');

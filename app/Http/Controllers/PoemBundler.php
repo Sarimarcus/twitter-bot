@@ -27,6 +27,24 @@ class PoemBundler extends Controller
     }
 
     /*
+     * Load next poem
+     */
+    public function next(Request $request)
+    {
+        $skip = $request->limit++;
+        $poem = Poem::take(1)->skip($skip)->first();
+        $alexandrines = $poem->alexandrines()->orderBy('rank')->get();
+
+        $data = [
+            'headTitle' => 'Poem Bundler',
+            'poem' => $poem,
+            'alexandrines' => $alexandrines
+        ];
+
+        return view('poem-bundler.homepage', $data);
+    }
+
+    /*
      * Test method
      */
     public function create()
