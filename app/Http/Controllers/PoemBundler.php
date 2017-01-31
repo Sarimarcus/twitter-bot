@@ -41,7 +41,7 @@ class PoemBundler extends Controller
             'alexandrines' => $alexandrines
         ];
 
-        return view('poem-bundler.homepage', $data);
+        return view('poem-bundler.poem-content', $data);
     }
 
     /*

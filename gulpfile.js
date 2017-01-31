@@ -11,7 +11,15 @@ var elixir = require('laravel-elixir');
  |
  */
 
+elixir.config.js.browserify.watchify = {
+    enabled: true,
+    options: {
+        poll: true
+    }
+}
+
 elixir(function(mix) {
     mix.sass('app.scss')
         .browserify('app.js');
+    mix.copy('node_modules/bootstrap-sass/assets/fonts/bootstrap/','public/fonts/bootstrap');
 });
