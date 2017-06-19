@@ -59,9 +59,10 @@ class PoemMaker
             $found = [];
             foreach ($inspiration['statuses'] as $key => $tweet) {
 
-                // Not taking tweets with mentions or links or with numbers inside
+                // Not taking tweets with mentions, links, numbers inside or hastags
                 if (false === strpos($tweet['text'], '@') &&
                     false === strpos($tweet['text'], 'http') &&
+                    false === strpos($tweet['text'], '#') &&
                     false == preg_match('~[0-9]+~', $tweet['text'])) {
                     if ($this->isAlexandrine($tweet['text'])) {
 
