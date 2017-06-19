@@ -12,7 +12,9 @@
         "barryvdh/laravel-debugbar": "^2.2",
         "khill/lavacharts" : "3.0.*",
         "guzzlehttp/guzzle": "~6.2",
-        "vanderlee/syllable" : "1.4.*"
+        "vanderlee/syllable" : "1.4.*",
+        "tumblr/tumblr": "^0.3.0",
+        "jenssegers/oauth": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

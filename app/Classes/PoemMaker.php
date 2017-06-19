@@ -216,10 +216,10 @@ class PoemMaker
     private function getBotConfig()
     {
         $botConfig = [
-            'consumer_key'    => env('TWITTER_CONSUMER_KEY', ''),
-            'consumer_secret' => env('TWITTER_CONSUMER_SECRET', ''),
-            'token'           => env('TWITTER_ACCESS_TOKEN', ''),
-            'secret'          => env('TWITTER_ACCESS_TOKEN_SECRET', '')
+            'consumer_key'    => config('app.twitter_consumer_key'),
+            'consumer_secret' => config('app.twitter_consumer_secret'),
+            'token'           => config('app.twitter_access_token'),
+            'secret'          => config('app.twitter_access_token_secret')
         ];
 
         return $botConfig;
