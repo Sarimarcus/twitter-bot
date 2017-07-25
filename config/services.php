@@ -35,4 +35,11 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'tumblr' => [
+        'client_id' => env('TUMBLR_CONSUMER_KEY'),
+        'client_secret' => env('TUMBLR_CONSUMER_SECRET'),
+        'blog' => env('TUMBLR_BLOG'),
+        'redirect' => env('TUMBLR_REDIRECT_URI'),
+    ],
+
 ];

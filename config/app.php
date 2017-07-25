@@ -162,7 +162,12 @@ return [
         Thujohn\Twitter\TwitterServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
-        Jenssegers\OAuth\OAuthServiceProvider::class,
+
+        /*
+         * My Service Providers
+         */
+        App\Providers\TumblrServiceProvider::class,
+        \SocialiteProviders\Manager\ServiceProvider::class,
     ],
 
     /*
@@ -209,8 +214,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'Twitter'   => Thujohn\Twitter\Facades\Twitter::class,
-        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
-        'OAuth'     => Jenssegers\OAuth\Facades\OAuth::class
+        'Debugbar'  => Barryvdh\Debugbar\Facade::class
     ],
 
     /*
@@ -221,12 +225,4 @@ return [
     'twitter_consumer_secret' => env('TWITTER_CONSUMER_SECRET'),
     'twitter_access_token' => env('TWITTER_ACCESS_TOKEN'),
     'twitter_access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
-
-    /*
-     Tumblr
-     */
-
-    'tumblr_consumer_key' => env('TUMBLR_CONSUMER_KEY'),
-    'tumblr_consumer_secret' => env('TUMBLR_CONSUMER_SECRET'),
-    'tumblr_blog' => env('TUMBLR_BLOG')
 ];

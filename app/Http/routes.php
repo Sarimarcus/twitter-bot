@@ -54,3 +54,9 @@ Route::get('wurstify', 'Wurstify@make');
 Route::get('poem', 'PoemBundler@index');
 Route::get('poem/next/{limit}', 'PoemBundler@next');
 //Route::get('poem-create', 'PoemBundler@create');
+
+/*
+ * Tumblr OAuth
+ */
+Route::get('login/tumblr', 'Auth\Tumblr@redirectToProvider');
+Route::get('login/tumblr/callback', 'Auth\Tumblr@handleProviderCallback');

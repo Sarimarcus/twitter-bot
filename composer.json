@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "~6.2",
         "vanderlee/syllable" : "1.4.*",
         "tumblr/tumblr": "^0.3.0",
-        "jenssegers/oauth": "^2.0"
+        "laravel/socialite": "~2.0",
+        "socialiteproviders/tumblr": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
