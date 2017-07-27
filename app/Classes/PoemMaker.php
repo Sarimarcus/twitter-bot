@@ -246,7 +246,8 @@ class PoemMaker
             'type'  => 'text',
             'title' => 'Poème #' . $poemId,
             'body'  => $html,
-            'tags'  => 'poème,poem,generated'
+            'tags'  => 'poème,poem,generated',
+            'tweet' => 'Voici le dernier poème que j\'ai redigé pour vous : '
         ];
 
         $client = app('app.tumblr.api');
