@@ -1,4 +1,4 @@
-<h2>{{ $poem->title }}</h2>
+<div class="inner">
 @if (count($alexandrines))
         @foreach ($alexandrines as $alexandrine)
         <blockquote>
@@ -12,3 +12,4 @@
         </blockquote>
         @endforeach
 @endif
+</div>

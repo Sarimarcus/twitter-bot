@@ -34,10 +34,10 @@ class Tumblr extends Controller
         $token = $user->token;
         $tokenSecret = $user->tokenSecret;
 
+        \Cache::forever('TumblrToken', $token);
+        \Cache::forever('TumblrTokenSecret', $tokenSecret);
+
         \Log::info('Tumblr OAuth Token : ' . $token);
         \Log::info('Tumblr OAuth Token Secret : ' . $tokenSecret);
-
-        // Now store these credentials somewhere as they will need to be set
-        // on the tumblr api client in order to make requests.
     }
 }

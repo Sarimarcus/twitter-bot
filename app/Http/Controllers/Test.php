@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\ServiceProvider;
+use App\Models\Poem;
 
 class Test extends Controller
 {
@@ -20,9 +21,28 @@ class Test extends Controller
 
     public function poem()
     {
+        /*$poem = Poem::orderBy('created_at', 'desc')->first();
+        $alexandrines = $poem->alexandrines()->orderBy('rank')->get();
+
+        $data = [
+            'headTitle' => 'Poem Bundler',
+            'poem' => $poem,
+            'alexandrines' => $alexandrines
+        ];
+
+        $html = view('poem-bundler.poem-content', $data)->render();
+        dd($html);*/
+
         $o = new \App\Classes\PoemMaker('fr');
-        $data =  $o->getInspiration();
-        dd($data);
+        $o->generatePoem();
+    }
+
+    public function tumblr(\Tumblr\API\Client $client)
+    {
+        //$client = \App::make(Tumblr::class);
+      //  $client = $this->app->make('Tumblr\API\Client');
+      //  $client = app('app.tumblr.api');
+        dd($client);
     }
 
     public function last()
