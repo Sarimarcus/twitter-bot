@@ -12,7 +12,7 @@ use Carbon\Carbon;
 class PoemMaker
 {
     // Tweet for thanks
-    const THANK_MSG = 'Merci pour ton tweet, c\'est un bel alexandrin, je vais m\'en servir pour mon poème. Plus qu\' à trouver des rimes !';
+    const THANK_MSG = 'Voici mon dernier poème : [POST]';
 
     // Number of verse of the poem
     const NUMBER_VERSE = 3;
@@ -231,7 +231,7 @@ class PoemMaker
     /*
      * Send poem content to Tumblr
      */
-    private function sendTumblr($poemId)
+    public function sendTumblr($poemId)
     {
         $poem = Poem::find($poemId);
         $alexandrines = $poem->alexandrines()->orderBy('rank')->get();
@@ -251,7 +251,56 @@ class PoemMaker
         ];
 
         $client = app('app.tumblr.api');
-        $client->createPost(config('services.tumblr.blog'), $postData);
+
+        try {
+            $call = $client->createPost(config('services.tumblr.blog'), $postData);
+            $postUrl = 'https://' . config('services.tumblr.blog') . '/post/' . $call->id;
+            \Log::info('// Posted to Tumblr ! ID : ' . $postUrl);
+
+            // Sending it to Twitter
+            $this->sendTwitter($postUrl, $alexandrines);
+
+        } catch (\Exception $e) {
+            \Log::error('// Can\'t post to Tumblr : ' . $e->getMessage());
+        }
+    }
+
+    /*
+     * Send link to the poem on Twitter
+     */
+    public function sendTwitter($postUrl, $alexandrines)
+    {
+        $statusPromote = str_replace('[POST]', $postUrl, self::THANK_MSG);
+        $statusThanks = '';
+
+        // Adding the usernames
+        foreach ($alexandrines as $key => $value) {
+            $statusThanks .= '@' . $value['screen_name'] . ', ';
+        }
+
+        $statusThanks .= 'merci pour l\'inspiration !';
+
+        try {
+
+            // Send the message
+            $params = [
+                'status'                => html_entity_decode($statusPromote),
+                'format'                => 'array'
+            ];
+
+            $call = \Twitter::postTweet($params);
+
+            // Send the second message
+            $params = [
+                'status'                => html_entity_decode($statusThanks),
+                'in_reply_to_status_id' => $call['id'],
+                'format'                => 'array'
+            ];
+            \Twitter::postTweet($params);
+
+        } catch (\Exception $e) {
+            \Log::error('// Can\'t thank the source : ' . $e->getMessage());
+        }
     }
 
     /*

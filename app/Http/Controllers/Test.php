@@ -45,6 +45,12 @@ class Test extends Controller
         dd($client);
     }
 
+    public function twitter()
+    {
+        $o = new \App\Classes\PoemMaker('fr');
+        $o->sendTumblr(254);
+    }
+
     public function last()
     {
         $text = 'Je partirai. Vois-tu, je sais que tu m\'attends.';
