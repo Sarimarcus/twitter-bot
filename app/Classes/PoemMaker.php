@@ -66,6 +66,9 @@ class PoemMaker
                     false == preg_match('~[0-9]+~', $tweet['text'])) {
                     if ($this->isAlexandrine($tweet['text'])) {
 
+                        // Getting the last word (to find better rhymes)
+                        $lastWord = $this->getLastWord($tweet['text']);
+
                         // Getting last phoneme for rhyme matching (i remember you we are here to build a poem)
                         $lastPhoneme = $this->getLastPhoneme($tweet['text']);
 
@@ -81,7 +84,8 @@ class PoemMaker
                             'lang'              => $tweet['lang'],
                             'screen_name'       => $tweet['user']['screen_name'],
                             'profile_image_url' => $tweet['user']['profile_image_url'],
-                            'phoneme'           => $lastPhoneme
+                            'phoneme'           => $lastPhoneme,
+                            'last_wurd'         => $lastWord
                         ];
 
                         // Store in DB
@@ -113,15 +117,7 @@ class PoemMaker
         $lastPhoneme = '';
 
         // Getting last word
-        $words = mb_split('[^\'[:alpha:]]+', $this->removeEmoji($text));
-        $words = array_reverse($words);
-        foreach ($words as $w) {
-            // Don't get the word if it's empty (sometimes it happens) or an emoji
-            if (mb_strlen($w)) {
-                $lastWord = $w;
-                break;
-            }
-        }
+        $lastWord = $this->getLastWord($text);
 
         // Getting last syllable
         $syllable = new \Syllable('fr');
@@ -182,6 +178,26 @@ class PoemMaker
 
         // Send Poem to Tumblr
         $this->sendTumblr($poemId);
+    }
+
+    /*
+     * Get the last word of a string
+     * @param text text to analyse
+     * @return text the last word
+     */
+    public function getLastWord($text)
+    {
+        $words = mb_split('[^\'[:alpha:]]+', $this->removeEmoji($text));
+        $words = array_reverse($words);
+        foreach ($words as $w) {
+            // Don't get the word if it's empty (sometimes it happens) or an emoji
+            if (mb_strlen($w)) {
+                $lastWord = $w;
+                break;
+            }
+        }
+
+        return $lastWord;
     }
 
     /*

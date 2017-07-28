@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         Commands\GetQOTD::class,
         Commands\GetInspiration::class,
         Commands\SearchPhoneme::class,
+        Commands\SearchLastWord::class,
         Commands\GeneratePoem::class
     ];
 
