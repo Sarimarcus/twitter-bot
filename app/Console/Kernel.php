@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
          */
 
         $schedule->command('poem:get-inspiration')
-                 ->everyFiveMinutes();
+                 ->everyMinute();
 
         $schedule->command('poem:generate')
                  ->twiceDaily(10, 18);
