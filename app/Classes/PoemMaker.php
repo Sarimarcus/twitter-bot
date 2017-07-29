@@ -91,9 +91,6 @@ class PoemMaker
                         // Store in DB
                         $alexandrine = Alexandrine::updateOrCreate(['tweet_id' => $tweet['id']], $data);
 
-                        // Let's coo
-                        $this->coo();
-
                         $found[] = $data;
                     }
                 }
@@ -152,24 +149,6 @@ class PoemMaker
             \Twitter::postTweet($params);
         } catch (\Exception $e) {
             \Log::error('// Can\'t thank the source : ' . $e->getMessage());
-        }
-    }
-
-    /*
-     * Tweet {roucoule}
-     * @return boolean
-     */
-    public function coo()
-    {
-        try {
-            // Send the message
-            $params = [
-                'status'                => html_entity_decode('{roucoule}'),
-                'format'                => 'array'
-            ];
-            \Twitter::postTweet($params);
-        } catch (\Exception $e) {
-            \Log::error('// Can\'t coo : ' . $e->getMessage());
         }
     }
 
