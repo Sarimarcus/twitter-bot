@@ -168,7 +168,6 @@ class PoemMaker
 
             // Getting the alexandrines for the rhyme
             $output = $this->assembleAlexandrines($rhyme)->all();
-            dd($output);
             foreach ($output as $key => $value) {
                 $lines[] = $value->id;
             }
