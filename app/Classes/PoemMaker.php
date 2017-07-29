@@ -85,7 +85,7 @@ class PoemMaker
                             'screen_name'       => $tweet['user']['screen_name'],
                             'profile_image_url' => $tweet['user']['profile_image_url'],
                             'phoneme'           => $lastPhoneme,
-                            'last_wurd'         => $lastWord
+                            'last_word'         => $lastWord
                         ];
 
                         // Store in DB
