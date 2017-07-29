@@ -168,6 +168,7 @@ class PoemMaker
 
             // Getting the alexandrines for the rhyme
             $output = $this->assembleAlexandrines($rhyme)->all();
+            dd($output);
             foreach ($output as $key => $value) {
                 $lines[] = $value->id;
             }
@@ -275,7 +276,6 @@ class PoemMaker
 
             // Sending it to Twitter
             $this->sendTwitter($postUrl, $alexandrines);
-
         } catch (\Exception $e) {
             \Log::error('// Can\'t post to Tumblr : ' . $e->getMessage());
         }
@@ -313,7 +313,6 @@ class PoemMaker
                 'format'                => 'array'
             ];
             \Twitter::postTweet($params);
-
         } catch (\Exception $e) {
             \Log::error('// Can\'t thank the source : ' . $e->getMessage());
         }
@@ -348,7 +347,13 @@ class PoemMaker
         $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
         $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
 
-        return $random;
+        // Need to have different words for better poem
+        $unique = $random->unique('last_word');
+        if (count($unique) == self::NUMBER_ALEXANDRINE) {
+            return $random;
+        } else {
+            return $this->assembleAlexandrines($phoneme);
+        }
     }
 
     /*
