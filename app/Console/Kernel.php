@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
                  ->everyMinute();
 
         $schedule->command('poem:generate')
-                 ->twiceDaily(10, 18);
+                 ->twiceDaily(10, 17);
 
          /*
           * Twitter Bot tasks
