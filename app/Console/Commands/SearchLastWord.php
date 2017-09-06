@@ -44,7 +44,7 @@ class SearchLastWord extends Command
             $lastWord = $o->getLastWord($alexandrine['text']);
 
             $a = Alexandrine::find($alexandrine['id']);
-            $a->last_word = $lastWord;
+            $a->last_word = SoundexFr::phonetique($lastWord);
             $a->save();
         }
     }
