@@ -22,7 +22,7 @@ class Alexandrine extends Model
      */
     public static function scopeFree($query)
     {
-        return $query->whereNull('poem_id')->where('phoneme', '<>', '️');
+        return $query->whereNull('poem_id');
     }
 
     /*
