@@ -31,8 +31,7 @@ class Alexandrine extends Model
     public function getSimilarPhonemes()
     {
         return $this->select('phoneme', DB::raw('count(id) as total'))
-                    ->groupBy('phoneme')->whereNull('poem_id')
-                    ->where('phoneme', '<>', '️')->get();
+                    ->groupBy('phoneme')->whereNull('poem_id')->get();
     }
 
     /*
