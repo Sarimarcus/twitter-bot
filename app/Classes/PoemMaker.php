@@ -341,11 +341,9 @@ class PoemMaker
         $rhymes = [];
         $o = new Alexandrine();
         $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
-        $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
 
-        // Need to have different words for better poem
-        $unique = $random->unique('last_word');
-        if (count($unique) == self::NUMBER_ALEXANDRINE) {
+        if(count($alexandrines) >= self::NUMBER_ALEXANDRINE){
+            $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
             return $random;
         } else {
             return $this->assembleAlexandrines($phoneme);

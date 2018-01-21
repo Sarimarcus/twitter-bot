@@ -5,7 +5,7 @@
             <p>{{ $alexandrine->text }}</p>
             <footer>
                 <cite title="{{ '@' . $alexandrine->screen_name }}">Tweeté par
-                    <a href="//www.twitter.com/{{ $alexandrine->screen_name }}/status/{{ $alexandrine->tweet_id }}" target="_blank">{{ '@' . $alexandrine->screen_name }}
+                    <a href="https://twitter.com/{{ $alexandrine->screen_name }}/status/{{ $alexandrine->tweet_id }}" target="_blank">{{ '@' . $alexandrine->screen_name }}
                     </a>
                 </cite>
             </footer>

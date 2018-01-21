@@ -40,6 +40,7 @@ class Alexandrine extends Model
     public function getAlexandrinesByPhoneme($phoneme)
     {
         return $this->select('id', 'last_word')
+                    ->groupBy('last_word')
                     ->where('phoneme', $phoneme)
                     ->whereNull('poem_id')
                     ->get();
