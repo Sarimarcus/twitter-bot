@@ -160,6 +160,7 @@ class PoemMaker
         $lines = [];
 
         // Get some random rhymes
+        \Log::info('// Poem Maker : get some random rhymes');
         $rhymes = array_rand(array_flip($this->getRhymes()), self::NUMBER_VERSE);
         foreach ($rhymes as $k => $rhyme) {
 
@@ -340,6 +341,8 @@ class PoemMaker
     {
         $rhymes = [];
         $o = new Alexandrine();
+
+        \Log::info('// Poem Maker : get alexandrines by phoneme');
         $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
 
         if(count($alexandrines) >= self::NUMBER_ALEXANDRINE){
