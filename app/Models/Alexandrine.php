@@ -9,6 +9,8 @@ class Alexandrine extends Model
 {
     protected $fillable  = ['tweet_id', 'user_id', 'text', 'lang', 'screen_name', 'profile_image_url', 'phoneme', 'last_word', 'created_at', 'updated_at'];
 
+    const MIN_PHONEMES_COUNT = 25;
+
     /**
      * Get the poem that owns the alexandrine.
      */
@@ -31,7 +33,10 @@ class Alexandrine extends Model
     public function getSimilarPhonemes()
     {
         return $this->select('phoneme', DB::raw('count(id) as total'))
-                    ->groupBy('phoneme')->whereNull('poem_id')->get();
+                    ->whereNull('poem_id')
+                    ->groupBy('phoneme')
+                    ->having('total', '>= ', self::MIN_PHONEMES_COUNT)
+                    ->get();
     }
 
     /*
@@ -40,7 +45,6 @@ class Alexandrine extends Model
     public function getAlexandrinesByPhoneme($phoneme)
     {
         return $this->select('id', 'last_word')
-                    ->groupBy('last_word')
                     ->where('phoneme', $phoneme)
                     ->whereNull('poem_id')
                     ->get();

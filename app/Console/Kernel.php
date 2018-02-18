@@ -43,11 +43,11 @@ class Kernel extends ConsoleKernel
          * Poem Maker tasks
          */
 
-/*        $schedule->command('poem:get-inspiration')
+        $schedule->command('poem:get-inspiration')
                  ->everyMinute();
 
         $schedule->command('poem:generate')
-                 ->twiceDaily(10, 17);*/
+                 ->twiceDaily(10, 17);
 
          /*
           * Twitter Bot tasks
