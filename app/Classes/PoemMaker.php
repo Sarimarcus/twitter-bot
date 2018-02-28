@@ -52,7 +52,6 @@ class PoemMaker
         ];
 
         try {
-            \Log::info('// Poem Maker : getting inspiration');
             $inspiration = \Twitter::getSearch($params);
 
             // Looking for an alexandrine !
@@ -96,11 +95,11 @@ class PoemMaker
                 }
             }
 
-            \Log::info('// Found ' . count($found) . ' alexandrine(s)');
+            \Log::info('[Poem Maker] Found ' . count($found) . ' alexandrine(s)');
 
             return $found;
         } catch (\Exception $e) {
-            \Log::error('// Can\'t get inspiration : ' . $e->getMessage());
+            \Log::error('[Poem Maker] Can\'t get inspiration : ' . $e->getMessage());
         }
     }
 
@@ -148,7 +147,7 @@ class PoemMaker
             ];
             \Twitter::postTweet($params);
         } catch (\Exception $e) {
-            \Log::error('// Can\'t thank the source : ' . $e->getMessage());
+            \Log::error('[Poem Maker] Can\'t thank the source : ' . $e->getMessage());
         }
     }
 
@@ -160,7 +159,7 @@ class PoemMaker
         $lines = [];
 
         // Get some random rhymes
-        \Log::info('// Poem Maker : get some random rhymes');
+        \Log::info('[Poem Maker] Poem Maker : get some random rhymes');
         $rhymes = array_rand(array_flip($this->getRhymes()), self::NUMBER_VERSE);
         foreach ($rhymes as $k => $rhyme) {
 
@@ -269,12 +268,12 @@ class PoemMaker
         try {
             $call = $client->createPost(config('services.tumblr.blog'), $postData);
             $postUrl = 'https://' . config('services.tumblr.blog') . '/post/' . $call->id;
-            \Log::info('// Posted to Tumblr ! ID : ' . $postUrl);
+            \Log::info('[Poem Maker] Posted to Tumblr ! ID : ' . $postUrl);
 
             // Sending it to Twitter
             $this->sendTwitter($postUrl, $alexandrines);
         } catch (\Exception $e) {
-            \Log::error('// Can\'t post to Tumblr : ' . $e->getMessage());
+            \Log::error('[Poem Maker] Can\'t post to Tumblr : ' . $e->getMessage());
         }
     }
 
@@ -311,7 +310,7 @@ class PoemMaker
             ];
             \Twitter::postTweet($params);
         } catch (\Exception $e) {
-            \Log::error('// Can\'t thank the source : ' . $e->getMessage());
+            \Log::error('[Poem Maker] Can\'t thank the source : ' . $e->getMessage());
         }
     }
 
@@ -342,7 +341,7 @@ class PoemMaker
         $rhymes = [];
         $o = new Alexandrine();
 
-        \Log::info('// Poem Maker : get alexandrines by phoneme');
+        \Log::info('[Poem Maker] Poem Maker : get alexandrines by phoneme');
         $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
 
         if(count($alexandrines) >= self::NUMBER_ALEXANDRINE){
