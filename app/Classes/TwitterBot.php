@@ -221,6 +221,9 @@ class TwitterBot
                     } catch (\Exception $e) {
                         \Log::error('[' . $bot->screen_name . '] Retweeting and liking from the DB : ' . $e->getMessage());
                         Bot::addError($bot);
+
+                        // Try again
+                        self::statusUpdate($bot);
                     }
                 }
 
@@ -258,6 +261,9 @@ class TwitterBot
                 } catch (\Exception $e) {
                     \Log::error('[' . $bot->screen_name . '] Retweeting and liking something interesting : ' . $e->getMessage());
                     Bot::addError($bot);
+
+                    // Try again
+                    self::statusUpdate($bot);
                 }
 
                 break;
