@@ -371,6 +371,14 @@ class TwitterBot
         // Getting tweets from account
         $target = $interesting->merge($suggested)->unique()->random();
         if ($tweets = self::runRequest($bot, 'getUserTimeline', ['screen_name' => $target])) {
+
+            // cleanning empty tweets
+            foreach ($tweets as &$tweet) {
+                if (empty($tweet['status'])) {
+                    unset($tweet);
+                }
+            }
+
             return $tweets;
         }
     }
