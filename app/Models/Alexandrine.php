@@ -47,6 +47,7 @@ class Alexandrine extends Model
         return $this->select('id', 'last_word')
                     ->where('phoneme', $phoneme)
                     ->whereNull('poem_id')
+                    ->groupBy('last_word')
                     ->get();
     }
 }

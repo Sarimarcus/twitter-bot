@@ -164,9 +164,13 @@ class PoemMaker
         foreach ($rhymes as $k => $rhyme) {
 
             // Getting the alexandrines for the rhyme
-            $output = $this->assembleAlexandrines($rhyme)->all();
-            foreach ($output as $key => $value) {
-                $lines[] = $value->id;
+            if ($output = $this->assembleAlexandrines($rhyme)->all()) {
+                foreach ($output as $key => $value) {
+                    $lines[] = $value->id;
+                }
+            } else {
+                // That means we can't find enough alexandrines, let's try again to generate the poem
+                $this->generatePoem();
             }
         }
 
@@ -348,7 +352,7 @@ class PoemMaker
             $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
             return $random;
         } else {
-            return $this->assembleAlexandrines($phoneme);
+            return false;
         }
     }
 
