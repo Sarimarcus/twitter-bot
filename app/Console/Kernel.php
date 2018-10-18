@@ -53,7 +53,7 @@ class Kernel extends ConsoleKernel
           * Twitter Bot tasks
           */
 
-        $schedule->command('twitter:follow-users')
+        /* $schedule->command('twitter:follow-users')
                  ->everyTenMinutes();
 
         $schedule->command('twitter:status-update')
@@ -81,6 +81,6 @@ class Kernel extends ConsoleKernel
                  ->daily();
 
         $schedule->command('quote:get-qotd')
-                 ->daily();
+                 ->daily() */;
     }
 }
