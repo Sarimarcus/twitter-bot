@@ -23,11 +23,18 @@ class TwitterBot
      */
     public static function runTask($task)
     {
-        if($bots = Bot::online()->orderBy('created_at')->get()){
+
+        // It's late ... It's the best I can do
+        try {
+            $bots = Bot::online()->orderBy('created_at')->get();
+
             foreach ($bots as $bot) {
                 $bot::setConfiguration($bot);
                 self::$task($bot);
             }
+
+        } catch (Exception $e) {
+           \Log::info('No bot online :/');
         }
     }
 
