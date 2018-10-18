@@ -23,10 +23,7 @@ class TwitterBot
      */
     public static function runTask($task)
     {
-        $bots = Bot::online()->orderBy('created_at')->get();
-
-        // Bots are dying ... Thank you Twitter :/
-        if (count($bots) > 0) {
+        if($bots = Bot::online()->orderBy('created_at')->get()){
             foreach ($bots as $bot) {
                 $bot::setConfiguration($bot);
                 self::$task($bot);
