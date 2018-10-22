@@ -52,4 +52,13 @@ class PoemBundler extends Controller
         $call = new \App\Classes\PoemMaker('fr');
         $call->generatePoem();
     }
+
+    /*
+     * Get places
+     */
+    public function getPlaces()
+    {
+        $call = new \App\Classes\PoemMaker('fr');
+        $call->getPlaceID();
+    }
 }

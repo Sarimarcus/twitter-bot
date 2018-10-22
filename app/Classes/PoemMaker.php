@@ -202,6 +202,19 @@ class PoemMaker
     }
 
     /*
+     * Test function to retrieve Places IDS
+     */
+    public function getPlaceID($coordinates)
+    {
+        $coordinates = [
+            'lat' => '40.4165000',
+            'long' => ' -3.7025600'
+        ];
+
+        $request = \Twitter::postTweet($coordinates);
+    }
+
+    /*
      * Check if a string is an alexandrine
      * @param string $string
      * @php return boolean
@@ -294,7 +307,7 @@ class PoemMaker
             $statusThanks .= '@' . $value['screen_name'] . ', ';
         }
 
-        $statusThanks .= 'merci pour l\'inspiration !';
+        $statusThanks .= 'merci pour l\'inspiration ! Suivez moi pour plus de poème ❤️';
 
         try {
 
