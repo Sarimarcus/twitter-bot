@@ -204,7 +204,7 @@ class PoemMaker
     /*
      * Test function to retrieve Places IDS
      */
-    public function getPlaceID($coordinates)
+    public function getPlaceID()
     {
         $coordinates = [
             'lat' => '40.4165000',

@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
         Commands\GetInspiration::class,
         Commands\SearchPhoneme::class,
         Commands\SearchLastWord::class,
-        Commands\GeneratePoem::class
+        Commands\GeneratePoem::class,
+        Commands\GetPlaces::class
     ];
 
     /**
