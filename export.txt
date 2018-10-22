@@ -1,0 +1,706 @@
+object(stdClass)#604 (2) {
+  ["result"]=>
+  object(stdClass)#603 (1) {
+    ["places"]=>
+    array(5) {
+      [0]=>
+      object(stdClass)#576 (11) {
+        ["id"]=>
+        string(16) "206c436ce43a43a3"
+        ["url"]=>
+        string(56) "https://api.twitter.com/1.1/geo/id/206c436ce43a43a3.json"
+        ["place_type"]=>
+        string(4) "city"
+        ["name"]=>
+        string(6) "Madrid"
+        ["full_name"]=>
+        string(15) "Madrid, España"
+        ["country_code"]=>
+        string(2) "ES"
+        ["country"]=>
+        string(7) "España"
+        ["contained_within"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#577 (10) {
+            ["id"]=>
+            string(16) "ea520f3528c9b3e4"
+            ["url"]=>
+            string(56) "https://api.twitter.com/1.1/geo/id/ea520f3528c9b3e4.json"
+            ["place_type"]=>
+            string(5) "admin"
+            ["name"]=>
+            string(6) "Madrid"
+            ["full_name"]=>
+            string(27) "Madrid, Comunidad de Madrid"
+            ["country_code"]=>
+            string(2) "ES"
+            ["country"]=>
+            string(7) "España"
+            ["centroid"]=>
+            array(2) {
+              [0]=>
+              float(-3.7707523138302)
+              [1]=>
+              float(40.5247236)
+            }
+            ["bounding_box"]=>
+            object(stdClass)#578 (2) {
+              ["type"]=>
+              string(7) "Polygon"
+              ["coordinates"]=>
+              array(1) {
+                [0]=>
+                array(5) {
+                  [0]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                  [1]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(41.1649106)
+                  }
+                  [2]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.0531322)
+                    [1]=>
+                    float(41.1649106)
+                  }
+                  [3]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.0531322)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                  [4]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                }
+              }
+            }
+            ["attributes"]=>
+            object(stdClass)#579 (0) {
+            }
+          }
+        }
+        ["centroid"]=>
+        array(2) {
+          [0]=>
+          float(-3.6858585988669)
+          [1]=>
+          float(40.4777947)
+        }
+        ["bounding_box"]=>
+        object(stdClass)#580 (2) {
+          ["type"]=>
+          string(7) "Polygon"
+          ["coordinates"]=>
+          array(1) {
+            [0]=>
+            array(5) {
+              [0]=>
+              array(2) {
+                [0]=>
+                float(-3.8890049)
+                [1]=>
+                float(40.3120713)
+              }
+              [1]=>
+              array(2) {
+                [0]=>
+                float(-3.8890049)
+                [1]=>
+                float(40.6435181)
+              }
+              [2]=>
+              array(2) {
+                [0]=>
+                float(-3.5180102)
+                [1]=>
+                float(40.6435181)
+              }
+              [3]=>
+              array(2) {
+                [0]=>
+                float(-3.5180102)
+                [1]=>
+                float(40.3120713)
+              }
+              [4]=>
+              array(2) {
+                [0]=>
+                float(-3.8890049)
+                [1]=>
+                float(40.3120713)
+              }
+            }
+          }
+        }
+        ["attributes"]=>
+        object(stdClass)#581 (0) {
+        }
+      }
+      [1]=>
+      object(stdClass)#582 (11) {
+        ["id"]=>
+        string(16) "01933449466df5b4"
+        ["url"]=>
+        string(56) "https://api.twitter.com/1.1/geo/id/01933449466df5b4.json"
+        ["place_type"]=>
+        string(12) "neighborhood"
+        ["name"]=>
+        string(3) "Sol"
+        ["full_name"]=>
+        string(11) "Sol, Madrid"
+        ["country_code"]=>
+        string(2) "ES"
+        ["country"]=>
+        string(7) "España"
+        ["contained_within"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#583 (10) {
+            ["id"]=>
+            string(16) "206c436ce43a43a3"
+            ["url"]=>
+            string(56) "https://api.twitter.com/1.1/geo/id/206c436ce43a43a3.json"
+            ["place_type"]=>
+            string(4) "city"
+            ["name"]=>
+            string(6) "Madrid"
+            ["full_name"]=>
+            string(15) "Madrid, España"
+            ["country_code"]=>
+            string(2) "ES"
+            ["country"]=>
+            string(7) "España"
+            ["centroid"]=>
+            array(2) {
+              [0]=>
+              float(-3.6858585988669)
+              [1]=>
+              float(40.4777947)
+            }
+            ["bounding_box"]=>
+            object(stdClass)#584 (2) {
+              ["type"]=>
+              string(7) "Polygon"
+              ["coordinates"]=>
+              array(1) {
+                [0]=>
+                array(5) {
+                  [0]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.8890049)
+                    [1]=>
+                    float(40.3120713)
+                  }
+                  [1]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.8890049)
+                    [1]=>
+                    float(40.6435181)
+                  }
+                  [2]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.5180102)
+                    [1]=>
+                    float(40.6435181)
+                  }
+                  [3]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.5180102)
+                    [1]=>
+                    float(40.3120713)
+                  }
+                  [4]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.8890049)
+                    [1]=>
+                    float(40.3120713)
+                  }
+                }
+              }
+            }
+            ["attributes"]=>
+            object(stdClass)#585 (0) {
+            }
+          }
+        }
+        ["centroid"]=>
+        array(2) {
+          [0]=>
+          float(-3.7045633660438)
+          [1]=>
+          float(40.41683245)
+        }
+        ["bounding_box"]=>
+        object(stdClass)#586 (2) {
+          ["type"]=>
+          string(7) "Polygon"
+          ["coordinates"]=>
+          array(1) {
+            [0]=>
+            array(5) {
+              [0]=>
+              array(2) {
+                [0]=>
+                float(-3.7088681)
+                [1]=>
+                float(40.4133657)
+              }
+              [1]=>
+              array(2) {
+                [0]=>
+                float(-3.7088681)
+                [1]=>
+                float(40.4202992)
+              }
+              [2]=>
+              array(2) {
+                [0]=>
+                float(-3.6992178)
+                [1]=>
+                float(40.4202992)
+              }
+              [3]=>
+              array(2) {
+                [0]=>
+                float(-3.6992178)
+                [1]=>
+                float(40.4133657)
+              }
+              [4]=>
+              array(2) {
+                [0]=>
+                float(-3.7088681)
+                [1]=>
+                float(40.4133657)
+              }
+            }
+          }
+        }
+        ["attributes"]=>
+        object(stdClass)#587 (0) {
+        }
+      }
+      [2]=>
+      object(stdClass)#588 (11) {
+        ["id"]=>
+        string(16) "ea520f3528c9b3e4"
+        ["url"]=>
+        string(56) "https://api.twitter.com/1.1/geo/id/ea520f3528c9b3e4.json"
+        ["place_type"]=>
+        string(5) "admin"
+        ["name"]=>
+        string(6) "Madrid"
+        ["full_name"]=>
+        string(27) "Madrid, Comunidad de Madrid"
+        ["country_code"]=>
+        string(2) "ES"
+        ["country"]=>
+        string(7) "España"
+        ["contained_within"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#589 (10) {
+            ["id"]=>
+            string(16) "3b111abdac0a7687"
+            ["url"]=>
+            string(56) "https://api.twitter.com/1.1/geo/id/3b111abdac0a7687.json"
+            ["place_type"]=>
+            string(5) "admin"
+            ["name"]=>
+            string(19) "Comunidad de Madrid"
+            ["full_name"]=>
+            string(28) "Comunidad de Madrid, España"
+            ["country_code"]=>
+            string(2) "ES"
+            ["country"]=>
+            string(7) "España"
+            ["centroid"]=>
+            array(2) {
+              [0]=>
+              float(-3.7707523138302)
+              [1]=>
+              float(40.5247236)
+            }
+            ["bounding_box"]=>
+            object(stdClass)#590 (2) {
+              ["type"]=>
+              string(7) "Polygon"
+              ["coordinates"]=>
+              array(1) {
+                [0]=>
+                array(5) {
+                  [0]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                  [1]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(41.1649106)
+                  }
+                  [2]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.0531322)
+                    [1]=>
+                    float(41.1649106)
+                  }
+                  [3]=>
+                  array(2) {
+                    [0]=>
+                    float(-3.0531322)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                  [4]=>
+                  array(2) {
+                    [0]=>
+                    float(-4.5791745)
+                    [1]=>
+                    float(39.8845366)
+                  }
+                }
+              }
+            }
+            ["attributes"]=>
+            object(stdClass)#591 (0) {
+            }
+          }
+        }
+        ["centroid"]=>
+        array(2) {
+          [0]=>
+          float(-3.7707523138302)
+          [1]=>
+          float(40.5247236)
+        }
+        ["bounding_box"]=>
+        object(stdClass)#592 (2) {
+          ["type"]=>
+          string(7) "Polygon"
+          ["coordinates"]=>
+          array(1) {
+            [0]=>
+            array(5) {
+              [0]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(39.8845366)
+              }
+              [1]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(41.1649106)
+              }
+              [2]=>
+              array(2) {
+                [0]=>
+                float(-3.0531322)
+                [1]=>
+                float(41.1649106)
+              }
+              [3]=>
+              array(2) {
+                [0]=>
+                float(-3.0531322)
+                [1]=>
+                float(39.8845366)
+              }
+              [4]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(39.8845366)
+              }
+            }
+          }
+        }
+        ["attributes"]=>
+        object(stdClass)#593 (0) {
+        }
+      }
+      [3]=>
+      object(stdClass)#594 (11) {
+        ["id"]=>
+        string(16) "3b111abdac0a7687"
+        ["url"]=>
+        string(56) "https://api.twitter.com/1.1/geo/id/3b111abdac0a7687.json"
+        ["place_type"]=>
+        string(5) "admin"
+        ["name"]=>
+        string(19) "Comunidad de Madrid"
+        ["full_name"]=>
+        string(28) "Comunidad de Madrid, España"
+        ["country_code"]=>
+        string(2) "ES"
+        ["country"]=>
+        string(7) "España"
+        ["contained_within"]=>
+        array(1) {
+          [0]=>
+          object(stdClass)#595 (10) {
+            ["id"]=>
+            string(16) "ecdce75d48b13b64"
+            ["url"]=>
+            string(56) "https://api.twitter.com/1.1/geo/id/ecdce75d48b13b64.json"
+            ["place_type"]=>
+            string(7) "country"
+            ["name"]=>
+            string(7) "España"
+            ["full_name"]=>
+            string(7) "España"
+            ["country_code"]=>
+            string(2) "ES"
+            ["country"]=>
+            string(7) "España"
+            ["centroid"]=>
+            array(2) {
+              [0]=>
+              float(-3.4686377505769)
+              [1]=>
+              float(39.8952506)
+            }
+            ["bounding_box"]=>
+            object(stdClass)#596 (2) {
+              ["type"]=>
+              string(7) "Polygon"
+              ["coordinates"]=>
+              array(1) {
+                [0]=>
+                array(5) {
+                  [0]=>
+                  array(2) {
+                    [0]=>
+                    float(-18.1606948)
+                    [1]=>
+                    float(27.6377504)
+                  }
+                  [1]=>
+                  array(2) {
+                    [0]=>
+                    float(-18.1606948)
+                    [1]=>
+                    float(43.7903881)
+                  }
+                  [2]=>
+                  array(2) {
+                    [0]=>
+                    float(4.3279851)
+                    [1]=>
+                    float(43.7903881)
+                  }
+                  [3]=>
+                  array(2) {
+                    [0]=>
+                    float(4.3279851)
+                    [1]=>
+                    float(27.6377504)
+                  }
+                  [4]=>
+                  array(2) {
+                    [0]=>
+                    float(-18.1606948)
+                    [1]=>
+                    float(27.6377504)
+                  }
+                }
+              }
+            }
+            ["attributes"]=>
+            object(stdClass)#597 (0) {
+            }
+          }
+        }
+        ["centroid"]=>
+        array(2) {
+          [0]=>
+          float(-3.7707523138302)
+          [1]=>
+          float(40.5247236)
+        }
+        ["bounding_box"]=>
+        object(stdClass)#598 (2) {
+          ["type"]=>
+          string(7) "Polygon"
+          ["coordinates"]=>
+          array(1) {
+            [0]=>
+            array(5) {
+              [0]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(39.8845366)
+              }
+              [1]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(41.1649106)
+              }
+              [2]=>
+              array(2) {
+                [0]=>
+                float(-3.0531322)
+                [1]=>
+                float(41.1649106)
+              }
+              [3]=>
+              array(2) {
+                [0]=>
+                float(-3.0531322)
+                [1]=>
+                float(39.8845366)
+              }
+              [4]=>
+              array(2) {
+                [0]=>
+                float(-4.5791745)
+                [1]=>
+                float(39.8845366)
+              }
+            }
+          }
+        }
+        ["attributes"]=>
+        object(stdClass)#599 (0) {
+        }
+      }
+      [4]=>
+      object(stdClass)#600 (11) {
+        ["id"]=>
+        string(16) "ecdce75d48b13b64"
+        ["url"]=>
+        string(56) "https://api.twitter.com/1.1/geo/id/ecdce75d48b13b64.json"
+        ["place_type"]=>
+        string(7) "country"
+        ["name"]=>
+        string(7) "España"
+        ["full_name"]=>
+        string(7) "España"
+        ["country_code"]=>
+        string(2) "ES"
+        ["country"]=>
+        string(7) "España"
+        ["contained_within"]=>
+        array(0) {
+        }
+        ["centroid"]=>
+        array(2) {
+          [0]=>
+          float(-3.4686377505769)
+          [1]=>
+          float(39.8952506)
+        }
+        ["bounding_box"]=>
+        object(stdClass)#601 (2) {
+          ["type"]=>
+          string(7) "Polygon"
+          ["coordinates"]=>
+          array(1) {
+            [0]=>
+            array(5) {
+              [0]=>
+              array(2) {
+                [0]=>
+                float(-18.1606948)
+                [1]=>
+                float(27.6377504)
+              }
+              [1]=>
+              array(2) {
+                [0]=>
+                float(-18.1606948)
+                [1]=>
+                float(43.7903881)
+              }
+              [2]=>
+              array(2) {
+                [0]=>
+                float(4.3279851)
+                [1]=>
+                float(43.7903881)
+              }
+              [3]=>
+              array(2) {
+                [0]=>
+                float(4.3279851)
+                [1]=>
+                float(27.6377504)
+              }
+              [4]=>
+              array(2) {
+                [0]=>
+                float(-18.1606948)
+                [1]=>
+                float(27.6377504)
+              }
+            }
+          }
+        }
+        ["attributes"]=>
+        object(stdClass)#602 (0) {
+        }
+      }
+    }
+  }
+  ["query"]=>
+  object(stdClass)#605 (3) {
+    ["url"]=>
+    string(83) "https://api.twitter.com/1.1/geo/reverse_geocode.json?lat=40.4165000&long=-3.7025600"
+    ["type"]=>
+    string(15) "reverse_geocode"
+    ["params"]=>
+    object(stdClass)#606 (3) {
+      ["accuracy"]=>
+      float(0)
+      ["coordinates"]=>
+      object(stdClass)#607 (2) {
+        ["type"]=>
+        string(5) "Point"
+        ["coordinates"]=>
+        array(2) {
+          [0]=>
+          float(-3.70256)
+          [1]=>
+          float(40.4165)
+        }
+      }
+      ["granularity"]=>
+      string(12) "neighborhood"
+    }
+  }
+}

@@ -37,7 +37,8 @@ class GeneratePoem extends Command
      */
     public function handle()
     {
-        $call = new \App\Classes\PoemMaker('fr');
+        //$call = new \App\Classes\PoemMaker('fr');
+        $call = new \App\Classes\PoemMaker('es');
         $r = $call->generatePoem();
     }
 }

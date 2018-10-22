@@ -44,7 +44,8 @@ class PoemMaker
     public function getInspiration()
     {
         $params = [
-            'q'           => 'place:09f6a7707f18e0b1', // Hardcoding Paris, FR for now
+           // 'q'           => 'place:09f6a7707f18e0b1', // Hardcoding Paris, FR for now
+            'q'           => 'place:ea520f3528c9b3e4', // Hardcoding Madrid, ES for now
             'lang'        => $this->language,
             'result_type' => 'recent',
             'count'       => 100,
@@ -208,10 +209,12 @@ class PoemMaker
     {
         $coordinates = [
             'lat' => '40.4165000',
-            'long' => ' -3.7025600'
+            'long' => '-3.7025600'
         ];
 
-        $request = \Twitter::postTweet($coordinates);
+        $request = \Twitter::getGeoReverse($coordinates);
+        var_dump($requests);
+
     }
 
     /*
