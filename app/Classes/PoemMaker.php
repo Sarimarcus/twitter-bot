@@ -361,7 +361,7 @@ class PoemMaker
         $o = new Alexandrine();
 
         \Log::info('[Poem Maker] Poem Maker : get alexandrines by phoneme');
-        $alexandrines = $o->getAlexandrinesByPhoneme($phoneme);
+        $alexandrines = $o->getAlexandrinesByPhoneme($phoneme, $this->language);
 
         if(count($alexandrines) >= self::NUMBER_ALEXANDRINE){
             $random = $alexandrines->random(self::NUMBER_ALEXANDRINE);
