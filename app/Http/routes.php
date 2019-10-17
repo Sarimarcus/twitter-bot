@@ -59,3 +59,9 @@ Route::get('wurstify', 'Wurstify@make');
  */
 Route::get('poem', 'PoemBundler@index');
 Route::get('poem/next/{limit}', 'PoemBundler@next');
+
+/*\Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+    Log::info( json_encode($query->sql) );
+    Log::info( json_encode($query->bindings) );
+    Log::info( json_encode($query->time)   );
+});*/
