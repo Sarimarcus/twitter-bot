@@ -37,7 +37,7 @@ class GetInspiration extends Command
      */
     public function handle()
     {
-        $o = new \App\Classes\PoemMaker('es');
+        $o = new \App\Classes\PoemMaker('fr');
         $o->getInspiration();
     }
 }
