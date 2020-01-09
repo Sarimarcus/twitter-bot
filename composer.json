@@ -15,7 +15,8 @@
         "vanderlee/syllable" : "1.4.*",
         "tumblr/tumblr": "^0.3.0",
         "laravel/socialite": "~2.0",
-        "socialiteproviders/tumblr": "~2.0"
+        "socialiteproviders/tumblr": "~2.0",
+        "sentry/sentry-laravel": "1.5.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
