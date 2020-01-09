@@ -65,3 +65,7 @@ Route::get('poem/next/{limit}', 'PoemBundler@next');
     Log::info( json_encode($query->bindings) );
     Log::info( json_encode($query->time)   );
 });*/
+
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
